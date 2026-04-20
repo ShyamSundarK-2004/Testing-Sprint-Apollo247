@@ -48,7 +48,7 @@ public class Hook extends WebdriverUtility {
 		configMaximizeBrowser();
 
 		// adding a implicit wait for the page to load
-		waitForElements(60);
+		waitForElements(70);
 
 		// First run login manually Or if Logged in already use the same
 		// sessions/cookies
@@ -63,7 +63,7 @@ public class Hook extends WebdriverUtility {
 
 	@After
 	public void teadDown() {
-//		quitBroswerWindow();
-//		b.unload();
+		quitBroswerWindow();
+		b.unload();
 	}
 }

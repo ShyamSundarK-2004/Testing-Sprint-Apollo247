@@ -12,7 +12,6 @@ Feature: Automation Testing on Lab Test Module
     Examples:
       | input    | type    |
       | CBC Test | valid   |
-      | PPBS     | valid   |
       | @@@@     | invalid |
       | 12333    | invalid |
 

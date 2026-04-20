@@ -33,12 +33,6 @@ public class LabTestSteps {
 		assertTrue(title.contains("lab-tests"), "Page not Navigated to the module");
 	}
 
-	@When("User clicks on profile module")
-	public void user_clicks_on_profile_module() {
-		b.getPages().dashboardPage.clickOnMyAccountBtn();
-
-	}
-
 	// ================= SEARCH Scenarios =================
 
 	@When("User searches for {string}")

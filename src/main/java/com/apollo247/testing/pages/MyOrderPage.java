@@ -50,8 +50,7 @@ public class MyOrderPage {
 	}
 
 	public boolean isSpecificUserOrderDisplayed(String userName) {
-		List<WebElement> users = driver
-				.findElements(By.xpath("//span[contains(text(),'Booked for')]//following-sibling::p"));
+		List<WebElement> users = driver.findElements(By.xpath("//span[contains(text(),'Booked for')]//parent::div"));
 		for (WebElement user : users) {
 			String usr = user.getText();
 			if (usr.contains(userName)) {
