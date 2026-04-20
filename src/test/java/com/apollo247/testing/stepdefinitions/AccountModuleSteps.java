@@ -100,6 +100,11 @@ public class AccountModuleSteps {
 
     @Then("Appointments section should still be displayed")
     public void appointments_still_displayed() {
+        // After refresh, the panel is closed and page reloads to home.
+        // Re-open panel and navigate to My Appointments again before asserting.
+        b.getPages().dashboardPage.clickProfileIcon();
+        b.getPages().myappointmentsPage.openMyAppointments();
+
         boolean status = b.getPages().myappointmentsPage.isPageLoadedAfterRefresh();
         Assert.assertTrue(status, "Appointments not visible after refresh");
         System.out.println("ASSERT PASSED: Appointments persisted after refresh");

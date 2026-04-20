@@ -181,17 +181,16 @@ public class ManageFamilyPage {
     // ================= EXCEL FLOW =================
 
     public void addFamilyMembersFromExcel() {
+
         try {
             List<Map<String, String>> members =
-                    excelUtilities.getAccountModuleData("FamilyMembers");
+                    excelUtilities.getExcelDataAsMap("FamilyMembers");
 
             for (Map<String, String> member : members) {
 
                 String fName = member.get("firstName");
                 String lName = member.get("lastName");
                 String dob = member.get("dob");
-
-                System.out.println("Adding from Excel: " + fName + " " + lName);
 
                 wait.until(ExpectedConditions.elementToBeClickable(addNewProfile));
                 clickAddNewProfile();
@@ -202,7 +201,7 @@ public class ManageFamilyPage {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("Add family flow failed: " + e.getMessage());
+            throw new RuntimeException("Failed to add family members from Excel: " + e.getMessage());
         }
     }
 

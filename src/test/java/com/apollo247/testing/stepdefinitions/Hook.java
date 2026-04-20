@@ -57,6 +57,7 @@ public class Hook extends WebdriverUtility {
 		// initialize all the pages with driver using page factory
 		Pages pages = new Pages(b.getDriver());
 		b.setPages(pages);
+		pages.dashboardPage.closeDomPopup();
 	}
 
 	@After

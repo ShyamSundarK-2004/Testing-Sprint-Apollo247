@@ -1,12 +1,15 @@
 package com.apollo247.testing.runner;
 
+import org.testng.annotations.DataProvider;
+
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
     features = "./src/test/java/com/apollo247/testing/features",
     glue = "com.apollo247.testing.stepdefinitions",
-    dryRun = true,   
+    tags = "@Logout",
+    dryRun = false,   
     plugin = {
         "pretty",
         "html:target/account-module-report.html",
@@ -16,5 +19,10 @@ import io.cucumber.testng.CucumberOptions;
 )
 
 public class MyAccountRunner extends AbstractTestNGCucumberTests {
+	@Override
+	@DataProvider(parallel = true)
+	public Object[][] scenarios() {
+		return super.scenarios();
+	}
 
 }

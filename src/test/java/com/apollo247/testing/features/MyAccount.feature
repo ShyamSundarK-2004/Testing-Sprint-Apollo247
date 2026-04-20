@@ -40,8 +40,8 @@ And user dismisses the error popup
 
 Examples:
 | Email              |
-| [abc@capgemini.com](mailto:abc@capgemini.com)  |
-| [test@benz.com](mailto:test@benz.com)      |
+| abc@capgemini.com  |
+| test@benz.com      |
 
 @MyMemberships @PlanValidation
 Scenario: Verify membership plan details after clicking Buy Now
