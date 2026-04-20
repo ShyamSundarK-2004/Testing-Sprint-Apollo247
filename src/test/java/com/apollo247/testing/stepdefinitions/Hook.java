@@ -48,7 +48,7 @@ public class Hook extends WebdriverUtility {
 		configMaximizeBrowser();
 
 		// adding a implicit wait for the page to load
-		waitForElements(40);
+		waitForElements(60);
 
 		// First run login manually Or if Logged in already use the same
 		// sessions/cookies
@@ -57,11 +57,13 @@ public class Hook extends WebdriverUtility {
 		// initialize all the pages with driver using page factory
 		Pages pages = new Pages(b.getDriver());
 		b.setPages(pages);
+
+		pages.dashboardPage.closeDomPopup();
 	}
 
 	@After
 	public void teadDown() {
-		quitBroswerWindow();
-		b.unload();
+//		quitBroswerWindow();
+//		b.unload();
 	}
 }

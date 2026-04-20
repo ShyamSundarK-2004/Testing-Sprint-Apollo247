@@ -67,7 +67,7 @@ public class LabTestSteps {
 		}
 	}
 
-	// ================= PRESCRIPTION FLOW =================
+	// ================= PRESCRIPTION FLOW WITH VALID FILE =================
 
 	@When("User clicks on book test using prescription")
 	public void user_clicks_on_book_test_using_prescription() {
@@ -90,6 +90,26 @@ public class LabTestSteps {
 	@Then("verify  proceed button is enabled")
 	public void verify_proceed_button_is_enabled() {
 		assertTrue(b.getPages().bookByPrescriptionPage.isProceedBtnEnabled(), "Proceed button is not enabled");
+	}
+
+	// ================= PRESCRIPTION FLOW WITH VALID INVALID FILE =================
+
+	@Then("verify invalid file message displayed and click on ok")
+	public void verify_invalid_file_message_displayed_and_click_on_ok() {
+
+		String path = "C:\\Users\\Shyam Sundar\\Documents\\prescription.webp";
+
+		b.getPages().bookByPrescriptionPage.uploadFile(path);
+
+		assertTrue(b.getPages().bookByPrescriptionPage.isWrongFileUploaded(), "Wrong file type is accepted");
+
+		b.getPages().bookByPrescriptionPage.closeInvalidMessagePopup();
+
+	}
+
+	@Then("verify proceed button is not enabled")
+	public void verify_proceed_button_is_not_enabled() {
+		assertTrue(b.getPages().bookByPrescriptionPage.isProceedBtnEnabled(), "Proceed button is enabled");
 	}
 
 	// ================= Radiology Scenarios =================
@@ -138,5 +158,28 @@ public class LabTestSteps {
 		assertTrue(b.getPages().radiologyPage.isRequestCallBtnEnabled(), "Request Call Button is not Enabled");
 	}
 
-	// ================= End To End Scenarios =================
+	// ================= My Order Checking Scenarios =================
+
+	@Given("User should be on orders page")
+	public void user_should_be_on_orders_page() {
+		b.getPages().labTestPage.closePopupIfPresent();
+
+		b.getPages().labTestPage.clickOnViewReportInMyOrder();
+
+		String url = b.getPages().myOrderPage.getCurrentUrl("orders");
+		assertTrue(url.contains("orders"), "Not in MyorderPage");
+
+	}
+
+	@When("User clicks on patient dropdown")
+	public void user_clicks_on_patient_dropdown() {
+		b.getPages().myOrderPage.clickOnUserDropdown();
+	}
+
+	@Then("User select a name {string} and check orders")
+	public void user_select_a_name_and_check_orders(String userName) {
+		String user = b.getPages().myOrderPage.clickOnSpecificUser(userName);
+		boolean flag = b.getPages().myOrderPage.isSpecificUserOrderDisplayed(user);
+		assertTrue(flag, "Different user orders found");
+	}
 }

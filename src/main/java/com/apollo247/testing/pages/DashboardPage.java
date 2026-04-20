@@ -137,17 +137,21 @@ public class DashboardPage {
 
 	// closing dom popup
 	public void closeDomPopup() {
-		// Wait for shadow host and locate the hidden host
-		WebElement domPopup = utilities.waituntilPresenceOfElementLocated(20L,
-				By.cssSelector("ct-web-popup-imageonly"));
+		try {
+			// Wait for shadow host and locate the hidden host
+			WebElement domPopup = utilities.waituntilPresenceOfElementLocated(20L,
+					By.cssSelector("ct-web-popup-imageonly"));
 
-		// Access shadow root
-		SearchContext shadowDom = domPopup.getShadowRoot();
+			// Access shadow root
+			SearchContext shadowDom = domPopup.getShadowRoot();
 
-		// Find close button INSIDE shadow DOM
-		WebElement closeBtn = shadowDom.findElement(By.id("close"));
+			// Find close button INSIDE shadow DOM
+			WebElement closeBtn = shadowDom.findElement(By.id("close"));
 
-		closeBtn.click();
+			closeBtn.click();
+		} catch (Exception e) {
+			System.out.println("No Popup found");
+		}
 
 	}
 

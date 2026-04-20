@@ -21,6 +21,7 @@ public class SessionManager {
 
 	private static final String SESSION_DIR = "apollo247_session/";
 	private static final String APOLLO_URL = "https://www.apollo247.com";
+	private static final String INSURANCE_URL = "https://www.apollo247insurance.com";
 
 	public static void ManageSession(WebDriver driver) throws Exception {
 
@@ -54,13 +55,10 @@ public class SessionManager {
 		System.out.println("🌐 Navigating to Apollo247...");
 		driver.get(APOLLO_URL);
 		Thread.sleep(3000);
-
 		// 1. COOKIES FIRST
 		loadCookies(driver);
-
 		// 2. LOCALSTORAGE (ESCAPED PROPERLY)
 		loadLocalStorage(driver);
-
 		// 3. SESSIONSTORAGE
 		loadSessionStorage(driver);
 

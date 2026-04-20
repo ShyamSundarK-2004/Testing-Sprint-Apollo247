@@ -8,8 +8,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Reporter;
 
-import com.apollo247.testing.utilities.WebdriverUtility;
 import com.apollo247.testing.utilities.JavaScriptUtilities;
+import com.apollo247.testing.utilities.WebdriverUtility;
 
 public class LabTestPage {
 
@@ -50,6 +50,10 @@ public class LabTestPage {
 	@FindBy(xpath = "//h3[text() = 'Upload and Order']")
 	private WebElement bookByPrescriptionModule;
 
+	// view orders in my orders page button
+	@FindBy(xpath = "//h3[text() = 'View Reports in My Orders']")
+	private WebElement viewReportInMyOrder;
+
 	// ===== GETTERS =====
 
 	public WebElement getSearchBar() {
@@ -74,6 +78,10 @@ public class LabTestPage {
 
 	public WebElement getBookByMPescriptionModule() {
 		return bookByPrescriptionModule;
+	}
+
+	public WebElement getViewReportInMyOrder() {
+		return viewReportInMyOrder;
 	}
 
 	// ====== BUSINESS LOGIC ======
@@ -137,6 +145,11 @@ public class LabTestPage {
 		getRadiologyBookingBtn().click();
 		utilities.switchToWindowByURL("radiology");
 
+	}
+
+	public void clickOnViewReportInMyOrder() {
+		utilities.waitUntilElementIsVisibility(20L, getViewReportInMyOrder());
+		jsUtil.jsClick(getViewReportInMyOrder());
 	}
 
 }
