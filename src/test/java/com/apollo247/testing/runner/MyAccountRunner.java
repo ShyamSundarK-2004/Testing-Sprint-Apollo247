@@ -8,14 +8,14 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
     features = "./src/test/java/com/apollo247/testing/features",
     glue = "com.apollo247.testing.stepdefinitions",
-    tags = "@Logout",
-    dryRun = false,   
+    tags = "@NeedHelp",
     plugin = {
         "pretty",
-        "html:target/account-module-report.html",
-        "json:target/account-module-report.json"
+        "html:Reports/account-module-report.html",
+        "json:Reports/account-module-report.json"
 
-    }
+    },
+    monochrome = true
 )
 
 public class MyAccountRunner extends AbstractTestNGCucumberTests {

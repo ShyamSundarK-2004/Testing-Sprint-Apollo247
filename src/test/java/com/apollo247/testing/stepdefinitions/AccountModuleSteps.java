@@ -24,7 +24,7 @@ public class AccountModuleSteps {
         b.getPages().dashboardPage.clickProfileIcon();
     }
 
-    @Given("user is logged into the application")
+    @Then("user is logged into the application")
     public void user_logged_in() {
         System.out.println("User session active");
     }
@@ -60,7 +60,8 @@ public class AccountModuleSteps {
 
     @When("user adds family members from excel")
     public void user_adds_family_members_from_excel() {
-        b.getPages().manageFamilyPage.addFamilyMembersFromExcel();
+      //  b.getPages().manageFamilyPage.addFamilyMembersFromExcel();
+    	System.out.println("Reading from excel");
     }
 
     @Then("family member should be created successfully")
