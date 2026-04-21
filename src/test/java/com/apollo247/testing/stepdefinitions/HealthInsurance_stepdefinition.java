@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.testng.Assert;
 
 import com.apollo247.testing.utilities.BaseClass;
+import com.apollo247.testing.utilities.SessionManager;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -20,7 +21,16 @@ public class HealthInsurance_stepdefinition {
 @Given("User navigates to Health Insurance page and enter pincode {string}")
 public void user_navigates_to_health_insurance_page_and_enter_pincode(String pincode) {
 	b.getPages().dashboardPage.clickonHealthInsuranceModule();
+	
+	//b.getPages().healthInsurancePage.performEnterPinCode(pincode);
+	try {
+		SessionManager.switchToDomain(b.getDriver(), "https://www.apollo247insurance.com/");
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	b.getPages().healthInsurancePage.performEnterPinCode(pincode);
+
 	System.out.println("Enter pincode");
 
 	
@@ -28,6 +38,7 @@ public void user_navigates_to_health_insurance_page_and_enter_pincode(String pin
 }
 @When("User selects {string} and {string} at the age {string} as members")
 public void user_selects_and_at_the_age_as_members(String gender, String m1, String m1Age) {
+	//b.getPages().healthInsurancePage.performEnterPinCode("601201");
 	b.getPages().healthInsurancePage.selectGender(gender);
 	b.getPages().healthInsurancePage.unselectMember();
 	b.getPages().healthInsurancePage.selectMember(m1, m1Age);
@@ -80,6 +91,41 @@ public void family_insurance_plans_should_be_displayed_correctly() {
 	Assert.assertTrue(b.getPages().healthInsuranceProductListings.isNoPlansMessageDisplayed(),"'No plans found' message not displayed correctly");
     Assert.assertTrue(b.getPages().healthInsuranceProductListings.isPlansAvailable(),"Plans are not displayed properly");
 	System.out.println("Validated");
+}
+
+//@filtering 
+//User selected Male self at age 22
+
+@When("User applies coverage filter between {string}")
+public void user_applies_coverage_filter_between(String coverageAmount) {
+	//b.getPages().healthInsuranceProductListings.clickFilter();
+	b.getPages().healthInsuranceProductListings.coverageAmount(coverageAmount);
+	System.out.println("coverage amt selected");
+	
+    
+}
+@When("User selects room rent type as {string}")
+public void user_selects_room_rent_type_as(String roomRentType) {
+	//b.getPages().healthInsuranceProductListings.clickFilter();
+	b.getPages().healthInsuranceProductListings.roomRentType(roomRentType);
+	System.out.println("roomrent type selected");
+    
+}
+@When("User sorts plans by {string}")
+public void user_sorts_plans_by(String plan) {
+	b.getPages().healthInsuranceProductListings.sortByPlans(plan);
+	System.out.println("sort plans selected");
+
+}
+@Then("Plans should be displayed based on applied filters coverage amount {string} and {string}")
+public void plans_should_be_displayed_based_on_applied_filters_coverage_amount_and(String coverageAmt, String planType) {
+
+    boolean isValid = b.getPages().healthInsuranceProductListings.isMatch(coverageAmt);
+    Assert.assertTrue(isValid, "Coverage filter validation failed");
+    Assert.assertTrue(b.getPages().healthInsuranceProductListings.isTextMatching(planType),"Text does not match!");
+    System.out.println("amt and plans validated");
+    
+    
 }
 
 }

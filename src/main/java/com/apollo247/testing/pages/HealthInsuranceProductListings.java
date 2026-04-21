@@ -57,14 +57,20 @@ public class HealthInsuranceProductListings {
 	@FindBy(id = "premium_desc")
 	private WebElement premiumOption;
 	
-	@FindBy(xpath = "//button[@class=\"n_  r_\"]")
+	@FindBy(xpath = "//button[contains(@id,'headlessui-listbox-button')]")
 	private WebElement plansCoverageAmountValue;
+	
+	@FindBy(xpath = "//h3[normalize-space()='Premium']")
+	private WebElement premiumPlanHeader;
 	// ----------Getters---------------
 	public WebElement getViewPlans() {
 		return viewPlansButton;
 	}
 	public WebElement getPlansCoverageAmountValue() {
 		return plansCoverageAmountValue;
+	}
+	public WebElement getPremiumPlanHeader() {
+		return premiumPlanHeader;
 	}
 
 	public WebElement getViewPlansHeader() {
@@ -132,15 +138,7 @@ public class HealthInsuranceProductListings {
 	}
 
 	public void coverageAmount(String coverageRange) {
-//		clickFilter();
-//		clickCoverageOption();
-//		driver.findElement(By.xpath("//label[contains(normalize-space(), '"+coveragerange+"')]/preceding-sibling::input[@type='radio']")).click();
-//		
-//		
-//		clickApplyButton();
-		// Open filter
 	    clickFilter();
-
 	    // Click coverage option
 	    clickCoverageOption();
 
@@ -195,8 +193,8 @@ public class HealthInsuranceProductListings {
 	public  boolean isMatch(String rangeStr) {
 
         // normalize
-    	rangeStr=coverageRange(rangeStr).getText();
-    	String valueStr=getPlansCoverageAmountValue().getText();
+		//rangeStr=coverageRange(rangeStr).getText();
+		String valueStr=getPlansCoverageAmountValue().getText();
     	
         rangeStr = rangeStr.toLowerCase().replaceAll("[^0-9.\\-a-z]", "");
         valueStr = valueStr.toLowerCase().replaceAll("[^0-9.a-z]", "");
@@ -229,4 +227,9 @@ public class HealthInsuranceProductListings {
 
         return value >= min && value <= max;
     }
+	
+	public boolean isTextMatching(String expectedText) {
+	    String actualText = wait.until(ExpectedConditions.visibilityOf(getPremiumPlanHeader())).getText().trim();
+	    return actualText.equalsIgnoreCase(expectedText.trim());
+	}
 }

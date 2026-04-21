@@ -9,7 +9,7 @@ import io.cucumber.testng.CucumberOptions;
 	    plugin = {
 	        "pretty",
 	        "html:Reports/Health_Insurance.html",
-	        "json:Reports/cucumber.json"
+	        "json:Reports/Health_Insurance.json"
 	    },
 	    monochrome = true
 	)

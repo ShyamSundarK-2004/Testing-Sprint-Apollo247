@@ -1,6 +1,8 @@
 package com.apollo247.testing.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
+
 import java.time.Duration;
 import java.util.List;
 
@@ -92,18 +94,34 @@ public class HealthInsurancePage {
 	}
 
 	public void selectGender(String gender) {
-		By locator = By.xpath("//button[normalize-space()='" + gender + "']");
-		
 
-		for (int i = 0; i < 3; i++) {
-			try {
-				wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".PincodeModal_middleSection__RCZiF")));
-				wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(locator))).click();
-				break;
-			} catch (StaleElementReferenceException e) {
-				System.out.println("Retrying gender click...");
-			}
-		}
+	    By locator = By.xpath("//button[normalize-space()='" + gender + "']");
+	    By modal = By.cssSelector(".PincodeModal_middleSection__RCZiF");
+
+	    // ✅ Step 1: Wait ONCE for modal to disappear
+	    wait.until(ExpectedConditions.invisibilityOfElementLocated(modal));
+	    //utility.waitUntilInvisibilityOfElementLocated(10L, modal);
+
+	    // ✅ Step 2: Retry click (only for stale/intercept issues)
+	    for (int i = 0; i < 3; i++) {
+	        try {
+	            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+	            element.click();
+	            return; // ✅ success → exit method
+	        } 
+	        catch (StaleElementReferenceException e) {
+	            System.out.println("Retrying due to stale element...");
+	        } 
+	        catch (ElementClickInterceptedException e) {
+	            System.out.println("Retrying due to click interception...");
+	            ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
+	                    driver.findElement(locator));
+	            return;
+	        }
+	    }
+
+	    // ❌ If still failing → fail properly
+	    throw new RuntimeException("Unable to click gender: " + gender);
 	}
 
 	public void clickViewButton(String buttonName) {
