@@ -34,8 +34,8 @@ Feature: Automation Testing on Lab Test Module
     And User clicks on explore radiology option and switch to radiology tab
     Then User should be on radiology page
     When User enters radiology details
-      | city      | hospital                   | date     | tests         | filePath                                               |
-      | Bengaluru | Indiranagar- Apollo Clinic | April-15 | X-Ray,CT Scan | C:\\Users\\Shyam Sundar\\Documents\\prescription2.jpeg |
+      | city    | hospital                  | date     | tests         | filePath                                               |
+      | Chennai | Anna Nagar- Apollo Clinic | April-15 | X-Ray,CT Scan | C:\\Users\\Shyam Sundar\\Documents\\prescription2.jpeg |
     Then User should see request call button is enabled
 
   @labTest @myOrder

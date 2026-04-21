@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.apollo247.testing.utilities.BaseClass;
-import com.apollo247.testing.utilities.ExtendsReportsUtilities;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
@@ -27,9 +26,6 @@ public class LabTestSteps {
 	@Given("User is on Lab Tests page")
 	public void user_is_on_lab_tests_page() {
 
-		// Logging step in Extent Report
-		ExtendsReportsUtilities.info("User navigates to Lab Tests page");
-
 		// Click on Lab Tests module
 		b.getPages().dashboardPage.clickOnModule("Lab Tests");
 
@@ -39,9 +35,6 @@ public class LabTestSteps {
 
 	@Then("check user in on correct module")
 	public void check_user_in_on_correct_module() {
-
-		// Log validation step
-		ExtendsReportsUtilities.info("Validating Lab Tests module");
 
 		// Get current page URL
 		String title = b.getPages().labTestPage.getCurrentPageUrl();
@@ -55,9 +48,6 @@ public class LabTestSteps {
 	@When("User searches for {string}")
 	public void user_searches_for(String testName) {
 
-		// Log search action
-		ExtendsReportsUtilities.info("User searches for: " + testName);
-
 		// Close popup if exists
 		b.getPages().labTestPage.closePopupIfPresent();
 
@@ -67,9 +57,6 @@ public class LabTestSteps {
 
 	@Then("validate search result for {string}")
 	public void validate_search_result_for(String type) {
-
-		// Log validation type
-		ExtendsReportsUtilities.info("Validating search result type: " + type);
 
 		// Switch based on type (valid / invalid)
 		switch (type.toLowerCase()) {
@@ -96,9 +83,6 @@ public class LabTestSteps {
 	@When("User clicks on book test using prescription")
 	public void user_clicks_on_book_test_using_prescription() {
 
-		// Log action
-		ExtendsReportsUtilities.info("User clicks Book by Prescription");
-
 		// Close popup
 		b.getPages().labTestPage.closePopupIfPresent();
 
@@ -108,9 +92,6 @@ public class LabTestSteps {
 
 	@When("User uploads valid prescription")
 	public void user_uploads_valid_prescription() {
-
-		// Log upload step
-		ExtendsReportsUtilities.info("User uploads valid prescription");
 
 		// File path for upload
 		String path = "C:\\Users\\Shyam Sundar\\Documents\\prescription2.jpeg";
@@ -125,9 +106,6 @@ public class LabTestSteps {
 	@Then("verify  proceed button is enabled")
 	public void verify_proceed_button_is_enabled() {
 
-		// Log validation
-		ExtendsReportsUtilities.info("Checking if proceed button is enabled");
-
 		// Validate proceed button
 		assertTrue(b.getPages().bookByPrescriptionPage.isProceedBtnEnabled(), "Proceed button is not enabled");
 	}
@@ -136,9 +114,6 @@ public class LabTestSteps {
 
 	@Then("verify invalid file message displayed and click on ok")
 	public void verify_invalid_file_message_displayed_and_click_on_ok() {
-
-		// Log invalid upload
-		ExtendsReportsUtilities.info("Uploading invalid prescription and validating error");
 
 		String path = "C:\\Users\\Shyam Sundar\\Documents\\prescription.webp";
 
@@ -155,9 +130,6 @@ public class LabTestSteps {
 	@Then("verify proceed button is not enabled")
 	public void verify_proceed_button_is_not_enabled() {
 
-		// Log validation
-		ExtendsReportsUtilities.info("Checking if proceed button is disabled");
-
 		// Validate button state
 		assertTrue(b.getPages().bookByPrescriptionPage.isProceedBtnEnabled(), "Proceed button is enabled");
 	}
@@ -167,9 +139,6 @@ public class LabTestSteps {
 	@When("User clicks on lab test search bar")
 	public void user_clicks_on_lab_test_search_bar() {
 
-		// Log action
-		ExtendsReportsUtilities.info("User clicks on search bar");
-
 		b.getPages().labTestPage.closePopupIfPresent();
 		b.getPages().labTestPage.clickOnSearchBox();
 	}
@@ -177,17 +146,11 @@ public class LabTestSteps {
 	@When("User clicks on explore radiology option and switch to radiology tab")
 	public void user_clicks_on_explore_radiology_option_and_switch_to_radiology_tab() {
 
-		// Log action
-		ExtendsReportsUtilities.info("User switches to radiology tab");
-
 		b.getPages().labTestPage.clickOnRadiologyBookingBtn();
 	}
 
 	@Then("User should be on radiology page")
 	public void user_should_be_on_radiology_page() {
-
-		// Log validation
-		ExtendsReportsUtilities.info("Validating radiology page");
 
 		String url = b.getPages().radiologyPage.getCurrentPageUrl();
 
@@ -197,9 +160,6 @@ public class LabTestSteps {
 
 	@When("User enters radiology details")
 	public void user_enters_radiology_details(DataTable dataTable) {
-
-		// Log data entry
-		ExtendsReportsUtilities.info("Entering radiology details");
 
 		List<Map<String, String>> allData = dataTable.asMaps();
 
@@ -224,9 +184,6 @@ public class LabTestSteps {
 	@Then("User should see request call button is enabled")
 	public void user_should_see_request_call_button_is_enabled() {
 
-		// Log validation
-		ExtendsReportsUtilities.info("Validating Request Call button");
-
 		assertTrue(b.getPages().radiologyPage.isRequestCallBtnEnabled(), "Request Call Button is not Enabled");
 	}
 
@@ -234,9 +191,6 @@ public class LabTestSteps {
 
 	@Given("User should be on orders page")
 	public void user_should_be_on_orders_page() {
-
-		// Log navigation
-		ExtendsReportsUtilities.info("Navigating to orders page");
 
 		b.getPages().labTestPage.closePopupIfPresent();
 		b.getPages().labTestPage.clickOnViewReportInMyOrder();
@@ -250,17 +204,11 @@ public class LabTestSteps {
 	@When("User clicks on patient dropdown")
 	public void user_clicks_on_patient_dropdown() {
 
-		// Log action
-		ExtendsReportsUtilities.info("Clicking patient dropdown");
-
 		b.getPages().myOrderPage.clickOnUserDropdown();
 	}
 
 	@Then("User select a name {string} and check orders")
 	public void user_select_a_name_and_check_orders(String userName) {
-
-		// Log selection
-		ExtendsReportsUtilities.info("Selecting user: " + userName);
 
 		String user = b.getPages().myOrderPage.clickOnSpecificUser(userName);
 
