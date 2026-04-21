@@ -19,19 +19,19 @@ public class MyAppointmentPage {
 	        this.driver = driver;
 	        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 	    }
-	@FindBy(css = "[title='My Appointments - View All']")
+	@FindBy(linkText="View All")
     private WebElement viewAll;
 
-    @FindBy(xpath = "//div[.//*[contains(text(),'Sreedhara')]]//button[.//span[text()='Rebook']]")
+    @FindBy(xpath = "//p[text()='Dr. Amvrin Chatterjee']/../../..//span[text()='Rebook']")
     private WebElement rebook;
     
-    @FindBy(xpath = "//span[text()='Continue']")
+    @FindBy(xpath = "//button[.//span[text()='Continue']]")
     private WebElement Conbtn;
      
     @FindBy(xpath = "//span[text()='Change']")
     private WebElement ClickChange;
 
-    @FindBy(xpath ="//p[text()='indhira b']/../../..//div[@class=\"CheckoutPatientSelectionDialog_radioBtn__U8sBs\"]")
+    @FindBy(xpath ="//p[text()='sundar k']/../../..//div[@class=\"CheckoutPatientSelectionDialog_radioBtn__U8sBs\"]")
     private WebElement checkboxClick;
     
     @FindBy(xpath = "//span[text()='Proceed']")
@@ -70,9 +70,13 @@ public class MyAppointmentPage {
 	public WebElement getConbtn() {
 		return Conbtn;
 	}
+	public void view() {
+		wait.until(ExpectedConditions.elementToBeClickable(viewAll)).click();
+	}
 
 	public void Rebook() {
 		wait.until(ExpectedConditions.elementToBeClickable(rebook)).click();
+		wait.until(ExpectedConditions.visibilityOf(Conbtn));
 		wait.until(ExpectedConditions.elementToBeClickable(Conbtn)).click();
 		
 	}

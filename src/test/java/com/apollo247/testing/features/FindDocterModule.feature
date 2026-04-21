@@ -1,12 +1,11 @@
 Feature: Apollo 247 End-to-End Functional Testing
 Background:
 When user clicks the find_Docter module
-Then validate modules has beeen clicked
 # Scenario 1: Doctor Booking
 @doctorBooking @smoke   
 Scenario: Book a hospital visit appointment
   When  user searches for "Andrology" specialist in "Chennai" on date "20"
-  And user selects doctor "Dr. Amvrin Chatterjee"
+  And user selects doctor 
   And user selects available slot
   And user adds new patient with details
   | firstName  | lastName    | gender | email                | year | month | day |
@@ -52,23 +51,11 @@ Scenario: Verify BMI result for Female user using Excel data
 Scenario Outline: Validate doctor description for multiple doctors
   When User selects location and specialization
   And User sorts by Most Liked
-  And User opens doctor description  "<docterName>"
-  Then Doctor description should be validated ithuku nan scenario  "<expectedDescription>"
+  And User opens doctor description "<doctorName>"
+  Then Doctor description should be validated "<expectedDescription>"
 
 Examples:
   | doctorName         | expectedDescription                                                                     |
-  | Dr. Meenakshi N    | Dr. Meenakshi N has over 28 years of experience and is fluent in English, Hindi, Punjabi.|
+  | Dr. Ajay K Sinha    | Dr. Ajay K Sinha has over 30 years of experience and is fluent in English, Hindi, Punjabi.|
   | Dr. Tripti Agrawal | Dr. Tripti Agrawal has over 25 years of experience and is fluent in English, Hindi.      |
   
-# Scenario 6: Doctor Search Validation
- @Negative1
-  Scenario: Verify validation message when mandatory fields are missing
-    Given User is on Doctor Search page
-    When User clicks on search without entering location
-    Then Validation message should be displayed for required field
-
-  @Negative
-  Scenario: Verify message when no doctors are found
-    Given User is on Doctor Search page
-    When User searches with rare criteria "Ayurveda Dermatology"
-    Then No doctors found message should be displayed

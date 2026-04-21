@@ -41,14 +41,14 @@ public class SearchDoctorPage {
     @FindBy(xpath = "//span[text()='Submit']")
     private WebElement submitBtn;
     
-    @FindBy(xpath = "//div[@class=\"slots_date__Dy0W_ \"]/../../..//p[text()='20']")
-    private WebElement dateSlot;
+//    @FindBy(xpath = "//div[@class=\"slots_date__Dy0W_ \"]/../../..//p[text()='20']")
+//    private WebElement dateSlot;
+//    
+//    @FindBy(css = "[class=\"slots_slot__YYaL_ slots_selected__xaSp_\"]")
+//    private WebElement TimeSlot;
     
-    @FindBy(css = "[class=\"slots_slot__YYaL_ slots_selected__xaSp_\"]")
-    private WebElement TimeSlot;
-    
-    @FindBy(xpath = "//span[text()='Continue']")
-    private WebElement continueBtn;
+    @FindBy(xpath = "//span[text()='Schedule Appointment']")
+    private WebElement schedulebtn;
 
     @FindBy(xpath = "//span[text()='Change']")
     private WebElement change;
@@ -112,19 +112,19 @@ public class SearchDoctorPage {
 	}
 
 
-	public WebElement getDateSlot() {
-		return dateSlot;
-	}
+//	public WebElement getDateSlot() {
+//		return dateSlot;
+//	}
+//
+//
+//
+//	public WebElement getTimeSlot() {
+//		return TimeSlot;
+//	}
 
 
-
-	public WebElement getTimeSlot() {
-		return TimeSlot;
-	}
-
-
-	public WebElement getContinueBtn() {
-		return continueBtn;
+	public WebElement getscheduleBtn() {
+		return schedulebtn;
 	}
 
 
@@ -221,23 +221,27 @@ public class SearchDoctorPage {
 
 	    wait.until(ExpectedConditions.elementToBeClickable(submitBtn)).click();
 	}
-    public void SelectDoctor(String doctorName) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+	public void selectFirstDoctor() {
 
-        WebElement doctorBtn = wait.until(
-            ExpectedConditions.elementToBeClickable(
-                By.xpath("//p[text()='" + doctorName + "']/ancestor::div//button[contains(text(),'Hospital Visit')]")
-            )
-        );
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-        doctorBtn.click();
-    }
+	    WebElement firstCard = wait.until(
+	        ExpectedConditions.visibilityOfElementLocated(
+	            By.xpath("//div[contains(@class,'QuickBook_slotWrapperCard')]")
+	        )
+	    );
+
+	    String doctorName = firstCard.findElement(By.xpath(".//h3 | .//p")).getText();
+	    System.out.println("Selecting Doctor: " + doctorName);
+
+	    firstCard.findElement(By.xpath(".//a")).click();
+	}
    
 
     public void SelectSlot() {
-        wait.until(ExpectedConditions.elementToBeClickable(dateSlot)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(TimeSlot)).click();
-        continueBtn.click();
+//        wait.until(ExpectedConditions.elementToBeClickable(dateSlot)).click();
+//        wait.until(ExpectedConditions.elementToBeClickable(TimeSlot)).click();
+    	      wait.until(ExpectedConditions.elementToBeClickable(schedulebtn)).click();
     }
 
     public void AddPatient(String fName, String lName, String mail,String year, String month, String day) {
@@ -259,29 +263,49 @@ public class SearchDoctorPage {
 
         wait.until(ExpectedConditions.elementToBeClickable(dob)).click();
 
-        // Click header twice to go to YEAR view
+        // Click header → go to Year view
         WebElement header = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//button[contains(@class,'react-calendar__navigation__label')]")
         ));
-        header.click(); // Month -> Year
-        header.click(); // Year -> Decade
+        header.click(); // month → year
+        header.click(); // year → decade
 
-        // Select Year using JS click
-        WebElement yearEle = wait.until(ExpectedConditions.visibilityOfElementLocated(
+        //  Navigate to correct decade dynamically
+        while (true) {
+
+            WebElement decadeRange = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//button[contains(@class,'react-calendar__navigation__label')]")
+            ));
+
+            String text = decadeRange.getText(); // e.g. "2021 – 2030"
+
+            int start = Integer.parseInt(text.split("–")[0].trim());
+            int end = Integer.parseInt(text.split("–")[1].trim());
+            int target = Integer.parseInt(year);
+
+            if (target >= start && target <= end) {
+                break; // correct decade reached
+            } else if (target < start) {
+                driver.findElement(By.xpath("//button[contains(@class,'prev-button')]")).click();
+            } else {
+                driver.findElement(By.xpath("//button[contains(@class,'next-button')]")).click();
+            }
+        }
+
+        // ✅ Select Year
+        wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//button//abbr[text()='" + year + "']")
-        ));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", yearEle);
+        )).click();
 
-        // Select Month
-        WebElement monthEle = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.xpath("//button//abbr[text()='" + month + "']")
-        ));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", monthEle);
+        // ✅ Select Month
+        wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button//abbr[contains(text(),'" + month + "')]")
+        )).click();
 
-        // Select Day
-        WebElement dayEle = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.xpath("//button//abbr[text()='" + day + "']")
-        ));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", dayEle);
+        // ✅ Select Day
+        wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[not(contains(@class,'neighboringMonth')) and text()='" + day + "']")
+        )).click();
     }
     }
+    

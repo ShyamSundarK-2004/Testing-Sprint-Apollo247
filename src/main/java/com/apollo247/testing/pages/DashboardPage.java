@@ -139,7 +139,7 @@ public class DashboardPage {
 	public void closeDomPopup() {
 		try {
 			// Wait for shadow host and locate the hidden host
-			WebElement domPopup = utilities.waituntilPresenceOfElementLocated(20L,
+			WebElement domPopup = utilities.waituntilPresenceOfElementLocated(10L,
 					By.cssSelector("ct-web-popup-imageonly"));
 
 			// Access shadow root
@@ -150,7 +150,8 @@ public class DashboardPage {
 
 			closeBtn.click();
 		} catch (Exception e) {
-			System.out.println("No Popup found");
+			// Popup not found or already closed, continuing without error
+			System.out.println("Popup element not found or already closed. Continuing test...");
 		}
 	}
 
@@ -197,8 +198,12 @@ public class DashboardPage {
 			return false;
 		}
 	}
+	public void clickBuyMedicines() {
+	    getBuyMedicineModule().click();
+	}  
 	public void clickProfileIcon() {
 	    clickOnMyAccountBtn();
 	}
+
 
 }

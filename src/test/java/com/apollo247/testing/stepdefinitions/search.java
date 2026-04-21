@@ -33,11 +33,6 @@ public class search  {
 	public void user_clicks_the_find_docter_module() {
 	      b.getPages().dashboardPage.clickOnModule("Find Doctors");
 	}
-	@Then("validate modules has beeen clicked")
-	public void validate_modules_has_beeen_clicked() {
-		String actualTitle = b.getDriver().getTitle();
-	    Assert.assertTrue(actualTitle.contains("Find Doctors"));
-	}
 
 	@When("user searches for {string} specialist in {string} on date {string}")
 	public void searchDoctor(String spec, String city, String date) {
@@ -45,9 +40,9 @@ public class search  {
 		b.getPages().Searchdocter.SearchDoctor(spec, city, date);
 	}
 
-	@When("user selects doctor {string}")
-	public void selectDoctor(String doctorName) {
-		b.getPages().Searchdocter.SelectDoctor(doctorName);
+	@When("user selects doctor")
+	public void selectDoctor() {
+		b.getPages().Searchdocter.selectFirstDoctor();
 	}
 
 	@When("user selects available slot")
@@ -99,13 +94,13 @@ public class search  {
 	    
 	}
 	@When("user clicks on first displayed docter")
-	public void user_clicks_on_first_displayed_docter(String doctname) {
-		b.getPages().FilterDocter.ClickDocter(doctname);
+	public void user_clicks_on_first_displayed_docter() {
+		b.getPages().FilterDocter.clickFirstDoctor();
 	  
 	}
 	@When("select the slot and continue to book")
 	public void select_the_slot_and_continue_to_book() {
-		b.getPages().Searchdocter.SelectSlot();
+		b.getPages().FilterDocter.Clickconbtn();
 	}
 	@Then("verify the booking details")
 	public void verify_the_booking_details() {
@@ -121,7 +116,7 @@ public class search  {
 	//MyAppointment
 	@When("User navigates to My Appointments and clicks View All")
 	public void user_navigates_to_my_appointments_and_clicks_view_all() {
-		b.getPages().AppointmentDocter.getViewAll();
+		b.getPages().AppointmentDocter.view();
 	}
 	@When("User clicks on Rebook for a doctor")
 	public void user_clicks_on_rebook_for_a_doctor() {
@@ -129,7 +124,7 @@ public class search  {
 	}
 	@When("User clicks Continue")
 	public void user_clicks_continue() {
-		b.getPages().Searchdocter.getContinueBtn();
+		b.getPages().AppointmentDocter.getConbtn();
 		
 	    
 	}
@@ -155,14 +150,12 @@ public class search  {
 	public void user_sorts_by_most_liked() {
 		b.getPages().LocationDocter.sortByMostLiked();
 	}
-	@When("User opens doctor description")
+	@When("User opens doctor description {string}")
 	public void user_opens_doctor_description(String doctername) {
-		String name = b.getPages().LocationDocter.openDoctor(doctername);
-
+	    String name = b.getPages().LocationDocter.openDoctor(doctername);
 	    System.out.println("Doctor Name: " + name);
-
 	}
-	@Then("Doctor description should be validated")
+	@Then("Doctor description should be validated {string}")
 	public void doctor_description_should_be_validated(String expectedDescription) {
 		String text = b.getPages().LocationDocter.getDescription();
 

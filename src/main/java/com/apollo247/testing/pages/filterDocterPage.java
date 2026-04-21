@@ -3,6 +3,7 @@ package com.apollo247.testing.pages;
 import java.time.Duration;
 
 
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -23,29 +24,21 @@ public class filterDocterPage{
 	@FindBy(linkText = "General Physician/ Internal Medicine")
 	private WebElement generalPhysician;
 
-	@FindBy(xpath = "[type=\"button\"]")
-	private WebElement relevanceDropdown;
-
-	@FindBy(xpath = "//span[text()='Price - low to high']")
-	private WebElement lowToHigh;
-
 	@FindBy(xpath = "//span[text()='6-10']")
 	private WebElement experience;
 
 	@FindBy(xpath = "//span[text()='English']")
 	private WebElement language;
+	 
+	@FindBy(xpath ="//button[.//span[text()='Continue']]")
+	private WebElement  Continuebutton;
+
+	public WebElement getContinuebutton() {
+		return Continuebutton;
+	}
 
 	public WebElement getGeneralPhysician() {
 		return generalPhysician;
-	}
-
-	
-	public WebElement getRelevanceDropdown() {
-		return relevanceDropdown;
-	}
-
-	public WebElement getLowToHigh() {
-		return lowToHigh;
 	}
 
 	public WebElement getExperience() {
@@ -57,40 +50,43 @@ public class filterDocterPage{
 	}
 	public void Relevance() {
 
-	    By dropdownBy = By.xpath("//button[.//p[contains(text(),'Relevance')]]");
+	    By dropdownBy = By.xpath("//button[contains(.,'Relevance')]");
 
 	    WebElement dropdown = wait.until(
-	            ExpectedConditions.elementToBeClickable(dropdownBy)
+	        ExpectedConditions.visibilityOfElementLocated(dropdownBy)
 	    );
 
-	    // Scroll
+	    wait.until(ExpectedConditions.elementToBeClickable(dropdown)).click();
+	    
+	 // Scroll into view
 	    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", dropdown);
 
-	    Actions act = new Actions(driver);
-
-	    act.moveToElement(dropdown)        
-	       .pause(Duration.ofSeconds(1)) 
-	       .click()                  
-	       .build()
-	       .perform();
-	    // Wait for dropdown options visible
-	    By optionBy = By.xpath("//li//span[contains(text(),'Price')]");
+	    // Wait for dropdown option
+	    By optionBy = By.xpath("//span[normalize-space()='Price - low to high']");
 
 	    WebElement option = wait.until(
-	            ExpectedConditions.visibilityOfElementLocated(optionBy)
+	        ExpectedConditions.visibilityOfElementLocated(optionBy)
 	    );
 
-	    wait.until(ExpectedConditions.elementToBeClickable(option));
-
-	    option.click();
+	    wait.until(ExpectedConditions.elementToBeClickable(option)).click();
 	}
-	public void ClickDocter(String Docter) {
-		WebElement doctorBtn = wait.until(
-			    ExpectedConditions.elementToBeClickable(
-			        By.xpath("//h3[contains(text(),'" + Docter+ "')]/ancestor::div[contains(@class,'DoctorList')]//button")
-			    )
-			);
-		 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", doctorBtn);
+	public void filter() {
+		wait.until(ExpectedConditions.elementToBeClickable(experience)).click();
+		wait.until(ExpectedConditions.elementToBeClickable(language)).click();
+	}
+	public void clickFirstDoctor() {
+
+	    WebElement doctorBtn = wait.until(
+	        ExpectedConditions.elementToBeClickable(
+	            By.xpath("//div[contains(@class,'DoctorCard')]//span[text()='Online Consult']")
+	        )
+	    );
+
+	    doctorBtn.click();  // normal click podhum
+	}
+	public void Clickconbtn() {
+		wait.until(ExpectedConditions.visibilityOf(Continuebutton)).click();
+		wait.until(ExpectedConditions.elementToBeClickable(Continuebutton)).click();
 	}
 	public void ClickGeneral() {
 		getGeneralPhysician().click();
