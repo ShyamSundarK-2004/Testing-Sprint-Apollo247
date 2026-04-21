@@ -6,7 +6,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Reporter;
 
 import com.apollo247.testing.utilities.JavaScriptUtilities;
 import com.apollo247.testing.utilities.WebdriverUtility;
@@ -108,12 +107,11 @@ public class LabTestPage {
 				getPopupCloseBtn().click();
 			}
 		} catch (Exception e) {
-			Reporter.log("No popup Displayed");
 		}
 	}
 
 	public boolean isResultDisplayed() {
-		utilities.waitUntilElementIsVisibility(20L, getTestNames().getFirst());
+		utilities.waitUntilElementIsVisibility(20L, getTestNames().get(1));
 		return getTestNames().size() > 0;
 	}
 

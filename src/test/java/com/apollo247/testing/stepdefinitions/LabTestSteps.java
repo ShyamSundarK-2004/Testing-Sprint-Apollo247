@@ -24,6 +24,7 @@ public class LabTestSteps {
 	@Given("User is on Lab Tests page")
 	public void user_is_on_lab_tests_page() {
 		b.getPages().dashboardPage.clickOnModule("Lab Tests");
+//		b.getDriver().findElement(By.cssSelector("[href='https://apollo247insurance.com/health-insurance']")).click();
 		b.getPages().labTestPage.closePopupIfPresent();
 	}
 
