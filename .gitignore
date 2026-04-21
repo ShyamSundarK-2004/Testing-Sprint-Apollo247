@@ -1,7 +1,4 @@
 /test-output/
-/target/
-/Reports/
-/Screenshots/
+/target/]
 *.log
 *.html
-*.xml
