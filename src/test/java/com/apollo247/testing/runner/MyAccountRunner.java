@@ -8,7 +8,6 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
     features = "./src/test/java/com/apollo247/testing/features",
     glue = "com.apollo247.testing.stepdefinitions",
-    tags = "@NeedHelp",
     plugin = {
         "pretty",
         "html:Reports/account-module-report.html",
