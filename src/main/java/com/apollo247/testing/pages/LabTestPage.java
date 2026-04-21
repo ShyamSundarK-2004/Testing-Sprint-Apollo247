@@ -49,6 +49,10 @@ public class LabTestPage {
 	@FindBy(xpath = "//h3[text() = 'Upload and Order']")
 	private WebElement bookByPrescriptionModule;
 
+	// view orders in my orders page button
+	@FindBy(xpath = "//h3[text() = 'View Reports in My Orders']")
+	private WebElement viewReportInMyOrder;
+
 	// ===== GETTERS =====
 
 	public WebElement getSearchBar() {
@@ -75,6 +79,10 @@ public class LabTestPage {
 		return bookByPrescriptionModule;
 	}
 
+	public WebElement getViewReportInMyOrder() {
+		return viewReportInMyOrder;
+	}
+
 	// ====== BUSINESS LOGIC ======
 
 	// click on search box
@@ -99,12 +107,11 @@ public class LabTestPage {
 				getPopupCloseBtn().click();
 			}
 		} catch (Exception e) {
-
 		}
 	}
 
 	public boolean isResultDisplayed() {
-		utilities.waitUntilElementIsVisibility(20L, getTestNames().getFirst());
+		utilities.waitUntilElementIsVisibility(20L, getTestNames().get(1));
 		return getTestNames().size() > 0;
 	}
 
@@ -136,6 +143,11 @@ public class LabTestPage {
 		getRadiologyBookingBtn().click();
 		utilities.switchToWindowByURL("radiology");
 
+	}
+
+	public void clickOnViewReportInMyOrder() {
+		utilities.waitUntilElementIsVisibility(20L, getViewReportInMyOrder());
+		jsUtil.jsClick(getViewReportInMyOrder());
 	}
 
 }

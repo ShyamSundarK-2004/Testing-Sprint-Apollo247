@@ -5,6 +5,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import com.apollo247.testing.pages.DashboardPage;
 import com.apollo247.testing.pages.LabTestPage;
+import com.apollo247.testing.pages.MyOrderPage;
 import com.apollo247.testing.pages.RadiologyPage;
 import com.apollo247.testing.pages.UploadPrescriptionPage;
 
@@ -14,6 +15,7 @@ public class Pages {
 	public LabTestPage labTestPage;
 	public UploadPrescriptionPage bookByPrescriptionPage;
 	public RadiologyPage radiologyPage;
+	public MyOrderPage myOrderPage;
 
 	// all the pages are initialized with the driver object
 	public Pages(WebDriver driver) {
@@ -23,7 +25,8 @@ public class Pages {
 		PageFactory.initElements(driver, dashboardPage);
 
 		// labtest page driver initialization
-		labTestPage = PageFactory.initElements(driver, LabTestPage.class);
+		labTestPage = new LabTestPage(driver);
+		PageFactory.initElements(driver, labTestPage);
 
 		// upload_prescription page driver initialization
 		bookByPrescriptionPage = new UploadPrescriptionPage(driver);
@@ -32,5 +35,9 @@ public class Pages {
 		// radiology page driver initialization
 		radiologyPage = new RadiologyPage(driver);
 		PageFactory.initElements(driver, radiologyPage);
+
+		// orders page driver initialization
+		myOrderPage = new MyOrderPage(driver);
+		PageFactory.initElements(driver, myOrderPage);
 	}
 }

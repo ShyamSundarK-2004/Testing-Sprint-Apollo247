@@ -132,6 +132,11 @@ public class WebdriverUtility {
 		wait.until(ExpectedConditions.invisibilityOfElementLocated(element));
 	}
 
+	public void waitUntilUrlContains(long timeInSeconds, String url) {
+		wait = new WebDriverWait(driver, Duration.ofSeconds(timeInSeconds));
+		wait.until(ExpectedConditions.urlContains(url));
+	}
+
 	// popups
 	// alert accept
 	public void handleAcceptAlert() {

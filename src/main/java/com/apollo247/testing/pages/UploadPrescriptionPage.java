@@ -33,8 +33,9 @@ public class UploadPrescriptionPage {
 	@FindBy(xpath = "//button/span[text() = 'Proceed']")
 	private WebElement preceedBtn;
 
-	@FindBy(xpath = "//h5[text() = 'Prescription uploaded successfully']")
-	private WebElement testBookedStatus;
+	// invalid message popup ok button
+	@FindBy(xpath = "//span[contains(text(),'Okay')]//parent::button")
+	private WebElement closeInvalidMessagePopup;
 
 	// ====== Getters ======
 
@@ -54,10 +55,9 @@ public class UploadPrescriptionPage {
 		return preceedBtn;
 	}
 
-	public WebElement getTestBookedStatus() {
-		return testBookedStatus;
+	public WebElement getCloseInvalidMessagePopup() {
+		return closeInvalidMessagePopup;
 	}
-
 	// ====== Business Logics ======
 
 	public void uploadFile(String path) {
@@ -80,7 +80,7 @@ public class UploadPrescriptionPage {
 		return getProceedBtn().isEnabled();
 	}
 
-	public boolean checkTestStatus() {
-		return getTestBookedStatus().isDisplayed();
+	public void closeInvalidMessagePopup() {
+		getCloseInvalidMessagePopup().click();
 	}
 }
