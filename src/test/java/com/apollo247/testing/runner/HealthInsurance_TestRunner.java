@@ -8,8 +8,8 @@ import io.cucumber.testng.CucumberOptions;
 	    glue = {"com.apollo247.testing.stepdefinitions"},
 	    plugin = {
 	        "pretty",
-	        "html:target/cucumber-reports.html",
-	        "json:target/cucumber.json"
+	        "html:Reports/Health_Insurance.html",
+	        "json:Reports/cucumber.json"
 	    },
 	    monochrome = true
 	)
