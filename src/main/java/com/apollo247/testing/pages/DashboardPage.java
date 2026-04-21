@@ -16,21 +16,6 @@ public class DashboardPage {
 	public WebdriverUtility utilities = new WebdriverUtility();
 
 	public DashboardPage(WebDriver driver) {
-
-		this.driver = driver;
-
-		PageFactory.initElements(driver, this);
-		this.utilities = new AllUtilityFunctions();
-		this.utilities.initializeDriver(driver); // Pass the active driver to utilities
-
-		utilities.initializeDriver(driver);
-
-		this.utilities = new WebdriverUtility();
-		this.utilities.initializeDriver(driver); // Pass the active driver to utilities
-
-//		this.utilities = new AllUtilityFunctions();
-//		this.utilities.initializeDriver(driver); // Pass the active driver to utilities
-
 		this.driver = driver;
 		utilities.initializeDriver(driver);
 
@@ -87,7 +72,6 @@ public class DashboardPage {
 	private WebElement userAccountPopup;
 
 	// ===== getters and setter ======
-	// ===== getters ======
 
 	// login button
 	public WebElement getLoginBtn() {
@@ -153,17 +137,21 @@ public class DashboardPage {
 
 	// closing dom popup
 	public void closeDomPopup() {
-		// Wait for shadow host and locate the hidden host
-		WebElement domPopup = utilities.waituntilPresenceOfElementLocated(20L,
-				By.cssSelector("ct-web-popup-imageonly"));
+		try {
+			// Wait for shadow host and locate the hidden host
+			WebElement domPopup = utilities.waituntilPresenceOfElementLocated(20L,
+					By.cssSelector("ct-web-popup-imageonly"));
 
-		// Access shadow root
-		SearchContext shadowDom = domPopup.getShadowRoot();
+			// Access shadow root
+			SearchContext shadowDom = domPopup.getShadowRoot();
 
-		// Find close button INSIDE shadow DOM
-		WebElement closeBtn = shadowDom.findElement(By.id("close"));
+			// Find close button INSIDE shadow DOM
+			WebElement closeBtn = shadowDom.findElement(By.id("close"));
 
-		closeBtn.click();
+			closeBtn.click();
+		} catch (Exception e) {
+			System.out.println("No Popup found");
+		}
 
 	}
 
@@ -186,30 +174,18 @@ public class DashboardPage {
 	}
 
 	public void enterOtpAndclickVerify() {
-		WebElement verify = utilities.waitUntillElementIsCLickable(60, getVerifyBtn());
-		WebElement verify = utilities.waitUntilElementIsCLickable(60L, getVerifyBtn());
-
 		WebElement verify = utilities.waitUntilElementIsCLickable(60L, getVerifyBtn());
 		verify.click();
 	}
 
 	public void clickOnModule(String module) {
-
 		WebElement moduleName = driver.findElement(By.linkText(module));
 		moduleName.click();
 	}
 
 	public void clickonHealthInsuranceModule() {
-		utilities.waitUntilInvisibilityOfElementLocated(5L, By.cssSelector(".LoginModal_loginForm__0CKIM"));
-		WebElement healthInsuranceModule = driver
-				.findElement(By.cssSelector("[href='https://apollo247insurance.com/health-insurance']"));
-		healthInsuranceModule.click();
-
-	public void clickonHealthInsuranceModule() {
-		utilities.waitUntilInvisibilityOfElementLocated(25L, By.cssSelector(".LoginModal_loginForm__0CKIM"));
-		WebElement healthInsuranceModule = Pages.healthInsurancePage.getClickBuyInsurance();
-		healthInsuranceModule.click();
-
+		By buyInsuranceLocator = By.cssSelector("[href='https://apollo247insurance.com/health-insurance']");
+		utilities.waituntilPresenceOfElementLocated(10L, buyInsuranceLocator).click();
 	}
 
 	public void clickOnMyAccountBtn() {
@@ -225,9 +201,8 @@ public class DashboardPage {
 		}
 	}
 
-	public String getCurrentPageUrl() {
-		return utilities.fetchApplicationURL();
-
+	public void clickBuyMedicines() {
+		getBuyMedicineModule().click();
 	}
 
 }

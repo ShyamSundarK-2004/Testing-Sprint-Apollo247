@@ -12,18 +12,19 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.apollo247.testing.utilities.AllUtilityFunctions;
+
+import com.apollo247.testing.utilities.WebdriverUtility;
 
 public class HealthInsurancePage {
 
 	public WebDriverWait wait;
 	public WebDriver driver;
-	public AllUtilityFunctions utility;
+	public WebdriverUtility utility;
 
 	public HealthInsurancePage(WebDriver driver) {
 		wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 		this.driver = driver;
-		this.utility = new AllUtilityFunctions();
+		this.utility = new WebdriverUtility();
 		this.utility.initializeDriver(driver); // Pass the active driver to utility
 	}
 
@@ -75,16 +76,28 @@ public class HealthInsurancePage {
 
 	// ---------Business Logic----------
 	public void performEnterPinCode(String pincode) {
-		// getClickBuyInsurance().click();
-		getEnterPinCode().sendKeys(pincode);
-		getSubmitButton().click();
+		WebElement pinInput = utility.waitUntilElementIsCLickable(10L, getEnterPinCode());
+
+	    // Clear before entering
+	    pinInput.clear();
+	    pinInput.sendKeys(pincode);
+
+	    WebElement submitBtn = utility.waitUntilElementIsCLickable(10L, getSubmitButton());
+
+	    try {
+	        submitBtn.click();
+	    } catch (Exception e) {
+	        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", submitBtn);
+	    }
 	}
 
 	public void selectGender(String gender) {
 		By locator = By.xpath("//button[normalize-space()='" + gender + "']");
+		
 
 		for (int i = 0; i < 3; i++) {
 			try {
+				wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".PincodeModal_middleSection__RCZiF")));
 				wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(locator))).click();
 				break;
 			} catch (StaleElementReferenceException e) {

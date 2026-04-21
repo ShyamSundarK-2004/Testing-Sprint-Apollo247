@@ -4,7 +4,7 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
-	    features = {"./src/test/java/com/apollo247/testing/features"},
+	    features = {"./src/test/java/com/apollo247/testing/features/HealthInsurance_Feature.feature"},
 	    glue = {"com.apollo247.testing.stepdefinitions"},
 	    plugin = {
 	        "pretty",
