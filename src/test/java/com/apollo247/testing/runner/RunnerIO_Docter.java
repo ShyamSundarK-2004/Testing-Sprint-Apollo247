@@ -25,7 +25,8 @@ import org.testng.annotations.DataProvider;
     plugin = {
         "pretty",
         "html:Reports/TestReport.html"
-    }
+    },
+    tags="@filter"
     
 )
 
