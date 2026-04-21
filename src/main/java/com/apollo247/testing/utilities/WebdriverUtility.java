@@ -196,5 +196,10 @@ public class WebdriverUtility {
 	public void switchToFrameByIndex(WebElement element) {
 		driver.switchTo().frame(element);
 	}
+	public void waitUntilUrlContains(long timeInSeconds, String url) {
+		wait = new WebDriverWait(driver, Duration.ofSeconds(timeInSeconds));
+		wait.until(ExpectedConditions.urlContains(url));
+	}
+
 
 }
