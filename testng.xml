@@ -4,6 +4,9 @@
 	<test thread-count="6" parallel="tests" name="Test">
 		<classes>
 			<class name="com.apollo247.testing.runner.RunnerIO" />
+			<class name="com.apollo247.testing.runner.MyAccountRunner" />
+		    <class name="runner.TestRunner"/>
+	
 		</classes>
 	</test> <!--
 	Test -->

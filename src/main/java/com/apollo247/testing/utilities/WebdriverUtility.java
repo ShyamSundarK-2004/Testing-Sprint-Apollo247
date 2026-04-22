@@ -1,7 +1,6 @@
 package com.apollo247.testing.utilities;
 
 import java.time.Duration;
-
 import java.util.Set;
 
 import org.openqa.selenium.By;
@@ -137,7 +136,6 @@ public class WebdriverUtility {
 		wait = new WebDriverWait(driver, Duration.ofSeconds(timeInSeconds));
 		wait.until(ExpectedConditions.urlContains(url));
 	}
-
 
 	// popups
 	// alert accept
