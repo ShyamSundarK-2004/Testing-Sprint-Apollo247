@@ -148,6 +148,10 @@ public class DashboardPage {
 			// Find close button INSIDE shadow DOM
 			WebElement closeBtn = shadowDom.findElement(By.id("close"));
 
+			if (closeBtn.isDisplayed()) {
+				closeBtn.click();
+				System.out.println("Popup closed successfully.");
+			}
 			closeBtn.click();
 		} catch (Exception e) {
 			System.out.println("No Popup found");
