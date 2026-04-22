@@ -65,12 +65,8 @@
 			<version>5.4.1</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.10.1</version>
-	</dependency>
-<!-- Source: https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+		
+        <!-- Source: https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
@@ -78,4 +74,5 @@
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
+	
 </project>

@@ -26,7 +26,6 @@ public class TakeScreenShotUtility {
 		perm.getParentFile().mkdirs();
 		
 		FileHandler.copy(temp, perm);
-
 		return perm.getAbsolutePath();
 	}
 

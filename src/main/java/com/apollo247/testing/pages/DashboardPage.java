@@ -137,25 +137,27 @@ public class DashboardPage {
 
 	// closing dom popup
 	public void closeDomPopup() {
-	    try {
 
-	        WebElement domPopup = utilities.waituntilPresenceOfElementLocated(
-	                5L,
-	                By.cssSelector("ct-web-popup-imageonly"));
+		try {
+			// Wait for shadow host and locate the hidden host
+			WebElement domPopup = utilities.waituntilPresenceOfElementLocated(20L,
+					By.cssSelector("ct-web-popup-imageonly"));
 
-	        SearchContext shadowDom = domPopup.getShadowRoot();
+			// Access shadow root
+			SearchContext shadowDom = domPopup.getShadowRoot();
 
-	        WebElement closeBtn = shadowDom.findElement(By.id("close"));
+			// Find close button INSIDE shadow DOM
+			WebElement closeBtn = shadowDom.findElement(By.id("close"));
 
-	        if (closeBtn.isDisplayed()) {
-	            closeBtn.click();
-	            System.out.println("Popup closed successfully.");
-	        }
+			if (closeBtn.isDisplayed()) {
+				closeBtn.click();
+				System.out.println("Popup closed successfully.");
+			}
 
-	    } catch (Exception e) {
-	        System.out.println("Popup not displayed. Continuing execution.");
-	    }
-	}
+		} catch (Exception e) {
+			System.out.println("No Popup found");
+		}
+
 
 	// clicking on header login button
 	public void clickLoginButton() {
@@ -181,14 +183,16 @@ public class DashboardPage {
 	}
 
 	public void clickOnModule(String module) {
-
-//		utilities.waitUntilInvisibilityOfElementLocated(35L, By.cssSelector(".LoginModal_loginForm__0CKIM"));
-
 		WebElement moduleName = driver.findElement(By.linkText(module));
 		moduleName.click();
 	}
 	public void clickBuyMedicines() {
 	    utilities.waitUntilElementIsCLickable(20L, getBuyMedicineModule()).click();
+	}
+
+	public void clickonHealthInsuranceModule() {
+		By buyInsuranceLocator = By.cssSelector("[href='https://apollo247insurance.com/health-insurance']");
+		utilities.waituntilPresenceOfElementLocated(10L, buyInsuranceLocator).click();
 	}
 
 	public void clickOnMyAccountBtn() {
@@ -202,6 +206,15 @@ public class DashboardPage {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+
+	public void clickBuyMedicines() {
+		getBuyMedicineModule().click();
+	}
+
+	public void clickProfileIcon() {
+	    clickOnMyAccountBtn();
 	}
 
 }
