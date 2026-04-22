@@ -94,7 +94,7 @@ public class LabTestPage {
 	// enter search text
 	public void searchTest(String text) {
 		clickOnSearchBox();
-		utilities.waitUntilElementIsVisibility(25L, getSearchBar());
+		utilities.waitUntilElementIsVisibility(30L, getSearchBar());
 		getSearchBar().sendKeys(text);
 		if (!text.isEmpty()) {
 			getSearchBar().sendKeys(Keys.ENTER);
@@ -110,9 +110,15 @@ public class LabTestPage {
 		}
 	}
 
-	public boolean isResultDisplayed() {
-		utilities.waitUntilElementIsVisibility(20L, getTestNames().get(1));
-		return getTestNames().size() > 0;
+	public boolean isResultDisplayed(String name) {
+		utilities.waitUntilElementIsVisibility(25L, getTestNames().get(1));
+		for (WebElement element : getTestNames()) {
+			String testName = element.getText();
+			if (testName.contains(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public String getCurrentPageUrl() {
@@ -121,7 +127,7 @@ public class LabTestPage {
 
 	public boolean isErrorMessageDisplayed() {
 		try {
-			utilities.waitUntilElementIsVisibility(20L, getResultNotFoundMsg());
+			utilities.waitUntilElementIsVisibility(25L, getResultNotFoundMsg());
 			return getResultNotFoundMsg().isDisplayed();
 		} catch (Exception e) {
 			return false;
@@ -134,19 +140,19 @@ public class LabTestPage {
 	}
 
 	public void clickOnBookByPrescriptionModule() {
-		utilities.waitUntilElementIsVisibility(20L, getBookByMPescriptionModule());
+		utilities.waitUntilElementIsVisibility(25L, getBookByMPescriptionModule());
 		jsUtil.jsClick(getBookByMPescriptionModule());
 	}
 
 	public void clickOnRadiologyBookingBtn() {
-		utilities.waitUntilElementIsVisibility(20L, getRadiologyBookingBtn());
+		utilities.waitUntilElementIsVisibility(25L, getRadiologyBookingBtn());
 		getRadiologyBookingBtn().click();
 		utilities.switchToWindowByURL("radiology");
 
 	}
 
 	public void clickOnViewReportInMyOrder() {
-		utilities.waitUntilElementIsVisibility(20L, getViewReportInMyOrder());
+		utilities.waitUntilElementIsVisibility(25L, getViewReportInMyOrder());
 		jsUtil.jsClick(getViewReportInMyOrder());
 	}
 

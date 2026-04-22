@@ -28,7 +28,7 @@ public class RadiologyPage {
 	// ====== Locators ======
 
 	// select city input field
-	@FindBy(xpath = "(//div[contains(@class,'AphSelect_select')])[2]")
+	@FindBy(xpath = "//div[text() = 'Choose City']")
 	private WebElement chooseCityField;
 
 	// select hospital or clinic field
@@ -142,16 +142,18 @@ public class RadiologyPage {
 	}
 
 	public void chooseCity(String cityName) {
-		jsUtil.scrollByPixels(-150);
+		jsUtil.scrollByPixels(-185);
 		utilities.waitUntilElementIsVisibility(25L, getChooseCityField());
-		getChooseCityField().click();
-		WebElement chooseCity = driver.findElement(By.xpath("//li[text() = '" + cityName + "']"));
+		jsUtil.jsClick(getChooseCityField());
+		utilities.waituntilPresenceOfElementLocated(25L, By.xpath("//li[text() = '" + cityName + "']"));
+		WebElement chooseCity = driver.findElement(By.xpath("//li[normalize-space() = '" + cityName + "']"));
 		chooseCity.click();
 	}
 
 	public void chooseHospital(String hospitalAreaName) {
 		getSelectHospitalField().click();
-		WebElement selecthospital = driver.findElement(By.xpath("//li[contains(text(),'" + hospitalAreaName + "')]"));
+		WebElement selecthospital = driver
+				.findElement(By.xpath("//li[contains(normalize-space(),'" + hospitalAreaName + "')]"));
 		selecthospital.click();
 	}
 
@@ -159,7 +161,8 @@ public class RadiologyPage {
 		String[] names = testName.split(",");
 		getSelectTestName().click();
 		for (String name : names) {
-			WebElement test = driver.findElement(By.xpath("//label[text() = '" + name + "']/preceding-sibling::input"));
+			WebElement test = driver
+					.findElement(By.xpath("//label[normalize-space() = '" + name + "']/preceding-sibling::input"));
 			test.click();
 		}
 	}

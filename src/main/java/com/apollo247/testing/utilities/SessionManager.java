@@ -1,4 +1,3 @@
-
 package com.apollo247.testing.utilities;
 
 import java.io.FileInputStream;
@@ -235,13 +234,30 @@ public class SessionManager {
 			oos.writeObject(cookies);
 		}
 
-		String localJson = (String) js.executeScript("return JSON.stringify(Object.fromEntries([...localStorage]));");
+		// ✅ SAFE localStorage extraction
+		String localScript = """
+				    var data = {};
+				    for (var i = 0; i < localStorage.length; i++) {
+				        var key = localStorage.key(i);
+				        data[key] = localStorage.getItem(key);
+				    }
+				    return JSON.stringify(data);
+				""";
 
+		String localJson = (String) js.executeScript(localScript);
 		Files.writeString(Paths.get(SESSION_DIR + "/localStorage.json"), localJson);
 
-		String sessionJson = (String) js
-				.executeScript("return JSON.stringify(Object.fromEntries([...sessionStorage]));");
+		// ✅ SAFE sessionStorage extraction
+		String sessionScript = """
+				    var data = {};
+				    for (var i = 0; i < sessionStorage.length; i++) {
+				        var key = sessionStorage.key(i);
+				        data[key] = sessionStorage.getItem(key);
+				    }
+				    return JSON.stringify(data);
+				""";
 
+		String sessionJson = (String) js.executeScript(sessionScript);
 		Files.writeString(Paths.get(SESSION_DIR + "/sessionStorage.json"), sessionJson);
 	}
 

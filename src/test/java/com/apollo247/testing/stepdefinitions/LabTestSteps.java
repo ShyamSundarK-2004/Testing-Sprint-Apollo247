@@ -51,19 +51,20 @@ public class LabTestSteps {
 		// Close popup if exists
 		b.getPages().labTestPage.closePopupIfPresent();
 
-		// Perform search
+		// Perform searc
 		b.getPages().labTestPage.searchTest(testName);
 	}
 
-	@Then("validate search result for {string}")
-	public void validate_search_result_for(String type) {
+	@Then("validate search result for {string},{string}")
+	public void validate_search_result_for(String testName, String type) {
 
 		// Switch based on type (valid / invalid)
 		switch (type.toLowerCase()) {
 
 		case "valid":
 			// Validate results are displayed
-			assertTrue(b.getPages().labTestPage.isResultDisplayed(), "Cards are not displayed for valid search");
+			assertTrue(b.getPages().labTestPage.isResultDisplayed(testName),
+					"Cards are not displayed for valid search");
 			break;
 
 		case "invalid":
@@ -217,4 +218,108 @@ public class LabTestSteps {
 
 		assertTrue(flag, "Different user orders found");
 	}
+
+	// ================= END TO END FLOW =================
+
+	@When("User searches for lab test {string}")
+	public void user_searches_for_lab_test(String testName) {
+		b.getPages().labTestPage.closePopupIfPresent();
+		b.getPages().labTestPage.searchTest(testName);
+	}
+
+	@When("User clicks on add button for the test")
+	public void user_clicks_on_add_button_for_the_test() {
+		b.getPages().searchResultPage.clickOnAddToCartBtn("CBC Test");
+	}
+
+	@Then("Verify only one test is added to cart")
+	public void verify_only_one_test_is_added_to_cart() {
+
+	}
+
+	@When("User clicks on proceed to cart")
+	public void user_clicks_on_proceed_to_cart() {
+
+	}
+
+	@Then("Patient selection panel should be displayed")
+	public void patient_selection_panel_should_be_displayed() {
+
+	}
+
+	@When("User reads patient details from Excel")
+	public void user_reads_patient_details_from_excel() {
+
+	}
+
+	@When("User enters patient details and clicks on save")
+	public void user_enters_patient_details_and_clicks_on_save() {
+
+	}
+
+	@Then("Verify patient is added successfully")
+	public void verify_patient_is_added_successfully() {
+
+	}
+
+	@When("User clicks on select slot")
+	public void user_clicks_on_select_slot() {
+
+	}
+
+	@When("User selects available date")
+	public void user_selects_available_date() {
+
+	}
+
+	@When("User selects suggested time slot")
+	public void user_selects_suggested_time_slot() {
+
+	}
+
+	@Then("Verify slot is selected")
+	public void verify_slot_is_selected() {
+
+	}
+
+	@When("User clicks on add new address")
+	public void user_clicks_on_add_new_address() {
+
+	}
+
+	@When("User enters address details and confirms location")
+	public void user_enters_address_details_and_confirms_location() {
+
+	}
+
+	@Then("Verify address is added successfully")
+	public void verify_address_is_added_successfully() {
+
+	}
+
+	@When("User clicks on review cart")
+	public void user_clicks_on_review_cart() {
+
+	}
+
+	@Then("Verify correct test, patient, slot and address details are displayed")
+	public void verify_correct_test_patient_slot_and_address_details_are_displayed() {
+
+	}
+
+	@When("User clicks on proceed to pay")
+	public void user_clicks_on_proceed_to_pay() {
+
+	}
+
+	@Then("Verify user is navigated to payment page")
+	public void verify_user_is_navigated_to_payment_page() {
+
+	}
+
+	@Then("Verify total amount and payment options are displayed")
+	public void verify_total_amount_and_payment_options_are_displayed() {
+
+	}
+
 }

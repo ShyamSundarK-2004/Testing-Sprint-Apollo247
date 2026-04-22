@@ -59,7 +59,7 @@ public class Hook extends WebdriverUtility {
 		// WebDriver common setup
 		initializeDriver(b.getDriver());
 		configMaximizeBrowser();
-		waitForElements(70);
+		waitForElements(50);
 
 		// Manage session (login once, reuse across domains)
 		SessionManager.ManageSession(b.getDriver());
@@ -85,13 +85,13 @@ public class Hook extends WebdriverUtility {
 
 				String path = new TakeScreenShotUtility().takeScreenShot(b.getDriver(), scenario.getName());
 
-				ExtendsReportsUtilities.fail("Step Failed : " + scenario.getName());
+				ExtendsReportsUtilities.fail("Step Failed");
 				ExtendsReportsUtilities.attachScreenshot(path);
 
 			} else {
 
 				// If step passes → log success
-				ExtendsReportsUtilities.pass("Step Passed : " + scenario.getName());
+				ExtendsReportsUtilities.pass("Step Passed");
 			}
 
 		} catch (Exception e) {
@@ -106,7 +106,7 @@ public class Hook extends WebdriverUtility {
 		ExtendsReportsUtilities.flushReport();
 
 		// Close browser and cleanup
-		quitBroswerWindow();
-		b.unload();
+//		quitBroswerWindow();
+//		b.unload();
 	}
 }
