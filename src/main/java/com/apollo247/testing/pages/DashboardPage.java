@@ -139,7 +139,7 @@ public class DashboardPage {
 	public void closeDomPopup() {
 		try {
 			// Wait for shadow host and locate the hidden host
-			WebElement domPopup = utilities.waituntilPresenceOfElementLocated(10L,
+			WebElement domPopup = utilities.waituntilPresenceOfElementLocated(20L,
 					By.cssSelector("ct-web-popup-imageonly"));
 
 			// Access shadow root
@@ -150,9 +150,9 @@ public class DashboardPage {
 
 			closeBtn.click();
 		} catch (Exception e) {
-			// Popup not found or already closed, continuing without error
-			System.out.println("Popup element not found or already closed. Continuing test...");
+			System.out.println("No Popup found");
 		}
+
 	}
 
 	// clicking on header login button
@@ -179,11 +179,13 @@ public class DashboardPage {
 	}
 
 	public void clickOnModule(String module) {
-
-//		utilities.waitUntilInvisibilityOfElementLocated(35L, By.cssSelector(".LoginModal_loginForm__0CKIM"));
-
 		WebElement moduleName = driver.findElement(By.linkText(module));
 		moduleName.click();
+	}
+
+	public void clickonHealthInsuranceModule() {
+		By buyInsuranceLocator = By.cssSelector("[href='https://apollo247insurance.com/health-insurance']");
+		utilities.waituntilPresenceOfElementLocated(10L, buyInsuranceLocator).click();
 	}
 
 	public void clickOnMyAccountBtn() {
@@ -198,11 +200,12 @@ public class DashboardPage {
 			return false;
 		}
 	}
+
+	public void clickBuyMedicines() {
+		getBuyMedicineModule().click();
+	}
 	public void clickProfileIcon() {
 	    clickOnMyAccountBtn();
-	}
-	public void clickBuyMedicines() {
-	    getBuyMedicineModule().click();
 	}
 
 }

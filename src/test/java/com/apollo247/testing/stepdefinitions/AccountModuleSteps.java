@@ -60,7 +60,7 @@ public class AccountModuleSteps {
 
     @When("user adds family members from excel")
     public void user_adds_family_members_from_excel() {
-      //  b.getPages().manageFamilyPage.addFamilyMembersFromExcel();
+      b.getPages().manageFamilyPage.addFamilyMembersFromExcel();
     	System.out.println("Reading from excel");
     }
 

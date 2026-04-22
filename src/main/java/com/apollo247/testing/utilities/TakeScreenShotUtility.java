@@ -23,7 +23,7 @@ public class TakeScreenShotUtility {
 		File perm = new File(path);
 		FileHandler.copy(temp, perm);
 
-		return path;
+		return perm.getAbsolutePath();
 	}
 
 	// using webelement to capture particular element
@@ -32,7 +32,7 @@ public class TakeScreenShotUtility {
 		File temp = element.getScreenshotAs(OutputType.FILE);
 		File perm = new File(path);
 		FileHandler.copy(temp, perm);
-		return path;
+		return perm.getAbsolutePath();
 	}
 
 }

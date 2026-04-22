@@ -20,7 +20,6 @@ public class ManageFamilyPage {
     WebDriver driver;
     WebDriverWait wait;
 
-   // private ExcelUtilities excelUtilities = new ExcelUtilities(driver);
 
     public ManageFamilyPage(WebDriver driver) {
         this.driver = driver;
@@ -200,29 +199,37 @@ public class ManageFamilyPage {
 
     // ================= EXCEL FLOW =================
 
-//    public void addFamilyMembersFromExcel() {
-//        try {
-//            List<Map<String, String>> members =
-//                    excelUtilities.getExcelDataAsMap("FamilyMembers");
-//
-//            for (Map<String, String> member : members) {
-//
-//                String fName = member.get("firstName");
-//                String lName = member.get("lastName");
-//                String dob   = member.get("dob");
-//
-//                wait.until(ExpectedConditions.elementToBeClickable(addNewProfile));
-//                clickAddNewProfile();
-//
-//                wait.until(ExpectedConditions.visibilityOf(firstName));
-//
-//                addFamilyMember(fName, lName, dob);
-//            }
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException("Failed to add family members from Excel: " + e.getMessage());
-//        }
-//    }
+    public void addFamilyMembersFromExcel() {
+        try {
+            int row = 1; // Row 0 = header (firstName, lastName, dob), data starts at row 1
+
+            while (true) {
+                // Col 0 = firstName, Col 1 = lastName, Col 2 = dob
+                String fName    = ExcelUtilities.getExcelData("FamilyMembers", row, 0);
+                String lName    = ExcelUtilities.getExcelData("FamilyMembers", row, 1);
+                String dobValue = ExcelUtilities.getExcelData("FamilyMembers", row, 2);
+
+                // Stop loop when firstName cell is empty — means no more data rows
+                if (fName == null || fName.trim().isEmpty()) {
+                    break;
+                }
+
+                // Open the Add New Profile form for each member
+                clickAddNewProfile();
+
+                // Wait for the form to load
+                wait.until(ExpectedConditions.visibilityOf(firstName));
+
+                // Fill form + select gender/relation + save
+                addFamilyMember(fName, lName, dobValue);
+
+                row++; // Move to next Excel row
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to add family members from Excel: " + e.getMessage());
+        }
+    }
     // ================= POPUP HANDLING =================
 
     public void closePopup(SearchContext shadowRoot) {
