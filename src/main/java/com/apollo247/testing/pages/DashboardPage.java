@@ -137,18 +137,24 @@ public class DashboardPage {
 
 	// closing dom popup
 	public void closeDomPopup() {
-		// Wait for shadow host and locate the hidden host
-		WebElement domPopup = utilities.waituntilPresenceOfElementLocated(20L,
-				By.cssSelector("ct-web-popup-imageonly"));
+	    try {
 
-		// Access shadow root
-		SearchContext shadowDom = domPopup.getShadowRoot();
+	        WebElement domPopup = utilities.waituntilPresenceOfElementLocated(
+	                5L,
+	                By.cssSelector("ct-web-popup-imageonly"));
 
-		// Find close button INSIDE shadow DOM
-		WebElement closeBtn = shadowDom.findElement(By.id("close"));
+	        SearchContext shadowDom = domPopup.getShadowRoot();
 
-		closeBtn.click();
+	        WebElement closeBtn = shadowDom.findElement(By.id("close"));
 
+	        if (closeBtn.isDisplayed()) {
+	            closeBtn.click();
+	            System.out.println("Popup closed successfully.");
+	        }
+
+	    } catch (Exception e) {
+	        System.out.println("Popup not displayed. Continuing execution.");
+	    }
 	}
 
 	// clicking on header login button
@@ -180,6 +186,9 @@ public class DashboardPage {
 
 		WebElement moduleName = driver.findElement(By.linkText(module));
 		moduleName.click();
+	}
+	public void clickBuyMedicines() {
+	    utilities.waitUntilElementIsCLickable(20L, getBuyMedicineModule()).click();
 	}
 
 	public void clickOnMyAccountBtn() {

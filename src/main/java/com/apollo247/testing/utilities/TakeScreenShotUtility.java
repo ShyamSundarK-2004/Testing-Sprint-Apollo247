@@ -17,22 +17,26 @@ public class TakeScreenShotUtility {
 
 	// using webdriver to capture whole webpage
 	public String takeScreenShot(WebDriver driver, String testname) throws IOException {
-		String path = "./Reports/" + testname + " " + timeStamp + ".png";
+		String path = "./Screenshots/" + testname + " " + timeStamp + ".png";
 		TakesScreenshot ts = (TakesScreenshot) driver;
 		File temp = ts.getScreenshotAs(OutputType.FILE);
 		File perm = new File(path);
+		
+		// Create Screenshots directory if it doesn't exist
+		perm.getParentFile().mkdirs();
+		
 		FileHandler.copy(temp, perm);
 
-		return path;
+		return perm.getAbsolutePath();
 	}
 
 	// using webelement to capture particular element
 	public String takeScreenShot(WebElement element, String testname) throws IOException {
-		String path = "./Reports/" + testname + " " + timeStamp + ".png";
+		String path = "./Screenshots/" + testname + " " + timeStamp + ".png";
 		File temp = element.getScreenshotAs(OutputType.FILE);
 		File perm = new File(path);
 		FileHandler.copy(temp, perm);
-		return path;
+		return perm.getAbsolutePath();
 	}
 
 }

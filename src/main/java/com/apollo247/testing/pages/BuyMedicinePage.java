@@ -71,11 +71,32 @@ public class BuyMedicinePage {
 
     /** Close the shadow-DOM popup on the Buy Medicines page */
     public void closePopup() {
-        WebElement shadowHost = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.cssSelector("ct-web-popup-imageonly")));
-        SearchContext shadowRoot = shadowHost.getShadowRoot();
-        shadowRoot.findElement(By.cssSelector("#close")).click();
-    }
+    	    try {
+    	        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+    	        WebElement shadowHost = shortWait.until(
+    	            ExpectedConditions.presenceOfElementLocated(
+    	                By.cssSelector("ct-web-popup-imageonly")));
+
+    	        SearchContext shadowRoot = shadowHost.getShadowRoot();
+
+    	        WebElement closeBtn =
+    	            shadowRoot.findElement(By.cssSelector("#close"));
+
+    	        closeBtn.click();
+    	        
+    	        // Wait for popup to be invisible
+    	        shortWait.until(
+    	            ExpectedConditions.invisibilityOfElementLocated(
+    	                By.cssSelector("ct-web-popup-imageonly")));
+    	        
+    	        System.out.println("Popup closed successfully");
+
+    	    } catch (Exception e) {
+    	        System.out.println("Popup not displayed or already closed");
+    	    }
+    	}
+    
 
     /** Click the search bar placeholder, type the medicine name, then click Add */
     public void searchAndAddMedicine(String medicineName) {
@@ -91,6 +112,12 @@ public class BuyMedicinePage {
 
     /** Click the Apollo Products navigation link */
     public void clickApolloProducts() {
+        closePopup();
+        try {
+            Thread.sleep(500); // Wait for popup to close
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         click(apolloProductsLink);
     }
 }
