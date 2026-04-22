@@ -38,7 +38,7 @@ public class HealthInsurancePage {
 	@FindBy(css = "[type=\"number\"]")
 	private WebElement pincodeNumber;
 
-	@FindBy(css = "[alt=\"cross icon\"]")
+	@FindBy(css = "img[alt='cross icon']")
 	private WebElement cancelSelectLocation;
 
 	@FindBy(xpath = "//button[.='Submit']")
@@ -187,5 +187,8 @@ public class HealthInsurancePage {
 
 		// Wait for dropdown to disappear
 		wait.until(ExpectedConditions.invisibilityOfElementLocated(dropdown));
+	}
+	public void clickCancelSelectLocation() {
+		cancelSelectLocation.click();
 	}
 }

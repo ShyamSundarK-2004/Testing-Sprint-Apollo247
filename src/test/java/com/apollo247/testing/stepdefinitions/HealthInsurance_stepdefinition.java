@@ -22,13 +22,15 @@ public class HealthInsurance_stepdefinition {
 public void user_navigates_to_health_insurance_page_and_enter_pincode(String pincode) {
 	b.getPages().dashboardPage.clickonHealthInsuranceModule();
 	
-	//b.getPages().healthInsurancePage.performEnterPinCode(pincode);
+	
 	try {
 		SessionManager.switchToDomain(b.getDriver(), "https://www.apollo247insurance.com/");
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+	b.getPages().healthInsurancePage.clickCancelSelectLocation();
+	b.getPages().dashboardPage.clickOnModule("Health Insurance");
 	b.getPages().healthInsurancePage.performEnterPinCode(pincode);
 
 	System.out.println("Enter pincode");
