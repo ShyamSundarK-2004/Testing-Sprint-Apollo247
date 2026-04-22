@@ -152,6 +152,7 @@ public class DashboardPage {
 				closeBtn.click();
 				System.out.println("Popup closed successfully.");
 			}
+			closeBtn.click();
 		} catch (Exception e) {
 			System.out.println("No Popup found");
 		}

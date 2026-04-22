@@ -13,6 +13,9 @@ import com.apollo247.testing.pages.MyAppointmentPage;
 import com.apollo247.testing.pages.SearchDoctorPage;
 import com.apollo247.testing.pages.filterDocterPage;
 
+import com.apollo247.testing.pages.*;
+
+
 public class Pages {
 
 	public DashboardPage dashboardPage;
@@ -26,6 +29,8 @@ public class Pages {
 	public MyAppointmentPage AppointmentDocter;
 	public LocationPage LocationDocter;
 	public HealthtoolPage HeartToolPage;
+	public  HealthInsurancePage healthInsurancePage;
+	public HealthInsuranceProductListings healthInsuranceProductListings;
 
 	// all the pages are initialized with the driver object
 	public Pages(WebDriver driver) {
@@ -65,6 +70,19 @@ public class Pages {
 		// Healthtool
 		HeartToolPage = new HealthtoolPage(driver);
 		PageFactory.initElements(driver, HeartToolPage);
+
+
+		healthInsurancePage = new HealthInsurancePage(driver);
+		PageFactory.initElements(driver, healthInsurancePage);
+		
+		healthInsuranceProductListings=new HealthInsuranceProductListings(driver);
+		PageFactory.initElements(driver, healthInsuranceProductListings);
+		
+		
+
+		
+
+
 
 	}
 }
