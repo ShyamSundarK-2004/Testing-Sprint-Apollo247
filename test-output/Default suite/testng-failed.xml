@@ -6,7 +6,7 @@
       <class name="com.apollo247.testing.runner.BuyMedicineRunner">
         <methods>
           <include name="setUpClass"/>
-          <include name="runScenario" invocation-numbers="0"/>
+          <include name="runScenario" invocation-numbers="0 1 2"/>
           <include name="tearDownClass"/>
         </methods>
       </class> <!-- com.apollo247.testing.runner.BuyMedicineRunner -->

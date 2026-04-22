@@ -6,13 +6,13 @@ import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
     features = "src/test/java/com/apollo247/testing/features/BuyMedicineFeature.feature",
-    glue = "com.apollo247.testing.stepdefinitions",dryRun = false,
+    glue = "com.apollo247.testing.stepdefinitions",
     plugin = {
         "pretty",
         "html:Reports/BuyMedicine.html",
         "json:Reports/BuyMedicine-module-report.json"
     },
-    tags="@CartManagement",
+    tags="@SearchMedicine",
     monochrome = true
 )
 public class BuyMedicineRunner extends AbstractTestNGCucumberTests {

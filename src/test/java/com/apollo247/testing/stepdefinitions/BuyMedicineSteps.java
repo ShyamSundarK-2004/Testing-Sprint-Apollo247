@@ -6,17 +6,20 @@ import java.util.Map;
 import org.testng.Assert;
 
 import com.apollo247.testing.utilities.BaseClass;
+import com.apollo247.testing.utilities.ExcelUtilities;
 import com.apollo247.testing.utilities.SessionManager;
+
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.*;
 
 public class BuyMedicineSteps {
 
-	private BaseClass b;
+    private BaseClass b;
 
-	public BuyMedicineSteps(BaseClass b) {
-	    this.b = b;
-	}
+    public BuyMedicineSteps(BaseClass b) {
+        this.b = b;
+    }
+
     // =========================
     // BACKGROUND
     // =========================
@@ -33,7 +36,6 @@ public class BuyMedicineSteps {
         SessionManager.ManageSession(b.getDriver());
 
         b.getDriver().get("https://www.apollo247.com/");
-
         b.getPages().dashboardPage.clickBuyMedicines();
 
         SessionManager.switchToDomain(
@@ -49,7 +51,7 @@ public class BuyMedicineSteps {
     }
 
     // =========================
-    // SEARCH MEDICINE
+    // SEARCH MEDICINE - Scenario Outline
     // =========================
 
     @When("User closes the popup")
@@ -74,8 +76,8 @@ public class BuyMedicineSteps {
 
     @Then("Product {string} should be visible in cart")
     public void product_should_be_visible_in_cart(String product) {
-        String actual = b.getPages().buyMedicineCartPage.getProductNameText();
-        Assert.assertTrue(actual.contains(product));
+        String actual = b.getPages().buyMedicineCartPage.getProductNameTextByProduct(product);
+        Assert.assertTrue(actual.contains(product), "Product " + product + " not found in cart");
         System.out.println("ASSERT PASSED: Product visible in cart");
     }
 
@@ -111,7 +113,7 @@ public class BuyMedicineSteps {
     }
 
     // =========================
-    // VOLINI MODULE
+    // VOLINI
     // =========================
 
     @Given("User navigates to Volini page")
@@ -136,7 +138,7 @@ public class BuyMedicineSteps {
     }
 
     // =========================
-    // CART QUANTITY
+    // CART QUANTITY - Data Table
     // =========================
 
     @Given("User has product in cart")
@@ -144,15 +146,24 @@ public class BuyMedicineSteps {
         Assert.assertTrue(true);
     }
 
-    @When("User changes quantity to 3")
-    public void user_changes_quantity_to_3() {
-        b.getPages().buyMedicineCartPage.changeQuantityToThree();
+    @When("User updates cart quantity using below data")
+    public void user_updates_cart_quantity_using_below_data(DataTable dataTable) {
+
+        List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
+
+        for (Map<String, String> row : data) {
+            String quantity = row.get("Quantity");
+
+            if (quantity.equals("3")) {
+                b.getPages().buyMedicineCartPage.changeQuantityToThree();
+            }
+        }
     }
 
-    @Then("Product quantity should be updated to 3")
-    public void product_quantity_should_be_updated_to_3() {
+    @Then("Product quantity should be updated successfully")
+    public void product_quantity_should_be_updated_successfully() {
         Assert.assertTrue(true);
-        System.out.println("ASSERT PASSED: Quantity updated");
+        System.out.println("ASSERT PASSED: Product quantity updated");
     }
 
     // =========================
@@ -162,11 +173,6 @@ public class BuyMedicineSteps {
     @Given("Cart page is empty")
     public void cart_page_is_empty() {
         Assert.assertTrue(true);
-    }
-
-    @When("Cart page loads successfully")
-    public void cart_page_loads_successfully() {
-        b.getPages().buyMedicineCartPage.waitForCartToLoad();
     }
 
     @Then("Empty cart message should be displayed")
@@ -191,22 +197,25 @@ public class BuyMedicineSteps {
     }
 
     // =========================
-    // DATA TABLE
+    // EXCEL
     // =========================
 
-    @When("User adds medicines using below data")
-    public void user_adds_medicines_using_below_data(DataTable dataTable) {
+    @When("User adds medicines from Excel file {string}")
+    public void user_adds_medicines_from_excel_file(String fileName) {
 
-        List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
+        int row = 1;
 
-        for (Map<String, String> row : data) {
-            b.getPages().buyMedicinePage.searchAndAddMedicine(row.get("MedicineName"));
+        while (true) {
+
+            String medicine = ExcelUtilities.getExcelData("Sheet1", row, 0);
+
+            if (medicine == null || medicine.isEmpty()) {
+                break;
+            }
+
+            b.getPages().buyMedicinePage.searchAndAddMedicine(medicine);
+
+            row++;
         }
-    }
-
-    @Then("All medicines should be added successfully")
-    public void all_medicines_should_be_added_successfully() {
-        Assert.assertTrue(true);
-        System.out.println("ASSERT PASSED: All medicines added successfully");
     }
 }

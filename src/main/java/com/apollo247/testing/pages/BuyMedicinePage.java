@@ -102,12 +102,48 @@ public class BuyMedicinePage {
     public void searchAndAddMedicine(String medicineName) {
         click(searchTrigger);
         type(searchInput, medicineName);
-        click(firstAddBtn);
+        
+        // Wait for search results to appear (wait for dropdown/results container)
+        try {
+            Thread.sleep(1000); // Wait for search results to load
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        
+        // Try to find and click the Add button for this specific medicine
+        try {
+            // First try: Look for the medicine name in results and click its Add button
+            By medicineLocator = By.xpath(
+                "//div[contains(text(),'" + medicineName + "')]" +
+                "/ancestor::*[contains(@class,'product') or contains(@class,'item')]" +
+                "//span[text()='Add']"
+            );
+            WebElement addBtn = wait.until(ExpectedConditions.elementToBeClickable(medicineLocator));
+            addBtn.click();
+            System.out.println("Product added: " + medicineName);
+        } catch (Exception e) {
+            // Fallback: Click the first Add button if specific medicine not found
+            System.out.println("Could not find specific Add button for " + medicineName + ", using first Add button");
+            click(firstAddBtn);
+        }
+        
+        // Wait for product to be added (look for toast notification or wait)
+        try {
+            Thread.sleep(1000); // Give time for product to be added
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     /** Click the cart icon/link */
     public void clickCart() {
         click(cartLink);
+        // Wait for cart to load
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     /** Click the Apollo Products navigation link */

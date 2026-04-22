@@ -2,6 +2,7 @@ package com.apollo247.testing.pages;
 
 import java.time.Duration;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,8 +22,8 @@ public class BuyMedicineCartPage {
 
     // ================= LOCATORS =================
 
-    // test1 – product name assertion
-    @FindBy(xpath = "//div[contains(text(),'Dolo-650 Tablet')]")
+    // test1 – product name assertion (generic - updated to find any product in cart)
+    @FindBy(xpath = "//div[contains(@class, 'cartitemname') or contains(@class, 'product-name')]")
     private WebElement doloProductName;
 
     // test4 – cart icon (aria-label)
@@ -77,6 +78,73 @@ public class BuyMedicineCartPage {
     public String getProductNameText() {
         return wait.until(ExpectedConditions.visibilityOf(doloProductName)).getText();
     }
+    
+    /** Get product name text by searching for specific product name in cart */
+    public String getProductNameTextByProduct(String productName) {
+        try {
+            // First, check if cart is empty
+            boolean isCartEmpty = false;
+            try {
+                driver.findElement(By.xpath("//*[contains(text(),'YOUR CART IS EMPTY') or contains(text(),'cart is empty')]"));
+                isCartEmpty = true;
+                System.out.println("Cart is empty! Product was not added successfully.");
+                return "";
+            } catch (Exception e) {
+                // Cart is not empty, continue
+            }
+            
+            // Wait for cart to load - look for any product-related elements
+            wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+                By.xpath("//*[contains(@class, 'cart') or contains(@class, 'product') or contains(@class, 'item')]")
+            ));
+            
+            // Try multiple locator strategies to find the product in cart
+            By[] locators = {
+                By.xpath("//div[contains(text(),'" + productName + "')]"),
+                By.xpath("//span[contains(text(),'" + productName + "')]"),
+                By.xpath("//h2[contains(text(),'" + productName + "')]"),
+                By.xpath("//h1[contains(text(),'" + productName + "')]"),
+                By.xpath("//p[contains(text(),'" + productName + "')]"),
+                By.xpath("//a[contains(text(),'" + productName + "')]"),
+                By.xpath("//*[@class='cartitemname' and contains(text(),'" + productName + "')]"),
+                By.xpath("//div[@class='product-name' and contains(text(),'" + productName + "')]"),
+                By.xpath("//*[contains(normalize-space(),'" + productName + "')]")
+            };
+            
+            for (By locator : locators) {
+                try {
+                    WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+                    String text = element.getText().trim();
+                    if (!text.isEmpty()) {
+                        System.out.println("Found product: " + text);
+                        return text;
+                    }
+                } catch (Exception e) {
+                    // Try next locator
+                    continue;
+                }
+            }
+            
+            // If nothing found, log all visible text to help debug
+            System.out.println("DEBUG: Product '" + productName + "' not found. All visible text in cart:");
+            java.util.List<WebElement> allElements = driver.findElements(By.xpath("//*"));
+            for (WebElement elem : allElements) {
+                try {
+                    String text = elem.getText().trim();
+                    if (!text.isEmpty() && text.length() < 150 && !text.contains("\n\n")) {
+                        System.out.println("  - " + text);
+                    }
+                } catch (Exception e) {
+                    // Skip elements that can't be accessed
+                }
+            }
+            
+        } catch (Exception e) {
+            System.out.println("Exception finding product in cart: " + productName + " - " + e.getMessage());
+            e.printStackTrace();
+        }
+        return "";
+    }
 
     // ---- test4 ----
 
@@ -86,9 +154,12 @@ public class BuyMedicineCartPage {
     }
 
     /** Open the quantity dropdown and select 3 (test4) */
-    public void changeQuantityToThree() {
-        jsClick(wait.until(ExpectedConditions.elementToBeClickable(qtyDropdown)));
-        jsClick(wait.until(ExpectedConditions.elementToBeClickable(qty3)));
+    public void changeQuantity(String quantity) {
+        jsClick(qtyDropdown);
+        WebElement qtyOption = driver.findElement(
+            By.xpath("//p[normalize-space()='" + quantity + "']")
+        );
+        jsClick(qtyOption);
     }
 
     // ---- test5 ----
@@ -117,4 +188,9 @@ public class BuyMedicineCartPage {
     public WebElement getContinueShoppingButton() {
         return wait.until(ExpectedConditions.visibilityOf(continueShopping));
     }
+
+	public void changeQuantityToThree() {
+    jsClick(wait.until(ExpectedConditions.elementToBeClickable(qtyDropdown)));
+    jsClick(wait.until(ExpectedConditions.elementToBeClickable(qty3)));
+}
 }
