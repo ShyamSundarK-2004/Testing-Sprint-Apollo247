@@ -1,6 +1,7 @@
 package com.apollo247.testing.pages;
 
 import java.time.Duration;
+
 import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -62,6 +63,11 @@ public class HealthInsuranceProductListings {
 	
 	@FindBy(xpath = "//h3[normalize-space()='Premium']")
 	private WebElement premiumPlanHeader;
+	
+	@FindBy(xpath = "//span[normalize-space()='Proceed to Customise']")
+	private WebElement proceedToCutomizeButton;
+	
+	
 	// ----------Getters---------------
 	public WebElement getViewPlans() {
 		return viewPlansButton;
@@ -98,6 +104,10 @@ public class HealthInsuranceProductListings {
 	}
 	public void clickClearSelectionButton() {
 		clearSelectionButton.click();
+	}
+	
+	public void clickProceedsPlan() {
+		proceedToCutomizeButton.click();
 	}
 	
 

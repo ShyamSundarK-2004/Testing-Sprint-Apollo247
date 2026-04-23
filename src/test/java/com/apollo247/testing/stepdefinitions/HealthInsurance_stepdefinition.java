@@ -1,6 +1,5 @@
 package com.apollo247.testing.stepdefinitions;
 
-import org.openqa.selenium.By;
 import org.testng.Assert;
 
 import com.apollo247.testing.utilities.BaseClass;
@@ -129,5 +128,72 @@ public void plans_should_be_displayed_based_on_applied_filters_coverage_amount_a
     
     
 }
+
+// Insurance Policy form validate inputs
+@When("User clicks proceeds with plan customization")
+public void user_clicks_proceeds_with_plan_customization() {
+	  b.getPages().healthInsuranceProductListings.clickProceedsPlan();
+	  b.getPages().healthInsurance_PolicyReview.clickPolicyProceedButton();
+}
+@When("User completes step1 Member Details form {string} {string} {string} {string} {string} {string}")
+public void user_completes_step1_member_details_form(String firstName, String lastName, String DOB, String feet, String inch, String weight) {
+	b.getPages().healthInsurance_InsuranceForm.fillMemberDetails(firstName, lastName, DOB, feet, inch, weight);
+	
+   }
+@When("User completes  step2 Medical Questions form {string} {string} {string} {string} {string}")
+public void user_completes_step2_medical_questions_form(String opt1, String opt2, String opt3, String opt4, String opt5) {
+	b.getPages().healthInsurance_InsuranceForm.fillMedicalQuestions(opt1, opt2, opt3, opt4, opt5);
+    
+}
+@When("User completes step3 Proposer Details form {string} {string} {string} {string} {string}")
+public void user_completes_step3_proposer_details_form(String emailId, String phNO, String emphNO, String proposerFN, String PANno ) {
+	b.getPages().healthInsurance_InsuranceForm.fillProposerDetailForm(emailId, phNO, emphNO, proposerFN, PANno);
+    
+}
+@When("User completes step4 KYC Verification {string} {string} upload document")
+public void user_completes_step4_kyc_verification_upload_document(String type, String idNO) {
+	b.getPages().healthInsurance_InsuranceForm.fillKYCVerificationForm(type, idNO);
+    
+}
+@When("User completes step5 address proof {string} {string} upload document")
+public void user_completes_step5_address_proof_upload_document(String type, String idNO) {
+	b.getPages().healthInsurance_InsuranceForm.fillAddressProofForm(type, idNO);
+    }
+@When("User completes step6 Address Details {string} {string} {string}")
+public void user_completes_step6_address_details(String flatNo, String location, String pincode) {
+	b.getPages().healthInsurance_InsuranceForm.fillAddressDetails(flatNo, location, pincode);
+	
+    }
+@When("User completes step7 Nomiee Selection {string} {string} {string} {string} {string} {string} {string} {string}")
+public void user_completes_step7_nomiee_selection(String nomineeFN, String nomineeLN, String noRelation, String noDOB, String apFN, String apLN, String apDOB, String apRealtion) {
+	b.getPages().healthInsurance_InsuranceForm.fillNomineeSelection(nomineeFN, nomineeLN, noRelation, noDOB, apFN,apLN,apDOB,apRealtion);
+    }
+@When("User completes step8 Bank Account Details {string} {string} {string}")
+public void user_completes_step8_bank_account_details(String accNO, String accType, String IFSCcode) {
+	b.getPages().healthInsurance_InsuranceForm.fillBankAccountDetails(accNO, accType, IFSCcode);
+    }
+@When("User completes all the forms and clicks {string}")
+public void user_completes_all_the_forms_and_clicks(String nextbtn) {
+	b.getPages().healthInsurance_InsuranceForm.clickNextBtn(nextbtn);
+    }
+@When("User accepts Terms and Conditions")
+public void user_accepts_terms_and_conditions() {
+    }
+@Then("User reviews policy details")
+public void user_reviews_policy_details() {
+   }
+@When("User clicks on policy form {string}")
+public void user_clicks_on_policy_form(String string) {
+    
+}
+@Then("A popup should be displayed with message {string}")
+public void a_popup_should_be_displayed_with_message(String string) {
+    }
+@Then("User should click {string} button and validate the policy")
+public void user_should_click_button_and_validate_the_policy(String string) {
+   
+}
+
+
 
 }
