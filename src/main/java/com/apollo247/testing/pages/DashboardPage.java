@@ -179,8 +179,9 @@ public class DashboardPage {
 	}
 
 	public void clickOnModule(String module) {
-		
+
 		WebElement moduleName = driver.findElement(By.linkText(module));
+		utilities.waitUntilElementIsCLickable(15L, moduleName);
 		moduleName.click();
 	}
 

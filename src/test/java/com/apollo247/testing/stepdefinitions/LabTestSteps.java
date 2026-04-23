@@ -1,11 +1,13 @@
 package com.apollo247.testing.stepdefinitions;
 
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Map;
 
 import com.apollo247.testing.utilities.BaseClass;
+import com.apollo247.testing.utilities.ExcelUtilities;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
@@ -15,6 +17,7 @@ import io.cucumber.java.en.When;
 public class LabTestSteps {
 
 	BaseClass b;
+	ExcelUtilities excelUtility = new ExcelUtilities();
 
 	// Constructor Injection → gets BaseClass instance
 	public LabTestSteps(BaseClass b) {
@@ -40,7 +43,7 @@ public class LabTestSteps {
 		String title = b.getPages().labTestPage.getCurrentPageUrl();
 
 		// Validate correct navigation
-		assertTrue(title.contains("lab-tests"), "Page not Navigated to the module");
+		assertTrue(title.contains("lab-tests"), "Page not Navigated to the Lab Test module");
 	}
 
 	// ================= SEARCH Scenarios =================
@@ -51,25 +54,25 @@ public class LabTestSteps {
 		// Close popup if exists
 		b.getPages().labTestPage.closePopupIfPresent();
 
-		// Perform searc
+		// Perform search
 		b.getPages().labTestPage.searchTest(testName);
 	}
 
 	@Then("validate search result for {string},{string}")
 	public void validate_search_result_for(String testName, String type) {
-
+		;
 		// Switch based on type (valid / invalid)
 		switch (type.toLowerCase()) {
 
 		case "valid":
 			// Validate results are displayed
-			assertTrue(b.getPages().labTestPage.isResultDisplayed(testName),
+			assertTrue(b.getPages().searchResultPage.isResultDisplayed(testName),
 					"Cards are not displayed for valid search");
 			break;
 
 		case "invalid":
 			// Validate error message is shown
-			assertTrue(b.getPages().labTestPage.isErrorMessageDisplayed(),
+			assertTrue(b.getPages().searchResultPage.isErrorMessageDisplayed(),
 					"Error message not displayed for invalid input");
 			break;
 
@@ -79,7 +82,7 @@ public class LabTestSteps {
 		}
 	}
 
-	// ================= PRESCRIPTION FLOW =================
+	// ================= VALID PRESCRIPTION UPLOAD FLOW =================
 
 	@When("User clicks on book test using prescription")
 	public void user_clicks_on_book_test_using_prescription() {
@@ -104,14 +107,13 @@ public class LabTestSteps {
 		assertTrue(b.getPages().bookByPrescriptionPage.isFileAttached(), "Prescription file not uploaded successfully");
 	}
 
-	@Then("verify  proceed button is enabled")
+	@Then("verify proceed button is enabled")
 	public void verify_proceed_button_is_enabled() {
+		assertTrue(b.getPages().bookByPrescriptionPage.isProceedBtnEnabled(), "Proceed button is not Enabled");
 
-		// Validate proceed button
-		assertTrue(b.getPages().bookByPrescriptionPage.isProceedBtnEnabled(), "Proceed button is not enabled");
 	}
 
-	// ================= INVALID FILE SCENARIO =================
+	// ================= INVALID PRESCRIPTION UPLOAD FLOW =================
 
 	@Then("verify invalid file message displayed and click on ok")
 	public void verify_invalid_file_message_displayed_and_click_on_ok() {
@@ -132,7 +134,7 @@ public class LabTestSteps {
 	public void verify_proceed_button_is_not_enabled() {
 
 		// Validate button state
-		assertTrue(b.getPages().bookByPrescriptionPage.isProceedBtnEnabled(), "Proceed button is enabled");
+		assertFalse(b.getPages().bookByPrescriptionPage.isProceedBtnEnabled(), "Proceed button should not be Enabled");
 	}
 
 	// ================= RADIOLOGY =================
@@ -175,6 +177,7 @@ public class LabTestSteps {
 
 			// Fill details
 			b.getPages().radiologyPage.chooseCity(city);
+			b.getPages().radiologyPage.closeRadiologyPopup();
 			b.getPages().radiologyPage.chooseHospital(hospital);
 			b.getPages().radiologyPage.chooseDate(date);
 			b.getPages().radiologyPage.chooseTestName(testName);
@@ -216,109 +219,62 @@ public class LabTestSteps {
 		// Validate orders
 		boolean flag = b.getPages().myOrderPage.isSpecificUserOrderDisplayed(user);
 
-		assertTrue(flag, "Different user orders found");
+		assertTrue(flag, "No Orders found for this user : " + userName);
 	}
 
 	// ================= END TO END FLOW =================
 
-	@When("User searches for lab test {string}")
-	public void user_searches_for_lab_test(String testName) {
+	@When("User searches for a test and selects test {string}")
+	public void user_searches_for_a_test_and_selects_test(String testName) {
 		b.getPages().labTestPage.closePopupIfPresent();
 		b.getPages().labTestPage.searchTest(testName);
+		b.getPages().searchResultPage.isResultDisplayed(testName);
+		b.getPages().searchResultPage.clickOnLabTest(testName);
 	}
 
-	@When("User clicks on add button for the test")
-	public void user_clicks_on_add_button_for_the_test() {
-		b.getPages().searchResultPage.clickOnAddToCartBtn("CBC Test");
+	@When("User adds test to cart")
+	public void user_adds_test_to_cart() {
+		b.getPages().labTestPage.closePopupIfPresent();
+		b.getPages().testPage.clickOnAddToCart();
 	}
 
-	@Then("Verify only one test is added to cart")
-	public void verify_only_one_test_is_added_to_cart() {
-
+	@Then("Verify {string} is added to the cart")
+	public void verify_is_added_to_the_cart(String testName) {
+		b.getPages().testPage.clickOnCartBtn();
+		assertTrue(b.getPages().testPage.cartTestName().contains(testName), "Different test is added to cart");
 	}
 
-	@When("User clicks on proceed to cart")
-	public void user_clicks_on_proceed_to_cart() {
+	@When("User enters patient details from Excel")
+	public void user_enters_patient_details_from_excel() {
+		b.getPages().testPage.clickOnProceedToCart();
+		b.getPages().patientDetailsPage.clickOnAddMember();
 
-	}
+		// Reading Patients data's from excel
+		String firstName = excelUtility.getExcelData("Patients_Data", 1, 0);
+		String lastName = excelUtility.getExcelData("Patients_Data", 1, 1);
 
-	@Then("Patient selection panel should be displayed")
-	public void patient_selection_panel_should_be_displayed() {
-
-	}
-
-	@When("User reads patient details from Excel")
-	public void user_reads_patient_details_from_excel() {
-
-	}
-
-	@When("User enters patient details and clicks on save")
-	public void user_enters_patient_details_and_clicks_on_save() {
-
-	}
-
-	@Then("Verify patient is added successfully")
-	public void verify_patient_is_added_successfully() {
+		b.getPages().patientDetailsPage.enterFirstName(firstName);
+		b.getPages().patientDetailsPage.enterLastName(lastName);
 
 	}
 
-	@When("User clicks on select slot")
-	public void user_clicks_on_select_slot() {
+	@When("User selects slot and address from Excel")
+	public void user_selects_slot_and_address_from_excel() {
 
 	}
 
-	@When("User selects available date")
-	public void user_selects_available_date() {
+	@Then("Verify booking summary details are correct")
+	public void verify_booking_summary_details_are_correct() {
 
 	}
 
-	@When("User selects suggested time slot")
-	public void user_selects_suggested_time_slot() {
+	@When("User proceeds to payment")
+	public void user_proceeds_to_payment() {
 
 	}
 
-	@Then("Verify slot is selected")
-	public void verify_slot_is_selected() {
-
-	}
-
-	@When("User clicks on add new address")
-	public void user_clicks_on_add_new_address() {
-
-	}
-
-	@When("User enters address details and confirms location")
-	public void user_enters_address_details_and_confirms_location() {
-
-	}
-
-	@Then("Verify address is added successfully")
-	public void verify_address_is_added_successfully() {
-
-	}
-
-	@When("User clicks on review cart")
-	public void user_clicks_on_review_cart() {
-
-	}
-
-	@Then("Verify correct test, patient, slot and address details are displayed")
-	public void verify_correct_test_patient_slot_and_address_details_are_displayed() {
-
-	}
-
-	@When("User clicks on proceed to pay")
-	public void user_clicks_on_proceed_to_pay() {
-
-	}
-
-	@Then("Verify user is navigated to payment page")
-	public void verify_user_is_navigated_to_payment_page() {
-
-	}
-
-	@Then("Verify total amount and payment options are displayed")
-	public void verify_total_amount_and_payment_options_are_displayed() {
+	@Then("Verify payment page is displayed with correct amount")
+	public void verify_payment_page_is_displayed_with_correct_amount() {
 
 	}
 

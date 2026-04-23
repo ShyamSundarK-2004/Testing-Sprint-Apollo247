@@ -1,7 +1,5 @@
 package com.apollo247.testing.pages;
 
-import java.util.List;
-
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,17 +27,9 @@ public class LabTestPage {
 	@FindBy(css = "[placeholder='Search for lab tests']")
 	private WebElement searchBar;
 
-	// test names inside each result
-	@FindBy(xpath = "//p[contains(@class,'RX')]")
-	private List<WebElement> testNames;
-
 	// call back popup
 	@FindBy(xpath = " //div[@class='CallbackWidget_popUpOpen__5Zh2n']//child::img[@alt='close']")
 	private WebElement popupCloseBtn;
-
-	// search result message
-	@FindBy(css = "[class='SearchResult_noResultsFound__srSdT']")
-	private WebElement resultNotFoundMsg;
 
 	// radiology booking section
 	@FindBy(css = "[href='/lab-tests/radiology']")
@@ -59,16 +49,8 @@ public class LabTestPage {
 		return searchBar;
 	}
 
-	public List<WebElement> getTestNames() {
-		return testNames;
-	}
-
 	public WebElement getPopupCloseBtn() {
 		return popupCloseBtn;
-	}
-
-	public WebElement getResultNotFoundMsg() {
-		return resultNotFoundMsg;
 	}
 
 	public WebElement getRadiologyBookingBtn() {
@@ -87,14 +69,13 @@ public class LabTestPage {
 
 	// click on search box
 	public void clickOnSearchBox() {
-		utilities.waitUntilElementIsVisibility(30L, getSearchBar());
+		utilities.waitUntilElementIsVisibility(35L, getSearchBar());
 		getSearchBar().click();
 	}
 
 	// enter search text
 	public void searchTest(String text) {
 		clickOnSearchBox();
-		utilities.waitUntilElementIsVisibility(30L, getSearchBar());
 		getSearchBar().sendKeys(text);
 		if (!text.isEmpty()) {
 			getSearchBar().sendKeys(Keys.ENTER);
@@ -110,28 +91,8 @@ public class LabTestPage {
 		}
 	}
 
-	public boolean isResultDisplayed(String name) {
-		utilities.waitUntilElementIsVisibility(25L, getTestNames().get(1));
-		for (WebElement element : getTestNames()) {
-			String testName = element.getText();
-			if (testName.contains(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public String getCurrentPageUrl() {
 		return utilities.fetchApplicationURL();
-	}
-
-	public boolean isErrorMessageDisplayed() {
-		try {
-			utilities.waitUntilElementIsVisibility(25L, getResultNotFoundMsg());
-			return getResultNotFoundMsg().isDisplayed();
-		} catch (Exception e) {
-			return false;
-		}
 	}
 
 	public boolean isNoActionPerformed() {
@@ -140,19 +101,19 @@ public class LabTestPage {
 	}
 
 	public void clickOnBookByPrescriptionModule() {
-		utilities.waitUntilElementIsVisibility(25L, getBookByMPescriptionModule());
+		utilities.waitUntilElementIsVisibility(30L, getBookByMPescriptionModule());
 		jsUtil.jsClick(getBookByMPescriptionModule());
 	}
 
 	public void clickOnRadiologyBookingBtn() {
-		utilities.waitUntilElementIsVisibility(25L, getRadiologyBookingBtn());
+		utilities.waitUntilElementIsVisibility(30L, getRadiologyBookingBtn());
 		getRadiologyBookingBtn().click();
 		utilities.switchToWindowByURL("radiology");
 
 	}
 
 	public void clickOnViewReportInMyOrder() {
-		utilities.waitUntilElementIsVisibility(25L, getViewReportInMyOrder());
+		utilities.waitUntilElementIsVisibility(30L, getViewReportInMyOrder());
 		jsUtil.jsClick(getViewReportInMyOrder());
 	}
 

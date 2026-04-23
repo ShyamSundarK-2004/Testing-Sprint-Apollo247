@@ -6,8 +6,10 @@ import org.openqa.selenium.support.PageFactory;
 import com.apollo247.testing.pages.DashboardPage;
 import com.apollo247.testing.pages.LabTestPage;
 import com.apollo247.testing.pages.MyOrderPage;
+import com.apollo247.testing.pages.PatientDetailsPage;
 import com.apollo247.testing.pages.RadiologyPage;
 import com.apollo247.testing.pages.SearchResultPage;
+import com.apollo247.testing.pages.TestPage;
 import com.apollo247.testing.pages.UploadPrescriptionPage;
 
 public class Pages {
@@ -18,6 +20,8 @@ public class Pages {
 	public RadiologyPage radiologyPage;
 	public MyOrderPage myOrderPage;
 	public SearchResultPage searchResultPage;
+	public TestPage testPage;
+	public PatientDetailsPage patientDetailsPage;
 
 	// all the pages are initialized with the driver object
 	public Pages(WebDriver driver) {
@@ -45,5 +49,13 @@ public class Pages {
 		// search results page driver initialization
 		searchResultPage = new SearchResultPage(driver);
 		PageFactory.initElements(driver, searchResultPage);
+
+		// labtest cart page driver initialization
+		testPage = new TestPage(driver);
+		PageFactory.initElements(driver, testPage);
+
+		// patient details page driver initialization
+		patientDetailsPage = new PatientDetailsPage(driver);
+		PageFactory.initElements(driver, patientDetailsPage);
 	}
 }

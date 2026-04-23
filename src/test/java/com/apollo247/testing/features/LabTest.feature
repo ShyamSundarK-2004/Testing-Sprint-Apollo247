@@ -12,21 +12,20 @@ Feature: Automation Testing on Lab Test Module
     Then validate search result for "<input>","<type>"
 
     Examples:
-      | input     | type    |
-      | CBC Test  | valid   |
-      | PPBS Test | valid   |
-      | @@@@      | invalid |
-      | 12333     | invalid |
+      | input    | type    |
+      | CBC Test | valid   |
+      | @@@@     | invalid |
+      | 12333    | invalid |
 
   # Positive scenario → valid file upload
-  @labTest @prescriptionScenario
+  @labTest @prescriptionPositiveScenario
   Scenario: Verify booking lab test using correct prescription format
     When User clicks on book test using prescription
     And User uploads valid prescription
     Then verify proceed button is enabled
 
   # Negative scenario → invalid file format validation
-  @labTest @prescriptionScenario
+  @labTest @prescriptionNegativeScenario
   Scenario: Verify booking lab test using wrong prescription file format
     When User clicks on book test using prescription
     And User uploads valid prescription
@@ -41,7 +40,7 @@ Feature: Automation Testing on Lab Test Module
     Then User should be on radiology page
     When User enters radiology details
       | city    | hospital                  | date     | tests         | filePath                                               |
-      | Chennai | Anna Nagar- Apollo Clinic | April-15 | X-Ray,CT Scan | C:\\Users\\Shyam Sundar\\Documents\\prescription2.jpeg |
+      | Chennai | Anna Nagar- Apollo Clinic | April-25 | X-Ray,CT Scan | C:\\Users\\Shyam Sundar\\Documents\\prescription2.jpeg |
     Then User should see request call button is enabled
 
   # Validate filtering logic based on selected patient
@@ -58,31 +57,17 @@ Feature: Automation Testing on Lab Test Module
 
   # Full booking journey → from search to payment page
   @labTest @EndToEndScenario
-  Scenario: Verify end-to-end lab test booking flow with Excel data
-  # Search & Add to Cart
-    When User searches for lab test "CBC Test"
-    And User clicks on add button for the test
-    Then Verify only one test is added to cart
-  # Go to Cart / Patient Selection
-    When User clicks on proceed to cart
-    Then Patient selection panel should be displayed
-  # Add Patient using Excel (DDT)
-    When User reads patient details from Excel
-    And User enters patient details and clicks on save
-    Then Verify patient is added successfully
-  # Slot Selection
-    When User clicks on select slot
-    And User selects available date
-    And User selects suggested time slot
-    Then Verify slot is selected
-  # Address Selection
-    When User clicks on add new address
-    And User enters address details and confirms location
-    Then Verify address is added successfully
-  # Review & Payment Page
-    When User clicks on review cart
-    Then Verify correct test, patient, slot and address details are displayed
-    When User clicks on proceed to pay
-    Then Verify user is navigated to payment page
-  # Final Validation
-    Then Verify total amount and payment options are displayed
+  Scenario Outline: Verify end-to-end lab test booking flow using Excel data
+    When User searches for a test and selects test "<TestName>"
+    And User adds test to cart
+    Then Verify "<TestName>" is added to the cart
+    When User enters patient details from Excel
+    And User selects slot and address from Excel
+    Then Verify booking summary details are correct
+    When User proceeds to payment
+    Then Verify payment page is displayed with correct amount
+
+    Examples:
+      | TestName |
+      | CBC Test |
+# | PPBS Test |

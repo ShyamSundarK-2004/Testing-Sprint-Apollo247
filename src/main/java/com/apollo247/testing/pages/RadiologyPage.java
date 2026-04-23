@@ -28,7 +28,7 @@ public class RadiologyPage {
 	// ====== Locators ======
 
 	// select city input field
-	@FindBy(xpath = "//div[text() = 'Choose City']")
+	@FindBy(xpath = "//div[normalize-space() = 'Choose City']")
 	private WebElement chooseCityField;
 
 	// select hospital or clinic field
@@ -38,6 +38,10 @@ public class RadiologyPage {
 	// select date field
 	@FindBy(xpath = "//button[contains(@class,'datePickerBtn')]")
 	private WebElement pickPreferedDate;
+
+	// close date popup
+	@FindBy(xpath = "//div[contains(@class,'AphDialog_paper')]//button[@title='Close']")
+	private WebElement closeDatePopup;
 
 	// select test name
 	@FindBy(xpath = "(//div[contains(@class,'AphSelect_select')])[4]")
@@ -87,6 +91,10 @@ public class RadiologyPage {
 
 	public WebElement getPickPreferedDate() {
 		return pickPreferedDate;
+	}
+
+	public WebElement getCloseDatePopup() {
+		return closeDatePopup;
 	}
 
 	public WebElement getSelectTestName() {
@@ -143,9 +151,9 @@ public class RadiologyPage {
 
 	public void chooseCity(String cityName) {
 		jsUtil.scrollByPixels(-185);
-		utilities.waitUntilElementIsVisibility(25L, getChooseCityField());
-		jsUtil.jsClick(getChooseCityField());
-		utilities.waituntilPresenceOfElementLocated(25L, By.xpath("//li[text() = '" + cityName + "']"));
+		utilities.waitUntilElementIsVisibility(35L, getChooseCityField());
+		getChooseCityField().click();
+		utilities.waituntilPresenceOfElementLocated(30L, By.xpath("//li[normalize-space()  = '" + cityName + "']"));
 		WebElement chooseCity = driver.findElement(By.xpath("//li[normalize-space() = '" + cityName + "']"));
 		chooseCity.click();
 	}
@@ -186,7 +194,7 @@ public class RadiologyPage {
 				}
 			}
 		}
-		driver.findElement(By.xpath("//abbr[text()='" + day + "']")).click();
+		driver.findElement(By.xpath("//abbr[normalize-space()='" + day + "']")).click();
 
 		actions.pressEscape();
 	}
