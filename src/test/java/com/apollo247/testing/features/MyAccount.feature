@@ -9,15 +9,14 @@ Scenario: Add valid family member from Excel
 
 When user navigates to Manage Family Members
 And user adds family members from excel
-Then family member should be created successfully
+Then family member should be created successfully "Profile created successfully."
 
 
 @Negative
 Scenario: Add family member with empty details
-  
+
   When user navigates to Manage Family Members
   And user clicks Add New Profile
-  And user clicks Save
   Then validation error message should be displayed
 
 @MyAppointments @AppointmentDisplay

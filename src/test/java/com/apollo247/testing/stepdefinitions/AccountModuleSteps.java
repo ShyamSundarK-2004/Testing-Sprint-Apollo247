@@ -5,8 +5,6 @@ import com.apollo247.testing.utilities.BaseClass;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.*;
 
-import java.util.List;
-
 public class AccountModuleSteps {
 
     private BaseClass b;
@@ -26,7 +24,7 @@ public class AccountModuleSteps {
 
     @Then("user is logged into the application")
     public void user_logged_in() {
-        System.out.println("User session active");
+        System.out.println("User assumed logged in");
     }
 
     // =========================
@@ -60,22 +58,21 @@ public class AccountModuleSteps {
 
     @When("user adds family members from excel")
     public void user_adds_family_members_from_excel() {
-      b.getPages().manageFamilyPage.addFamilyMembersFromExcel();
-    	System.out.println("Reading from excel");
+        b.getPages().manageFamilyPage.addFamilyMembersFromExcel();
     }
 
-    @Then("family member should be created successfully")
-    public void family_member_created_successfully() {
-        boolean status = b.getPages().manageFamilyPage.isSuccessToastDisplayed();
-        Assert.assertTrue(status, "Family member creation failed");
-        System.out.println("ASSERT PASSED: Family member created successfully");
+    @Then("family member should be created successfully {string}")
+    public void family_member_created_successfully(String expectedMsg) {
+        boolean status = b.getPages().manageFamilyPage.isFamilyMemberCreatedSuccessfully();
+        Assert.assertEquals(status, true, "Family member creation failed");
     }
 
     @Then("validation error message should be displayed")
     public void validation_error_message_should_be_displayed() {
-        boolean status = b.getPages().manageFamilyPage.isValidationErrorDisplayed();
-        Assert.assertTrue(status, "Validation error not displayed");
-        System.out.println("ASSERT PASSED: Validation error displayed");
+        b.getPages().manageFamilyPage.triggerFirstNameValidation();
+        
+        boolean actual = b.getPages().manageFamilyPage.isFirstNameErrorDisplayed();
+        Assert.assertEquals(actual, true, "First name validation error not displayed");
     }
 
     // =========================
@@ -94,21 +91,14 @@ public class AccountModuleSteps {
 
     @Then("Appointments section should be displayed")
     public void appointments_displayed() {
-        boolean status = b.getPages().myappointmentsPage.isAppointmentsPageDisplayed();
-        Assert.assertTrue(status, "Appointments page not displayed");
-        System.out.println("ASSERT PASSED: Appointments displayed");
+        String actual = b.getPages().myappointmentsPage.getAppointmentsHeadingText();
+        Assert.assertEquals(actual, "My Appointments", "Appointments page heading not displayed");
     }
 
     @Then("Appointments section should still be displayed")
     public void appointments_still_displayed() {
-        // After refresh, the panel is closed and page reloads to home.
-        // Re-open panel and navigate to My Appointments again before asserting.
-        b.getPages().dashboardPage.clickProfileIcon();
-        b.getPages().myappointmentsPage.openMyAppointments();
-
-        boolean status = b.getPages().myappointmentsPage.isPageLoadedAfterRefresh();
-        Assert.assertTrue(status, "Appointments not visible after refresh");
-        System.out.println("ASSERT PASSED: Appointments persisted after refresh");
+        String actual = b.getPages().myappointmentsPage.getAppointmentsHeadingText();
+        Assert.assertEquals(actual, "My Appointments", "Appointments page heading not displayed after refresh");
     }
 
     // =========================
@@ -137,9 +127,8 @@ public class AccountModuleSteps {
 
     @Then("corporate benefits error message should be displayed")
     public void corporate_error_displayed() {
-        boolean status = b.getPages().membershipsPage.isCorporateErrorDisplayed();
-        Assert.assertTrue(status, "Corporate error not displayed");
-        System.out.println("ASSERT PASSED: Corporate error displayed");
+        boolean actual = b.getPages().membershipsPage.isCorporateErrorTextCorrect();
+        Assert.assertEquals(actual, true, "Corporate error message not displayed correctly");
     }
 
     @Then("user dismisses the error popup")
@@ -159,14 +148,8 @@ public class AccountModuleSteps {
 
     @Then("the following plan details should be visible on the page")
     public void plan_details(DataTable dataTable) {
-
-        List<String> data = dataTable.asList();
-
-        for (int i = 1; i < data.size(); i++) {
-            boolean status = b.getPages().membershipsPage.isPlanDetailVisible(data.get(i));
-            Assert.assertTrue(status, "Plan not found: " + data.get(i));
-            System.out.println("ASSERT PASSED: Plan visible - " + data.get(i));
-        }
+        boolean actual = b.getPages().membershipsPage.validatePlanDetails(dataTable.asList());
+        Assert.assertEquals(actual, true, "Plan details validation failed");
     }
 
     // =========================
@@ -180,9 +163,8 @@ public class AccountModuleSteps {
 
     @Then("Notification Preferences page should be displayed")
     public void verify_notifications_page() {
-        boolean status = b.getPages().notificationsPage.isNotificationPageDisplayed();
-        Assert.assertTrue(status, "Notification page not displayed");
-        System.out.println("ASSERT PASSED: Notification page displayed");
+        boolean actual = b.getPages().notificationsPage.isNotificationPageDisplayed();
+        Assert.assertEquals(actual, true, "Notification page not displayed");
     }
 
     @When("user enables Push Notifications")
@@ -192,9 +174,8 @@ public class AccountModuleSteps {
 
     @Then("Push Notifications toggle should be active")
     public void push_active() {
-        boolean status = b.getPages().notificationsPage.isPushToggleVisible();
-        Assert.assertTrue(status, "Push toggle not active");
-        System.out.println("ASSERT PASSED: Push enabled");
+        boolean actual = b.getPages().notificationsPage.isPushNotificationEnabled();
+        Assert.assertEquals(actual, true, "Push toggle not enabled");
     }
 
     @When("user enables SMS Notifications")
@@ -204,26 +185,20 @@ public class AccountModuleSteps {
 
     @Then("SMS Notifications toggle should be active")
     public void sms_active() {
-        boolean status = b.getPages().notificationsPage.isSmsToggleVisible();
-        Assert.assertTrue(status, "SMS toggle not active");
-        System.out.println("ASSERT PASSED: SMS enabled");
+        boolean actual = b.getPages().notificationsPage.isSmsNotificationEnabled();
+        Assert.assertEquals(actual, true, "SMS toggle not enabled");
     }
 
     @When("user enables the following notification types")
     public void enable_multiple(DataTable table) {
-
-        List<String> list = table.asList();
-
-        for (int i = 1; i < list.size(); i++) {
-            b.getPages().notificationsPage.enableNotificationType(list.get(i));
-        }
+        b.getPages().notificationsPage.enableMultipleNotifications(table);
     }
 
     @Then("all selected notifications should be enabled")
     public void all_enabled() {
-        boolean status = b.getPages().notificationsPage.areAllTogglesVisible();
-        Assert.assertTrue(status, "Not all notifications enabled");
-        System.out.println("ASSERT PASSED: All notifications enabled");
+        boolean push = b.getPages().notificationsPage.isPushNotificationEnabled();
+        boolean sms = b.getPages().notificationsPage.isSmsNotificationEnabled();
+        Assert.assertEquals(push && sms, true, "Not all notifications enabled");
     }
 
     // =========================
@@ -237,11 +212,10 @@ public class AccountModuleSteps {
 
     @Then("all help categories should be visible")
     public void help_visible() {
-        boolean status = b.getPages().needHelpPage.areHelpCategoriesVisible();
-        Assert.assertTrue(status, "Help categories not visible");
-        System.out.println("ASSERT PASSED: Help categories visible");
+        boolean actual = b.getPages().needHelpPage.areHelpCategoriesVisible();
+        Assert.assertEquals(actual, true, "Help categories not visible");
     }
-
+    
     @When("user clicks on Medicines category")
     public void medicines_click() {
         b.getPages().needHelpPage.clickMedicinesCategory();
@@ -249,9 +223,8 @@ public class AccountModuleSteps {
 
     @Then("Medicines help page should be loaded")
     public void medicines_loaded() {
-        boolean status = b.getPages().needHelpPage.isMedicinesPageLoaded();
-        Assert.assertTrue(status, "Medicines page not loaded");
-        System.out.println("ASSERT PASSED: Medicines page loaded");
+        boolean actual = b.getPages().needHelpPage.isMedicinesPageLoaded();
+        Assert.assertEquals(actual, true, "Medicines page not loaded");
     }
 
     // =========================
@@ -271,7 +244,6 @@ public class AccountModuleSteps {
     @Then("user should be redirected to login page")
     public void logout_success() {
         boolean status = b.getPages().logoutPage.isLogoutSuccessful();
-        Assert.assertTrue(status, "Logout failed");
-        System.out.println("ASSERT PASSED: Logout successful");
+        Assert.assertEquals(status, true, "Logout failed: Login page is not displayed");
     }
 }
