@@ -403,6 +403,18 @@ public class HealthInsurance_InsuranceForm {
 		
 		driver.findElement(By.xpath("//p[contains(text(),'I hereby declare, on my behalf and on behalf of all persons proposed to be insured, that the above statements, answers and/or particulars given by me are true and complete in all respects to the best of my knowledge and that I am authorized to propose on behalf of these other persons.')]")).click();
 		driver.findElement(By.xpath("//p[contains(text(),'I/We authorize the Company to share information pertaining to my / our proposal including the medical records of the Insured / Proposer for the sole purpose of Service Delivery with our empaneled provider.')]")).click();
+		safeClick(By.xpath("//button[normalize-space()='Next']"));
+		
+	}
+	
+	public boolean reviewPolicyDetails(String actualstr) {
+		String expectedStr=driver.findElement(By.xpath("//p[.='SELF']/following-sibling::p")).getText();
+		return expectedStr.equalsIgnoreCase(actualstr);
+		
+	}
+	
+	public void policyBUY_NOW() {
+		driver.findElement(By.xpath("//span[normalize-space()='Buy Now']")).click();
 	}
 	
 	public void clickNextBtn(String nextbtn) {

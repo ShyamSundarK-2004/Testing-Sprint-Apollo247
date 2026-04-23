@@ -178,12 +178,15 @@ public void user_completes_all_the_forms_and_clicks(String nextbtn) {
     }
 @When("User accepts Terms and Conditions")
 public void user_accepts_terms_and_conditions() {
+	b.getPages().healthInsurance_InsuranceForm.acceptsTC();
     }
 @Then("User reviews policy details")
-public void user_reviews_policy_details() {
+public void user_reviews_policy_details(String memberName) {
+	Assert.assertTrue(b.getPages().healthInsurance_InsuranceForm.reviewPolicyDetails(memberName));
    }
 @When("User clicks on policy form {string}")
 public void user_clicks_on_policy_form(String string) {
+	
     
 }
 @Then("A popup should be displayed with message {string}")

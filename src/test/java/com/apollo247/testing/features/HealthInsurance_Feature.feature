@@ -46,7 +46,7 @@ Feature: Apollo 247 Health Insurance - Member Selection Validation
     And User completes step8 Bank Account Details "50200027074321" "Savings" "HDFC0000001" 
     And User completes all the forms and clicks "Next"
     And User accepts Terms and Conditions
-    Then User reviews policy details
+    Then User reviews policy details "sg anand"
     When User clicks on policy form "Buy Now"
     Then A popup should be displayed with message "Unable to process your request. Please try again."
     And User should click "Go to Homepage" button and validate the policy
