@@ -18,14 +18,14 @@ Feature: Automation Testing on Lab Test Module
       | 12333    | invalid |
 
   # Positive scenario → valid file upload
-  @labTest @prescriptionPositiveScenario
+  @labTest @prescriptionScenario
   Scenario: Verify booking lab test using correct prescription format
     When User clicks on book test using prescription
     And User uploads valid prescription
     Then verify proceed button is enabled
 
   # Negative scenario → invalid file format validation
-  @labTest @prescriptionNegativeScenario
+  @labTest @prescriptionScenario
   Scenario: Verify booking lab test using wrong prescription file format
     When User clicks on book test using prescription
     And User uploads valid prescription
