@@ -1,6 +1,10 @@
 package com.apollo247.testing.stepdefinitions;
 
+import java.io.IOException;
+
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
+import org.testng.asserts.SoftAssert;
 
 import com.apollo247.testing.utilities.BaseClass;
 import com.apollo247.testing.utilities.SessionManager;
@@ -156,11 +160,11 @@ public void user_completes_step4_kyc_verification_upload_document(String type, S
     
 }
 @When("User completes step5 address proof {string} {string} upload document")
-public void user_completes_step5_address_proof_upload_document(String type, String idNO) {
+public void user_completes_step5_address_proof_upload_document(String type, String idNO) throws InterruptedException {
 	b.getPages().healthInsurance_InsuranceForm.fillAddressProofForm(type, idNO);
     }
 @When("User completes step6 Address Details {string} {string} {string}")
-public void user_completes_step6_address_details(String flatNo, String location, String pincode) {
+public void user_completes_step6_address_details(String flatNo, String location, String pincode) throws InterruptedException {
 	b.getPages().healthInsurance_InsuranceForm.fillAddressDetails(flatNo, location, pincode);
 	
     }
@@ -175,26 +179,57 @@ public void user_completes_step8_bank_account_details(String accNO, String accTy
 @When("User completes all the forms and clicks {string}")
 public void user_completes_all_the_forms_and_clicks(String nextbtn) {
 	b.getPages().healthInsurance_InsuranceForm.clickNextBtn(nextbtn);
+	b.getPages().healthInsurance_InsuranceForm.clickNextBtn(nextbtn);
     }
 @When("User accepts Terms and Conditions")
 public void user_accepts_terms_and_conditions() {
 	b.getPages().healthInsurance_InsuranceForm.acceptsTC();
     }
-@Then("User reviews policy details")
+
+@Then("User reviews policy details {string}")
 public void user_reviews_policy_details(String memberName) {
-	Assert.assertTrue(b.getPages().healthInsurance_InsuranceForm.reviewPolicyDetails(memberName));
-   }
+	SoftAssert softAssert = new SoftAssert();
+    boolean isValid = b.getPages().healthInsurance_InsuranceForm.reviewPolicyDetails(memberName);
+    softAssert.assertTrue(isValid, "Policy details review failed for member: " + memberName);
+    softAssert.assertAll();
+}
 @When("User clicks on policy form {string}")
-public void user_clicks_on_policy_form(String string) {
-	
+public void user_clicks_on_policy_form(String BuyNow) {
+	b.getPages().healthInsurance_InsuranceForm.policyBUY_NOW(BuyNow);
+	b.getPages().healthInsurance_InsuranceForm.policyBUY_NOW(BuyNow);
     
 }
-@Then("A popup should be displayed with message {string}")
-public void a_popup_should_be_displayed_with_message(String string) {
-    }
-@Then("User should click {string} button and validate the policy")
-public void user_should_click_button_and_validate_the_policy(String string) {
-   
+@Then("The Payment Options page should be displayed with {string} {string} {string} and validating the policy")
+public void the_payment_options_page_should_be_displayed_with_and_validating_the_policy(String payment, String paymentOpt, String topayamt) throws IOException {
+	
+	SoftAssert softAssert = new SoftAssert();
+
+    boolean isPaymentPage = b.getPages()
+            .healthInsurance_InsuranceForm
+            .verifyPaymentPage(payment);
+
+    boolean isPaymentOptionVisible = b.getPages()
+            .healthInsurance_InsuranceForm
+            .verifyPaymentOption(paymentOpt);
+
+    boolean isToPayVisible = b.getPages()
+            .healthInsurance_InsuranceForm
+            .verifyAmtVisible(topayamt);
+
+    // ✅ Assertions
+    softAssert.assertTrue(isPaymentPage,
+            "❌ Payment page NOT loaded (URL or UI mismatch)");
+
+    softAssert.assertTrue(isPaymentOptionVisible,
+            "❌ 'Payment Options' text NOT visible");
+
+    softAssert.assertTrue(isToPayVisible,
+            "❌ 'To Pay' amount NOT visible");
+
+    // ✅ Important (collect all failures)
+    softAssert.assertAll();
+	System.out.println("✅ All assertions checked with soft assert");
+
 }
 
 

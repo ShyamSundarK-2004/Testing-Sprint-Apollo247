@@ -1,11 +1,14 @@
 package com.apollo247.testing.pages;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -209,9 +212,10 @@ public class HealthInsurance_InsuranceForm {
 		upload.sendKeys(filePath);
 	}
 
-	public void fillAddressProofForm(String type, String idNO) {
-		By selectBox = By.xpath("//strong[contains(text(),'Upload documents for address proof')]"
-				+ "/ancestor::form//input[@placeholder='Select']");
+	public void fillAddressProofForm(String type, String idNO) throws InterruptedException {
+
+
+		By selectBox = By.xpath("//strong[contains(text(),'Upload documents for address proof')]/ancestor::form//input[@placeholder='Select']");
 
 		WebElement dropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(selectBox));
 
@@ -222,63 +226,20 @@ public class HealthInsurance_InsuranceForm {
 		safeClick(wait.until(ExpectedConditions.visibilityOfElementLocated(option)));
 
 		// Enter ID number
-		WebElement idField = wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.xpath("//strong[contains(text(),'Upload documents for address proof')]"
-						+ "/ancestor::form//input[@placeholder='Enter id number']")));
+		WebElement idField = wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("//strong[contains(text(),'Upload documents for address proof')]/ancestor::form//input[@placeholder='Enter id number']")));
 		idField.clear();
 		idField.sendKeys(idNO);
 
 		// Upload file
 		String filePath = new File("src/test/resources/FileUpload/F1_picture.png").getAbsolutePath();
 		WebElement upload = driver
-				.findElement(By.xpath("//strong[contains(text(),'Upload documents for address proof')]"
-						+ "/ancestor::form//input[@type='file']"));
+				.findElement(By.xpath("//strong[contains(text(),'Upload documents for address proof')]/ancestor::form//input[@type='file']"));
 		upload.sendKeys(filePath);
-
 	}
-	
-	public void fillAddressDetails(String flatNO, String location, String pincode) {
-
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-
-	    // 🔹 Add New Address
-	    By addAddressBtn = By.xpath("//div[contains(@class,'AddressField_addButton') and normalize-space()='+ Add New Address']");
-	    WebElement addBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(addAddressBtn));
-
-	    scrollToCenter(addBtn);
-	    safeClick(addBtn);
-
-	    // 🔹 Fill Fields
-	    WebElement flat = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("flatNumber")));
-	    flat.clear();
-	    flat.sendKeys(flatNO);
-
-	    WebElement colony = driver.findElement(By.id("colony"));
-	    colony.clear();
-	    colony.sendKeys(location);
-
-	    WebElement pin = driver.findElement(By.id("pincode"));
-	    pin.clear();
-	    pin.sendKeys(pincode);
-
-	    // Wait for pincode processing
-	    wait.until(ExpectedConditions.not(
-	            ExpectedConditions.attributeToBe(By.id("pincode"), "value", "")
-	    ));
-
-	    // 🔹 Add Button (inside modal)
-	    By addBtnLocator = By.xpath("//button[contains(@class,'Footer_blackFull')]//span[normalize-space()='Add']");
-	    WebElement add = wait.until(ExpectedConditions.visibilityOfElementLocated(addBtnLocator));
-
-	    scrollToCenter(add);
-
-	    try {
-	        wait.until(ExpectedConditions.elementToBeClickable(add)).click();
-	    } catch (ElementClickInterceptedException e) {
-	        // 🔥 fallback for modal overlay
-	        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", add);
-	    }
-	}
+//	public void fillAddressDetails(String flatNO, String location, String pincode) throws InterruptedException {
+//
+//	}
 	
 	
 	public void scrollToCenter(WebElement element) {
@@ -318,7 +279,110 @@ public class HealthInsurance_InsuranceForm {
 //		// Step 6: Click Add button
 //		addButton.click();
 //	}
+//	public void fillAddressDetails(String flatNO, String location, String pincode) throws InterruptedException {
+//
+//	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+//
+//	    // ✅ Step 1: JS click - bypasses footer overlay
+//	    WebElement addNewAddr = wait.until(ExpectedConditions.presenceOfElementLocated(
+//	        By.xpath("//div[contains(@class,'AddressField_addButton')]")));
+//	    ((JavascriptExecutor) driver).executeScript(
+//	        "arguments[0].scrollIntoView({behavior:'smooth', block:'center'});", addNewAddr);
+//	    Thread.sleep(1000);
+//	    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addNewAddr);
+//	    System.out.println("✅ Add New Address clicked");
+//	    Thread.sleep(1000);
+//
+//	    // Step 2: Flat Number
+//	    WebElement flat = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='flatNumber']")));
+//	    ((JavascriptExecutor) driver).executeScript("arguments[0].value='';", flat);
+//	    flat.click();
+//	    flat.sendKeys(flatNO);
+//
+//	    // Step 3: Colony
+//	    WebElement colony = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='colony']")));
+//	    ((JavascriptExecutor) driver).executeScript("arguments[0].value='';", colony);
+//	    colony.click();
+//	    colony.sendKeys(location);
+//
+//	    // Step 4: Pincode
+//	    WebElement pin = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@id='pincode']")));
+//	    ((JavascriptExecutor) driver).executeScript("arguments[0].value='';", pin);
+//	    pin.click();
+//	    pin.sendKeys(pincode);
+//
+//	    // Step 5: Wait for city/state auto-fetch
+//	    wait.until(ExpectedConditions.not(
+//	        ExpectedConditions.attributeToBe(By.xpath("//input[@id='pincode']"), "value", "")));
+//	    Thread.sleep(1000);
+//
+//	    // ✅ Step 6: JS click Add button - bypasses footer overlay
+//	    WebElement addButton = wait.until(ExpectedConditions.presenceOfElementLocated(
+//	        By.xpath("//span[normalize-space()='Add']")));
+//	    ((JavascriptExecutor) driver).executeScript(
+//	        "arguments[0].scrollIntoView({behavior:'smooth', block:'center'});", addButton);
+//	    Thread.sleep(500);
+//	    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addButton);
+//	    System.out.println("✅ Address added successfully");
+//	}
+	public void fillAddressDetails(String flatNO, String location, String pincode) throws InterruptedException {
 
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+	    // Step 1: JS click Add New Address
+	    WebElement addNewAddr = wait.until(ExpectedConditions.presenceOfElementLocated(
+	        By.xpath("//div[contains(@class,'AddressField_addButton')]")));
+	    ((JavascriptExecutor) driver).executeScript(
+	        "arguments[0].scrollIntoView({behavior:'smooth', block:'center'});", addNewAddr);
+	    Thread.sleep(1000);
+	    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addNewAddr);
+	    Thread.sleep(2000); // ✅ Wait for modal to fully open
+
+	    // ✅ Step 2: Remove overflow:hidden blocking the modal
+	    ((JavascriptExecutor) driver).executeScript(
+	        "document.documentElement.style.overflow = 'auto';");
+	    Thread.sleep(500);
+
+	    // Step 3: Flat Number - JS click + sendKeys
+	    WebElement flat = wait.until(ExpectedConditions.presenceOfElementLocated(
+	        By.xpath("//input[@id='flatNumber']")));
+	    ((JavascriptExecutor) driver).executeScript(
+	        "arguments[0].scrollIntoView({block:'center'});", flat);
+	    ((JavascriptExecutor) driver).executeScript("arguments[0].value='';", flat);
+	    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", flat); // ✅ JS click
+	    flat.sendKeys(flatNO);
+	    System.out.println("✅ Flat number entered");
+
+	    // Step 4: Colony - JS click + sendKeys
+	    WebElement colony = wait.until(ExpectedConditions.presenceOfElementLocated(
+	        By.xpath("//input[@id='colony']")));
+	    ((JavascriptExecutor) driver).executeScript("arguments[0].value='';", colony);
+	    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", colony); // ✅ JS click
+	    colony.sendKeys(location);
+	    System.out.println("✅ Colony entered");
+
+	    // Step 5: Pincode - JS click + sendKeys
+	    WebElement pin = wait.until(ExpectedConditions.presenceOfElementLocated(
+	        By.xpath("//input[@id='pincode']")));
+	    ((JavascriptExecutor) driver).executeScript("arguments[0].value='';", pin);
+	    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", pin); // ✅ JS click
+	    pin.sendKeys(pincode);
+	    System.out.println("✅ Pincode entered");
+
+	    // Step 6: Wait for city/state auto-fetch
+	    wait.until(ExpectedConditions.not(
+	        ExpectedConditions.attributeToBe(By.id("pincode"), "value", "")));
+	    Thread.sleep(1500);
+
+	    // Step 7: JS click Add button
+	    WebElement addButton = wait.until(ExpectedConditions.presenceOfElementLocated(
+	        By.xpath("//span[normalize-space()='Add']")));
+	    ((JavascriptExecutor) driver).executeScript(
+	        "arguments[0].scrollIntoView({block:'center'});", addButton);
+	    Thread.sleep(500);
+	    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addButton);
+	    System.out.println("✅ Address added successfully");
+	}
 	public void fillNomineeSelection(String nomineeFN, String nomineeLN, String propRelation, String dob,
 			String appointeeFN, String appointeeLN, String apDOB, String apRelation) {
 
@@ -403,7 +467,7 @@ public class HealthInsurance_InsuranceForm {
 		
 		driver.findElement(By.xpath("//p[contains(text(),'I hereby declare, on my behalf and on behalf of all persons proposed to be insured, that the above statements, answers and/or particulars given by me are true and complete in all respects to the best of my knowledge and that I am authorized to propose on behalf of these other persons.')]")).click();
 		driver.findElement(By.xpath("//p[contains(text(),'I/We authorize the Company to share information pertaining to my / our proposal including the medical records of the Insured / Proposer for the sole purpose of Service Delivery with our empaneled provider.')]")).click();
-		safeClick(By.xpath("//button[normalize-space()='Next']"));
+		safeClick(By.xpath("//button[.//span[normalize-space()='Next']]"));
 		
 	}
 	
@@ -413,12 +477,129 @@ public class HealthInsurance_InsuranceForm {
 		
 	}
 	
-	public void policyBUY_NOW() {
-		driver.findElement(By.xpath("//span[normalize-space()='Buy Now']")).click();
+	public void policyBUY_NOW(String buynow) {
+		safeClick(By.xpath("//span[normalize-space()='Buy Now']"));
 	}
 	
 	public void clickNextBtn(String nextbtn) {
-		safeClick(By.xpath("//button[normalize-space()='"+nextbtn+"']"));
+		safeClick(By.xpath("//button[.//span[normalize-space()='Next']]"));
+	}
+	
+//	public boolean isErrorMessageVisible() {
+//	    try {
+//	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+//
+//	        return wait.until(ExpectedConditions.visibilityOfElementLocated(
+//	                By.xpath("//strong[normalize-space()='Unable to process your request. Please contact support.']")
+//	        )).isDisplayed();
+//
+//	    } catch (Exception e) {
+//	        return false;
+//	    }
+//	}
+	
+	public boolean isCallPopupVisible() {
+	    try {
+	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+
+	        return wait.until(ExpectedConditions.visibilityOfElementLocated(
+	                By.xpath("//strong[normalize-space()='Unable to process your request. Please contact support.']")
+	        )).isDisplayed();
+
+	    } catch (Exception e) {
+	        return false;
+	    }
+	}
+	public void closeCallPopupIfPresent() {
+	    try {
+	        if (isCallPopupVisible()) {
+
+	            System.out.println("⚠️ Call popup detected, closing it...");
+
+	            WebElement closeBtn = driver.findElement(
+	                    By.xpath("//span[@class='Lb']")
+	            );
+
+	            closeBtn.click();
+
+	            // wait until popup disappears
+	            new WebDriverWait(driver, Duration.ofSeconds(10))
+	                    .until(ExpectedConditions.invisibilityOf(closeBtn));
+	        }
+
+	    } catch (Exception e) {
+	        System.out.println("Popup handling failed: " + e.getMessage());
+	    }
+	}
+	public boolean verifyPaymentPage(String payment) throws IOException {
+
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+	    try {
+	        // ✅ Step 1: Wait for page load
+	        wait.until(driver -> ((JavascriptExecutor) driver)
+	                .executeScript("return document.readyState").equals("complete"));
+
+	        // ✅ Step 2: Handle popup if it appears
+	        closeCallPopupIfPresent();
+
+	        // ✅ Step 3: Wait for either condition (IMPORTANT)
+	        boolean isPaymentLoaded = wait.until(driver -> {
+
+	            String currentUrl = driver.getCurrentUrl().toLowerCase();
+
+	            boolean urlMatch = currentUrl.contains(payment.toLowerCase());
+
+	            boolean paymentTextVisible = driver.findElements(
+	                    By.xpath("//*[contains(text(),'Payment Options')]")
+	            ).size() > 0;
+
+	            return urlMatch || paymentTextVisible;
+	        });
+
+	        if (isPaymentLoaded) {
+	            System.out.println("✅ Payment page loaded");
+	            return true;
+	        }
+
+	        return false;
+
+	    } catch (Exception e) {
+
+	        System.out.println("❌ Payment flow failed: " + e.getMessage());
+
+	        // Screenshot
+	        TakesScreenshot ts = (TakesScreenshot) driver;
+	        File src = ts.getScreenshotAs(OutputType.FILE);
+	        FileUtils.copyFile(src, new File("screenshots/payment_issue.png"));
+
+	        return false;
+	    }
+	}
+	public boolean verifyPaymentOption(String expectedText) {
+	    try {
+	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+	        return wait.until(ExpectedConditions.visibilityOfElementLocated(
+	                By.xpath("//*[contains(text(),'" + expectedText + "')]")
+	        )).isDisplayed();
+
+	    } catch (Exception e) {
+	        return false; // don't fail test immediately
+	    }
+	}
+
+	public boolean verifyAmtVisible(String expectedText) {
+	    try {
+	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+	        return wait.until(ExpectedConditions.visibilityOfElementLocated(
+	                By.xpath("//*[contains(text(),'" + expectedText + "')]")
+	        )).isDisplayed();
+
+	    } catch (Exception e) {
+	        return false;
+	    }
 	}
 
 	// driver.findElement(By.id("email"));

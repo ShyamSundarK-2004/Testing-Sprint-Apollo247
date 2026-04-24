@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 public class BaseClass {
 
 	private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
-
 	private static ThreadLocal<Pages> pages = new ThreadLocal<Pages>();
 
 	// Set driver

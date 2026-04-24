@@ -48,5 +48,9 @@ Feature: Apollo 247 Health Insurance - Member Selection Validation
     And User accepts Terms and Conditions
     Then User reviews policy details "sg anand"
     When User clicks on policy form "Buy Now"
-    Then A popup should be displayed with message "Unable to process your request. Please try again."
-    And User should click "Go to Homepage" button and validate the policy
+    Then The Payment Options page should be displayed with "payment" "Payment Options" "To Pay" and validating the policy
+    
+    
+    
+    
+    
