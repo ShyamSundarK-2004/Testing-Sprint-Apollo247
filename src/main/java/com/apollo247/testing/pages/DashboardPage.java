@@ -140,13 +140,13 @@ public class DashboardPage {
 
 		try {
 			// Wait for shadow host and locate the hidden host
-			WebElement domPopup = utilities.waituntilPresenceOfElementLocated(20L,
+			WebElement domPopup = utilities.waituntilPresenceOfElementLocated(10L,
 					By.cssSelector("ct-web-popup-imageonly"));
 
 			// Access shadow root
 			SearchContext shadowDom = domPopup.getShadowRoot();
 
-			// Find close button INSIDE shadow DOM
+			// Find close button inside shadow DOM
 			WebElement closeBtn = shadowDom.findElement(By.id("close"));
 
 			if (closeBtn.isDisplayed()) {
@@ -183,7 +183,9 @@ public class DashboardPage {
 	}
 
 	public void clickOnModule(String module) {
+
 		WebElement moduleName = driver.findElement(By.linkText(module));
+		utilities.waitUntilElementIsCLickable(15L, moduleName);
 		moduleName.click();
 	}
 

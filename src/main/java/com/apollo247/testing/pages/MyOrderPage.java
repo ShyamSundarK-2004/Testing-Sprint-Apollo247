@@ -25,12 +25,19 @@ public class MyOrderPage {
 	@FindBy(xpath = "//div[contains(@class,'AphSelect_select')]")
 	private WebElement userDropdown;
 
+	// user orders card
+	@FindBy(xpath = "//div[contains(@class,'OrderCard_orderCardGroup')]")
+	private WebElement orderCard;
+
 	// ====== Getters ======
 
 	public WebElement getUserDropDown() {
 		return userDropdown;
 	}
 
+	public WebElement getOrderCard() {
+		return orderCard;
+	}
 	// ====== Business Logic ======
 
 	public String getCurrentUrl(String url) {
@@ -50,13 +57,17 @@ public class MyOrderPage {
 	}
 
 	public boolean isSpecificUserOrderDisplayed(String userName) {
+		utilities.waitUntilElementIsVisibility(20L, getOrderCard());
 		List<WebElement> users = driver.findElements(By.xpath("//span[contains(text(),'Booked for')]//parent::div"));
-		for (WebElement user : users) {
-			String usr = user.getText();
-			if (usr.contains(userName)) {
-				return true;
+		if (getOrderCard().isDisplayed()) {
+			for (WebElement user : users) {
+				String usr = user.getText();
+				if (usr.contains(userName)) {
+					return true;
+				}
 			}
 		}
 		return false;
+
 	}
 }

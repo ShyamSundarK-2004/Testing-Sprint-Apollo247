@@ -1,7 +1,5 @@
 package com.apollo247.testing.stepdefinitions;
 
-import org.openqa.selenium.By;
-
 import org.testng.Assert;
 
 import com.apollo247.testing.utilities.BaseClass;

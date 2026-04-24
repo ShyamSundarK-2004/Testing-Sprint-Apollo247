@@ -17,7 +17,7 @@ public class JavaScriptUtilities {
 	}
 
 	public void jsScrollIntoView(WebElement element) {
-		js.executeScript("arguments[0].scrollIntoView()", element);
+		js.executeScript("arguments[0].scrollIntoView(true)", element);
 	}
 
 	public void scrollByPixels(int pixels) {

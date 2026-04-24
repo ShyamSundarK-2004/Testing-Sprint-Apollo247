@@ -61,18 +61,18 @@ public class UploadPrescriptionPage {
 	// ====== Business Logics ======
 
 	public void uploadFile(String path) {
-		utilities.waituntilPresenceOfElementLocated(30, By.id("icon-button-file"));
+		utilities.waituntilPresenceOfElementLocated(35, By.id("icon-button-file"));
 		getFileUpload().sendKeys(path);
 
 	}
 
 	public boolean isFileAttached() {
-		utilities.waitUntilElementIsVisibility(15L, getFileAttached());
+		utilities.waitUntilElementIsVisibility(25L, getFileAttached());
 		return getFileAttached().isDisplayed();
 	}
 
 	public boolean isWrongFileUploaded() {
-		utilities.waitUntilElementIsVisibility(15L, getWrongFileUpload());
+		utilities.waitUntilElementIsVisibility(25L, getWrongFileUpload());
 		return getWrongFileUpload().isDisplayed();
 	}
 

@@ -1,5 +1,8 @@
 package com.apollo247.testing.utilities;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
@@ -8,7 +11,7 @@ public class ExtendsReportsUtilities {
 
 	private static ExtentReports extent;
 
-	// 🔥 Thread-safe (important for parallel execution)
+	// Thread-safe (important for parallel execution)
 	private static ThreadLocal<ExtentTest> scenarioTest = new ThreadLocal<>();
 	private static ThreadLocal<ExtentTest> stepNode = new ThreadLocal<>();
 
@@ -16,9 +19,12 @@ public class ExtendsReportsUtilities {
 
 	public static synchronized ExtentReports getReportInstance() {
 
+		String timeStamp = new SimpleDateFormat("yyyy-MM-dd[hh-mm-ss]").format(new Date());
+
 		if (extent == null) {
 
-			ExtentSparkReporter spark = new ExtentSparkReporter("./Reports/Apollo247_ExtentReport.html");
+			ExtentSparkReporter spark = new ExtentSparkReporter(
+					"./Reports/Apollo247_ExtentReport " + timeStamp + ".html");
 
 			spark.config().setReportName("Apollo247 Automation Report");
 			spark.config().setDocumentTitle("Execution Results");

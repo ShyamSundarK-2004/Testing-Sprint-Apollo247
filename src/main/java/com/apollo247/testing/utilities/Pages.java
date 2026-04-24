@@ -20,8 +20,12 @@ import com.apollo247.testing.pages.MyAppointmentsPage;
 import com.apollo247.testing.pages.MyOrderPage;
 import com.apollo247.testing.pages.NeedHelpPage;
 import com.apollo247.testing.pages.NotificationsPage;
+import com.apollo247.testing.pages.PatientDetailsPage;
 import com.apollo247.testing.pages.RadiologyPage;
 import com.apollo247.testing.pages.SearchDoctorPage;
+import com.apollo247.testing.pages.SearchResultPage;
+import com.apollo247.testing.pages.TestCartPage;
+import com.apollo247.testing.pages.TestPage;
 import com.apollo247.testing.pages.UploadPrescriptionPage;
 import com.apollo247.testing.pages.VoliniPage;
 import com.apollo247.testing.pages.filterDocterPage;
@@ -33,6 +37,10 @@ public class Pages {
 	public UploadPrescriptionPage bookByPrescriptionPage;
 	public RadiologyPage radiologyPage;
 	public MyOrderPage myOrderPage;
+	public SearchResultPage searchResultPage;
+	public TestPage testPage;
+	public PatientDetailsPage patientDetailsPage;
+	public TestCartPage testCartPage;
 
 	public SearchDoctorPage Searchdocter;
 	public filterDocterPage FilterDocter;
@@ -120,5 +128,21 @@ public class Pages {
 		PageFactory.initElements(driver, buyMedicineCartPage);
 		PageFactory.initElements(driver, buyMedicinePage);
 		PageFactory.initElements(driver, voliniPage);
+
+		// search results page driver initialization
+		searchResultPage = new SearchResultPage(driver);
+		PageFactory.initElements(driver, searchResultPage);
+
+		// labtest cart page driver initialization
+		testPage = new TestPage(driver);
+		PageFactory.initElements(driver, testPage);
+
+		// patient details page driver initialization
+		patientDetailsPage = new PatientDetailsPage(driver);
+		PageFactory.initElements(driver, patientDetailsPage);
+
+		// test cart page driver initialization
+		testCartPage = new TestCartPage(driver);
+		PageFactory.initElements(driver, testCartPage);
 	}
 }

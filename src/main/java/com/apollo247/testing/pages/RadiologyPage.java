@@ -28,7 +28,7 @@ public class RadiologyPage {
 	// ====== Locators ======
 
 	// select city input field
-	@FindBy(xpath = "(//div[contains(@class,'AphSelect_select')])[2]")
+	@FindBy(xpath = "//div[normalize-space() = 'Choose City']")
 	private WebElement chooseCityField;
 
 	// select hospital or clinic field
@@ -38,6 +38,10 @@ public class RadiologyPage {
 	// select date field
 	@FindBy(xpath = "//button[contains(@class,'datePickerBtn')]")
 	private WebElement pickPreferedDate;
+
+	// close date popup
+	@FindBy(xpath = "//div[contains(@class,'AphDialog_paper')]//button[@title='Close']")
+	private WebElement closeDatePopup;
 
 	// select test name
 	@FindBy(xpath = "(//div[contains(@class,'AphSelect_select')])[4]")
@@ -89,6 +93,10 @@ public class RadiologyPage {
 		return pickPreferedDate;
 	}
 
+	public WebElement getCloseDatePopup() {
+		return closeDatePopup;
+	}
+
 	public WebElement getSelectTestName() {
 		return selectTestName;
 	}
@@ -129,29 +137,48 @@ public class RadiologyPage {
 
 	public void closeRadiologyPopup() {
 		try {
-			if (getBookRadiologyPopup().isDisplayed()) {
-				getClosePopupBtn().click();
-			}
+			utilities.waitUntilElementIsCLickable(30L, getClosePopupBtn());
+			getClosePopupBtn().click();
 		} catch (Exception e) {
-
 		}
+
 	}
 
 	public String getCurrentPageUrl() {
 		return utilities.fetchApplicationURL();
 	}
 
+//	public void chooseCity(String cityName) {
+//		jsUtil.jsScrollIntoView(getChooseCityField());
+//		utilities.waitUntilElementIsCLickable(35L, getChooseCityField());
+//		jsUtil.jsClick(getChooseCityField());
+//		By city = By.xpath("//li[normalize-space() = '" + cityName + "']");
+//		WebElement chooseCity = utilities.waitUntilVisibilityOfElementLocated(30L, city);
+//		chooseCity.click();
+//	}
+
 	public void chooseCity(String cityName) {
-		jsUtil.scrollByPixels(-150);
-		utilities.waitUntilElementIsVisibility(10L, getChooseCityField());
+
+		// Click city field
+		WebElement cityField = utilities.waitUntilElementIsCLickable(30L, getChooseCityField());
+		jsUtil.jsScrollIntoView(cityField);
+		utilities.waitUntilElementIsCLickable(15L, cityField);
 		getChooseCityField().click();
-		WebElement chooseCity = driver.findElement(By.xpath("//li[text() = '" + cityName + "']"));
+		// Wait for dropdown (IMPORTANT)
+		By dropdown = By.xpath("//ul[contains(@class,'AphSelect_menu')]");
+		utilities.waitUntilVisibilityOfElementLocated(30L, dropdown);
+
+		// select city
+		WebElement chooseCity = utilities.waitUntilElementIsCLickable(30L,
+				driver.findElement(By.xpath("//li[contains(normalize-space(),'" + cityName + "')]")));
+
 		chooseCity.click();
 	}
 
 	public void chooseHospital(String hospitalAreaName) {
 		getSelectHospitalField().click();
-		WebElement selecthospital = driver.findElement(By.xpath("//li[contains(text(),'" + hospitalAreaName + "')]"));
+		WebElement selecthospital = driver
+				.findElement(By.xpath("//li[contains(normalize-space(),'" + hospitalAreaName + "')]"));
 		selecthospital.click();
 	}
 
@@ -159,7 +186,8 @@ public class RadiologyPage {
 		String[] names = testName.split(",");
 		getSelectTestName().click();
 		for (String name : names) {
-			WebElement test = driver.findElement(By.xpath("//label[text() = '" + name + "']/preceding-sibling::input"));
+			WebElement test = driver
+					.findElement(By.xpath("//label[normalize-space() = '" + name + "']/preceding-sibling::input"));
 			test.click();
 		}
 	}
@@ -183,7 +211,7 @@ public class RadiologyPage {
 				}
 			}
 		}
-		driver.findElement(By.xpath("//abbr[text()='" + day + "']")).click();
+		driver.findElement(By.xpath("//abbr[normalize-space()='" + day + "']")).click();
 
 		actions.pressEscape();
 	}
@@ -205,6 +233,14 @@ public class RadiologyPage {
 
 	public boolean isRequestCallBtnEnabled() {
 		return getRequestCallbtn().isEnabled();
+	}
+
+	public void enterHospitalDetails(String cityName, String hospital, String date, String testName, String filePath) {
+		chooseCity(cityName);
+		chooseHospital(hospital);
+		chooseDate(date);
+		chooseTestName(testName);
+		UploadPrescription(filePath);
 	}
 
 }
