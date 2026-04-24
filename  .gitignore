@@ -10,7 +10,7 @@ test-output/
 # Eclipse / IDE
 .classpath
 .project
-.settings/
+.settings
 
 # Selenium Generated Files
 Reports/
