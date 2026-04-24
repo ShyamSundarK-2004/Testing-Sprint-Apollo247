@@ -155,9 +155,9 @@ public class DashboardPage {
 			}
 
 		} catch (Exception e) {
-			System.out.println("No Popup found");
-		}
 
+		}
+	}
 
 	// clicking on header login button
 	public void clickLoginButton() {
@@ -186,8 +186,9 @@ public class DashboardPage {
 		WebElement moduleName = driver.findElement(By.linkText(module));
 		moduleName.click();
 	}
+
 	public void clickBuyMedicines() {
-	    utilities.waitUntilElementIsCLickable(20L, getBuyMedicineModule()).click();
+		utilities.waitUntilElementIsCLickable(20L, getBuyMedicineModule()).click();
 	}
 
 	public void clickonHealthInsuranceModule() {
@@ -208,13 +209,8 @@ public class DashboardPage {
 		}
 	}
 
-
-	public void clickBuyMedicines() {
-		getBuyMedicineModule().click();
-	}
-
 	public void clickProfileIcon() {
-	    clickOnMyAccountBtn();
+		clickOnMyAccountBtn();
 	}
 
 }
