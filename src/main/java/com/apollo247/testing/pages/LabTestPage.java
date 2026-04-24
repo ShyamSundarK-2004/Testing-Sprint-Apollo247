@@ -84,9 +84,8 @@ public class LabTestPage {
 
 	public void closePopupIfPresent() {
 		try {
-			if (getPopupCloseBtn().isDisplayed()) {
-				getPopupCloseBtn().click();
-			}
+			utilities.waitUntilElementIsCLickable(40L, getPopupCloseBtn());
+			getPopupCloseBtn().click();
 		} catch (Exception e) {
 		}
 	}
@@ -106,7 +105,7 @@ public class LabTestPage {
 	}
 
 	public void clickOnRadiologyBookingBtn() {
-		utilities.waitUntilElementIsVisibility(30L, getRadiologyBookingBtn());
+		utilities.waitUntilElementIsVisibility(20L, getRadiologyBookingBtn());
 		getRadiologyBookingBtn().click();
 		utilities.switchToWindowByURL("radiology");
 

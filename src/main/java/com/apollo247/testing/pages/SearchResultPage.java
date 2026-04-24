@@ -50,7 +50,7 @@ public class SearchResultPage {
 	}
 
 	public boolean isResultDisplayed(String name) {
-		utilities.waitUntilElementIsVisibility(30, getSearchResultSection());
+		utilities.waitUntilElementIsVisibility(40L, getSearchResultSection());
 		List<WebElement> testNames = driver.findElements(By.xpath("//p[contains(@class,'RX')]"));
 		for (WebElement element : testNames) {
 			String testName = element.getText();
@@ -62,8 +62,9 @@ public class SearchResultPage {
 	}
 
 	public void clickOnLabTest(String testName) {
-		utilities.waituntilPresenceOfElementLocated(30L, By.xpath("//p[contains(text(),'" + testName + "')]"));
-		WebElement labtestCard = driver.findElement(By.xpath("//p[contains(text(),'" + testName + "')]"));
+		utilities.waituntilPresenceOfElementLocated(35L,
+				By.xpath("//p[contains(normalize-space(),'" + testName + "')]"));
+		WebElement labtestCard = driver.findElement(By.xpath("//p[contains(normalize-space(),'" + testName + "')]"));
 		labtestCard.click();
 	}
 

@@ -21,13 +21,9 @@ public class TestPage {
 
 	// ====== Locators ======
 
-	// click on add to cart button in test page
+	// click on add to cart button and proceed to cart button in test page
 	@FindBy(xpath = "//button[contains(@class, 'DetailsPageItemCard_addToCartCTA')]")
-	private WebElement addToCartBtn;
-
-	// click on proceed to cart button in test page
-	@FindBy(xpath = "//button[contains(@class, 'DetailsPageItemCard_addToCartCTA')]")
-	private WebElement proceedToCartBtn;
+	private WebElement addAndProceedToCartBtn;
 
 	// cart button
 	@FindBy(css = "[alt='cart-icon']")
@@ -47,12 +43,8 @@ public class TestPage {
 
 	// ====== Getters ======
 
-	public WebElement getAddToCartBtn() {
-		return addToCartBtn;
-	}
-
-	public WebElement getProceedToCartBtn() {
-		return proceedToCartBtn;
+	public WebElement getAddAndProceedToCartBtn() {
+		return addAndProceedToCartBtn;
 	}
 
 	public WebElement getCartbtn() {
@@ -74,13 +66,18 @@ public class TestPage {
 	// ====== Business Logics ======
 
 	public void clickOnAddToCart() {
-		jsUtil.jsScrollIntoView(getTestPrice());
-		getNeedAdviceBanner().click();
-		getAddToCartBtn().click();
+		try {
+			utilities.waitUntilElementIsCLickable(15L, getNeedAdviceBanner()).click();
+			jsUtil.jsScrollIntoView(getAddAndProceedToCartBtn());
+		} catch (Exception e) {
+		}
+		utilities.waitUntilTextToBePresentInElement(30L, getAddAndProceedToCartBtn(), "Add");
+		getAddAndProceedToCartBtn().click();
 	}
 
 	public void clickOnProceedToCart() {
-		getProceedToCartBtn().click();
+		utilities.waitUntilTextToBePresentInElement(30L, getAddAndProceedToCartBtn(), "Proceed");
+		getAddAndProceedToCartBtn().click();
 	}
 
 	public void clickOnCartBtn() {

@@ -59,7 +59,7 @@ public class Hook extends WebdriverUtility {
 		// WebDriver common setup
 		initializeDriver(b.getDriver());
 		configMaximizeBrowser();
-		waitForElements(90);
+		waitForElements(50);
 
 		// Manage session (login once, reuse across domains)
 		SessionManager.ManageSession(b.getDriver());

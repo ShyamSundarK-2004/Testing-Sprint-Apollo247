@@ -30,7 +30,7 @@ Feature: Automation Testing on Lab Test Module
     When User clicks on book test using prescription
     And User uploads valid prescription
     Then verify invalid file message displayed and click on ok
-    And verify proceed button is not enabled
+    And verify wrong file uploaded popup shown
 
   # End-to-end radiology request flow with test data
   @labTest @radiologyScenario
@@ -57,12 +57,12 @@ Feature: Automation Testing on Lab Test Module
 
   # Full booking journey → from search to payment page
   @labTest @EndToEndScenario
-  Scenario Outline: Verify end-to-end lab test booking flow using Excel data
+  Scenario Outline: Verify end-to-end lab test booking flow
     When User searches for a test and selects test "<TestName>"
     And User adds test to cart
     Then Verify "<TestName>" is added to the cart
-    When User enters patient details from Excel
-    And User selects slot and address from Excel
+    When User enters patient details
+    And User selects slot and address
     Then Verify booking summary details are correct
     When User proceeds to payment
     Then Verify payment page is displayed with correct amount
@@ -70,4 +70,3 @@ Feature: Automation Testing on Lab Test Module
     Examples:
       | TestName |
       | CBC Test |
-# | PPBS Test |

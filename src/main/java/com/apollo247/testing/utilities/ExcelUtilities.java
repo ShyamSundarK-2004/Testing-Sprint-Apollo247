@@ -16,7 +16,7 @@ public class ExcelUtilities {
 
 	private static final String FILE_PATH = "./src/test/resources/Reader/Apollo247_TestData.xlsx";
 
-	// 🔥 Get data as STRING (reliable for all types)
+	// Get data as STRING from excel
 	public String getExcelData(String sheetName, int rowNum, int colNum) {
 
 		try (FileInputStream fis = new FileInputStream(FILE_PATH); Workbook wb = new XSSFWorkbook(fis)) {

@@ -137,24 +137,41 @@ public class RadiologyPage {
 
 	public void closeRadiologyPopup() {
 		try {
-			if (getBookRadiologyPopup().isDisplayed()) {
-				getClosePopupBtn().click();
-			}
+			utilities.waitUntilElementIsCLickable(30L, getClosePopupBtn());
+			getClosePopupBtn().click();
 		} catch (Exception e) {
-
 		}
+
 	}
 
 	public String getCurrentPageUrl() {
 		return utilities.fetchApplicationURL();
 	}
 
+//	public void chooseCity(String cityName) {
+//		jsUtil.jsScrollIntoView(getChooseCityField());
+//		utilities.waitUntilElementIsCLickable(35L, getChooseCityField());
+//		jsUtil.jsClick(getChooseCityField());
+//		By city = By.xpath("//li[normalize-space() = '" + cityName + "']");
+//		WebElement chooseCity = utilities.waitUntilVisibilityOfElementLocated(30L, city);
+//		chooseCity.click();
+//	}
+
 	public void chooseCity(String cityName) {
-		jsUtil.scrollByPixels(-185);
-		utilities.waitUntilElementIsVisibility(35L, getChooseCityField());
+
+		// Click city field
+		WebElement cityField = utilities.waitUntilElementIsCLickable(30L, getChooseCityField());
+		jsUtil.jsScrollIntoView(cityField);
+		utilities.waitUntilElementIsCLickable(15L, cityField);
 		getChooseCityField().click();
-		utilities.waituntilPresenceOfElementLocated(30L, By.xpath("//li[normalize-space()  = '" + cityName + "']"));
-		WebElement chooseCity = driver.findElement(By.xpath("//li[normalize-space() = '" + cityName + "']"));
+		// Wait for dropdown (IMPORTANT)
+		By dropdown = By.xpath("//ul[contains(@class,'AphSelect_menu')]");
+		utilities.waitUntilVisibilityOfElementLocated(30L, dropdown);
+
+		// select city
+		WebElement chooseCity = utilities.waitUntilElementIsCLickable(30L,
+				driver.findElement(By.xpath("//li[contains(normalize-space(),'" + cityName + "')]")));
+
 		chooseCity.click();
 	}
 

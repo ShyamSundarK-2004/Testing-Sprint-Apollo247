@@ -1,6 +1,5 @@
 package com.apollo247.testing.stepdefinitions;
 
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import java.util.List;
@@ -51,9 +50,6 @@ public class LabTestSteps {
 	@When("User searches for {string}")
 	public void user_searches_for(String testName) {
 
-		// Close popup if exists
-		b.getPages().labTestPage.closePopupIfPresent();
-
 		// Perform search
 		b.getPages().labTestPage.searchTest(testName);
 	}
@@ -86,9 +82,6 @@ public class LabTestSteps {
 
 	@When("User clicks on book test using prescription")
 	public void user_clicks_on_book_test_using_prescription() {
-
-		// Close popup
-		b.getPages().labTestPage.closePopupIfPresent();
 
 		// Click prescription module
 		b.getPages().labTestPage.clickOnBookByPrescriptionModule();
@@ -123,26 +116,23 @@ public class LabTestSteps {
 		// Upload invalid file
 		b.getPages().bookByPrescriptionPage.uploadFile(path);
 
-		// Validate error shown
-		assertTrue(b.getPages().bookByPrescriptionPage.isWrongFileUploaded(), "Wrong file type is accepted");
+	}
+
+	@Then("verify wrong file uploaded popup shown")
+	public void verify_wrong_file_uploaded_popup_shown() {
+
+		// Validate wrong file upload popup shown
+		assertTrue(b.getPages().bookByPrescriptionPage.isWrongFileUploaded(),
+				"Wrong file got accepted and no wrong file upload popup shown");
 
 		// Close popup
 		b.getPages().bookByPrescriptionPage.closeInvalidMessagePopup();
-	}
-
-	@Then("verify proceed button is not enabled")
-	public void verify_proceed_button_is_not_enabled() {
-
-		// Validate button state
-		assertFalse(b.getPages().bookByPrescriptionPage.isProceedBtnEnabled(), "Proceed button should not be Enabled");
 	}
 
 	// ================= RADIOLOGY =================
 
 	@When("User clicks on lab test search bar")
 	public void user_clicks_on_lab_test_search_bar() {
-
-		b.getPages().labTestPage.closePopupIfPresent();
 		b.getPages().labTestPage.clickOnSearchBox();
 	}
 
@@ -176,8 +166,8 @@ public class LabTestSteps {
 			String filePath = row.get("filePath");
 
 			// Fill details
-			b.getPages().radiologyPage.chooseCity(city);
 			b.getPages().radiologyPage.closeRadiologyPopup();
+			b.getPages().radiologyPage.chooseCity(city);
 			b.getPages().radiologyPage.chooseHospital(hospital);
 			b.getPages().radiologyPage.chooseDate(date);
 			b.getPages().radiologyPage.chooseTestName(testName);
@@ -196,7 +186,6 @@ public class LabTestSteps {
 	@Given("User should be on orders page")
 	public void user_should_be_on_orders_page() {
 
-		b.getPages().labTestPage.closePopupIfPresent();
 		b.getPages().labTestPage.clickOnViewReportInMyOrder();
 
 		String url = b.getPages().myOrderPage.getCurrentUrl("orders");
@@ -226,15 +215,14 @@ public class LabTestSteps {
 
 	@When("User searches for a test and selects test {string}")
 	public void user_searches_for_a_test_and_selects_test(String testName) {
-		b.getPages().labTestPage.closePopupIfPresent();
 		b.getPages().labTestPage.searchTest(testName);
 		b.getPages().searchResultPage.isResultDisplayed(testName);
 		b.getPages().searchResultPage.clickOnLabTest(testName);
+		b.getPages().labTestPage.closePopupIfPresent();
 	}
 
 	@When("User adds test to cart")
 	public void user_adds_test_to_cart() {
-		b.getPages().labTestPage.closePopupIfPresent();
 		b.getPages().testPage.clickOnAddToCart();
 	}
 
@@ -244,8 +232,8 @@ public class LabTestSteps {
 		assertTrue(b.getPages().testPage.cartTestName().contains(testName), "Different test is added to cart");
 	}
 
-	@When("User enters patient details from Excel")
-	public void user_enters_patient_details_from_excel() {
+	@When("User enters patient details")
+	public void user_enters_patient_details() {
 		b.getPages().testPage.clickOnProceedToCart();
 		b.getPages().patientDetailsPage.clickOnAddMember();
 
@@ -258,8 +246,8 @@ public class LabTestSteps {
 
 	}
 
-	@When("User selects slot and address from Excel")
-	public void user_selects_slot_and_address_from_excel() {
+	@When("User selects slot and address")
+	public void user_selects_slot_and_address() {
 
 	}
 

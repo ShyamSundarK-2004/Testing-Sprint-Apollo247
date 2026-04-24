@@ -137,6 +137,17 @@ public class WebdriverUtility {
 		wait.until(ExpectedConditions.urlContains(url));
 	}
 
+	public WebElement waitUntilVisibilityOfElementLocated(long timeInSeconds, By element) {
+		wait = new WebDriverWait(driver, Duration.ofSeconds(timeInSeconds));
+		return wait.until(ExpectedConditions.visibilityOfElementLocated(element));
+	}
+
+	public void waitUntilTextToBePresentInElement(long timeInSeconds, WebElement element, String text) {
+		wait = new WebDriverWait(driver, Duration.ofSeconds(timeInSeconds));
+		wait.until((ExpectedConditions.textToBePresentInElement(element, text)));
+
+	}
+
 	// popups
 	// alert accept
 	public void handleAcceptAlert() {
