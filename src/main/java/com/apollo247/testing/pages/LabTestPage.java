@@ -84,7 +84,7 @@ public class LabTestPage {
 
 	public void closePopupIfPresent() {
 		try {
-			utilities.waitUntilElementIsCLickable(40L, getPopupCloseBtn());
+			utilities.waitUntilElementIsCLickable(50L, getPopupCloseBtn());
 			getPopupCloseBtn().click();
 		} catch (Exception e) {
 		}

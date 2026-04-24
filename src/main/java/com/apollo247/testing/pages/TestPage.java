@@ -65,19 +65,40 @@ public class TestPage {
 
 	// ====== Business Logics ======
 
+//	public void clickOnAddToCart() {
+//		try {
+//			utilities.waitUntilElementIsCLickable(15L, getNeedAdviceBanner()).click();
+//			jsUtil.jsScrollIntoView(getAddAndProceedToCartBtn());
+//		} catch (Exception e) {
+//		}
+//		utilities.waitUntilTextToBePresentInElement(30L, getAddAndProceedToCartBtn(), "Add");
+//		getAddAndProceedToCartBtn().click();
+//	}
+
 	public void clickOnAddToCart() {
+
 		try {
-			utilities.waitUntilElementIsCLickable(15L, getNeedAdviceBanner()).click();
-			jsUtil.jsScrollIntoView(getAddAndProceedToCartBtn());
+			utilities.waitUntilElementIsCLickable(10L, getNeedAdviceBanner()).click();
 		} catch (Exception e) {
 		}
-		utilities.waitUntilTextToBePresentInElement(30L, getAddAndProceedToCartBtn(), "Add");
-		getAddAndProceedToCartBtn().click();
+
+		utilities.waitUntilElementIsCLickable(30L, getAddAndProceedToCartBtn());
+
+		jsUtil.jsScrollIntoView(getAddAndProceedToCartBtn());
+
+		try {
+			getAddAndProceedToCartBtn().click();
+		} catch (Exception e) {
+			jsUtil.jsClick(getAddAndProceedToCartBtn());
+		}
 	}
 
 	public void clickOnProceedToCart() {
-		utilities.waitUntilTextToBePresentInElement(30L, getAddAndProceedToCartBtn(), "Proceed");
-		getAddAndProceedToCartBtn().click();
+		try {
+			getAddAndProceedToCartBtn().click();
+		} catch (Exception e) {
+			jsUtil.jsClick(getAddAndProceedToCartBtn());
+		}
 	}
 
 	public void clickOnCartBtn() {

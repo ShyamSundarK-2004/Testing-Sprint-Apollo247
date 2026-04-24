@@ -167,11 +167,7 @@ public class LabTestSteps {
 
 			// Fill details
 			b.getPages().radiologyPage.closeRadiologyPopup();
-			b.getPages().radiologyPage.chooseCity(city);
-			b.getPages().radiologyPage.chooseHospital(hospital);
-			b.getPages().radiologyPage.chooseDate(date);
-			b.getPages().radiologyPage.chooseTestName(testName);
-			b.getPages().radiologyPage.UploadPrescription(filePath);
+			b.getPages().radiologyPage.enterHospitalDetails(city, hospital, date, testName, filePath);
 		}
 	}
 
@@ -232,38 +228,54 @@ public class LabTestSteps {
 		assertTrue(b.getPages().testPage.cartTestName().contains(testName), "Different test is added to cart");
 	}
 
-	@When("User enters patient details")
-	public void user_enters_patient_details() {
+	@When("User enters patient details {string}")
+	public void user_enters_patient_details(String rowNum) {
+
+		int row = Integer.parseInt(rowNum);
 		b.getPages().testPage.clickOnProceedToCart();
 		b.getPages().patientDetailsPage.clickOnAddMember();
 
 		// Reading Patients data's from excel
-		String firstName = excelUtility.getExcelData("Patients_Data", 1, 0);
-		String lastName = excelUtility.getExcelData("Patients_Data", 1, 1);
+		String firstName = excelUtility.getExcelData("Patients_Data", row, 0);
+		String lastName = excelUtility.getExcelData("Patients_Data", row, 1);
+		String DOB = excelUtility.getExcelData("Patients_Data", row, 2);
+		String gender = excelUtility.getExcelData("Patients_Data", row, 3);
+		String relation = excelUtility.getExcelData("Patients_Data", row, 4);
+		String emailID = excelUtility.getExcelData("Patients_Data", row, 5);
+		// filling in UI
+		b.getPages().patientDetailsPage.enterPatientDetails(firstName, lastName, DOB, gender, relation, emailID);
+		// saving the patient details
+		b.getPages().patientDetailsPage.clickSaveBtn();
+		// click on confirm patient details
+		b.getPages().patientDetailsPage.clickOnConfirmBtn();
+		// assert patient details saved and popup shown
+		assertTrue(b.getPages().patientDetailsPage.isPatientDetailsPopupShown(), "Patients details is not shown");
+		// click ok on popup
+		b.getPages().patientDetailsPage.clickOnPatientSavedPopupBtn();
 
-		b.getPages().patientDetailsPage.enterFirstName(firstName);
-		b.getPages().patientDetailsPage.enterLastName(lastName);
+		b.getPages().patientDetailsPage.selectSavedPatient(firstName);
 
+		b.getPages().patientDetailsPage.clickOnContinueBtn();
 	}
 
 	@When("User selects slot and address")
 	public void user_selects_slot_and_address() {
 
-	}
+		b.getPages().testCartPage.clickOnBookTestBtn();
 
-	@Then("Verify booking summary details are correct")
-	public void verify_booking_summary_details_are_correct() {
+		b.getPages().testCartPage.clickOnUpdateAndProceedbtn();
 
 	}
 
 	@When("User proceeds to payment")
 	public void user_proceeds_to_payment() {
-
+		b.getPages().testCartPage.clickOnProceedToPay();
 	}
 
-	@Then("Verify payment page is displayed with correct amount")
-	public void verify_payment_page_is_displayed_with_correct_amount() {
-
+	@Then("Verify payment page is displayed")
+	public void verify_payment_page_is_displayed() {
+		String url = b.getPages().testCartPage.getCurrentUrl();
+		assertTrue(url.contains("payments"), "Payment page is not displayed");
 	}
 
 }

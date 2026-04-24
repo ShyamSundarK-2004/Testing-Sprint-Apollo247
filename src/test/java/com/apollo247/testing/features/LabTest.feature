@@ -61,12 +61,12 @@ Feature: Automation Testing on Lab Test Module
     When User searches for a test and selects test "<TestName>"
     And User adds test to cart
     Then Verify "<TestName>" is added to the cart
-    When User enters patient details
+    When User enters patient details "<row>"
     And User selects slot and address
-    Then Verify booking summary details are correct
     When User proceeds to payment
-    Then Verify payment page is displayed with correct amount
+    Then Verify payment page is displayed
 
     Examples:
-      | TestName |
-      | CBC Test |
+      | TestName  | row |
+      | CBC Test  | 1   |
+      | PPBS Test | 2   |

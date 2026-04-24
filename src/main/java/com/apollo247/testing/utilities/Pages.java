@@ -9,6 +9,7 @@ import com.apollo247.testing.pages.MyOrderPage;
 import com.apollo247.testing.pages.PatientDetailsPage;
 import com.apollo247.testing.pages.RadiologyPage;
 import com.apollo247.testing.pages.SearchResultPage;
+import com.apollo247.testing.pages.TestCartPage;
 import com.apollo247.testing.pages.TestPage;
 import com.apollo247.testing.pages.UploadPrescriptionPage;
 
@@ -22,6 +23,7 @@ public class Pages {
 	public SearchResultPage searchResultPage;
 	public TestPage testPage;
 	public PatientDetailsPage patientDetailsPage;
+	public TestCartPage testCartPage;
 
 	// all the pages are initialized with the driver object
 	public Pages(WebDriver driver) {
@@ -57,5 +59,9 @@ public class Pages {
 		// patient details page driver initialization
 		patientDetailsPage = new PatientDetailsPage(driver);
 		PageFactory.initElements(driver, patientDetailsPage);
+
+		// test cart page driver initialization
+		testCartPage = new TestCartPage(driver);
+		PageFactory.initElements(driver, testCartPage);
 	}
 }

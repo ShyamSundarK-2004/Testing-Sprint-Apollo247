@@ -235,4 +235,12 @@ public class RadiologyPage {
 		return getRequestCallbtn().isEnabled();
 	}
 
+	public void enterHospitalDetails(String cityName, String hospital, String date, String testName, String filePath) {
+		chooseCity(cityName);
+		chooseHospital(hospital);
+		chooseDate(date);
+		chooseTestName(testName);
+		UploadPrescription(filePath);
+	}
+
 }

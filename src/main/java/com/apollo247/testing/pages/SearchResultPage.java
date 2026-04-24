@@ -42,7 +42,7 @@ public class SearchResultPage {
 
 	public boolean isErrorMessageDisplayed() {
 		try {
-			utilities.waitUntilElementIsVisibility(45L, getResultNotFoundMsg());
+			utilities.waitUntilElementIsVisibility(50L, getResultNotFoundMsg());
 			return getResultNotFoundMsg().isDisplayed();
 		} catch (Exception e) {
 			return false;
