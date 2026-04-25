@@ -137,10 +137,10 @@ public class MembershipsPage {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-            // ✅ Wait for navigation to payment page
+            // Wait for navigation to payment page
             wait.until(ExpectedConditions.urlContains("pay-care"));
 
-            // ✅ Get full page text (MOST RELIABLE)
+            // Get full page text (MOST RELIABLE)
             WebElement body = wait.until(
                     ExpectedConditions.visibilityOfElementLocated(By.tagName("body"))
             );
@@ -151,7 +151,7 @@ public class MembershipsPage {
             System.out.println(pageText);
             System.out.println("==========================");
 
-            // ✅ Validate using contains (robust)
+            // Validate using contains (robust)
             boolean hasPlan = pageText.contains("12");
             boolean hasMonths = pageText.contains("month"); // flexible
             boolean hasPrice = pageText.contains("199");
