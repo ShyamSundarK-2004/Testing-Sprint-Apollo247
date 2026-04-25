@@ -1,4 +1,4 @@
-# Apollo247 Automation Framework (Master Branch)
+# Apollo247 Automation Framework
 
 ## Overview
 
