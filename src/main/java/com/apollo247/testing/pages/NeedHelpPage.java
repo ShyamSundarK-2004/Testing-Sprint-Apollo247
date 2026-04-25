@@ -46,48 +46,77 @@ public class NeedHelpPage {
     // ================= BUSINESS LOGIC =================
 
     public void openNeedHelp() {
-
         // Close popup if present
         try {
             WebElement popup = wait.until(
-                    ExpectedConditions.presenceOfElementLocated(
-                            By.cssSelector("ct-web-popup-imageonly")
-                    )
+                ExpectedConditions.presenceOfElementLocated(
+                    By.cssSelector("ct-web-popup-imageonly")
+                )
             );
-
             SearchContext shadow = popup.getShadowRoot();
             shadow.findElement(By.id("close")).click();
-
         } catch (Exception ignored) {}
 
-        click(profileIcon);
-        click(needHelpOption);
-    }
+        // JS click profile icon
+        WebElement profile = wait.until(
+            ExpectedConditions.presenceOfElementLocated(
+                By.className("ProfileNew_profileContainer__mUxKD")
+            )
+        );
+        ((JavascriptExecutor) driver)
+            .executeScript("arguments[0].scrollIntoView({block:'center'});", profile);
+        ((JavascriptExecutor) driver)
+            .executeScript("arguments[0].click();", profile);
 
+        // JS click Need Help from dropdown
+        WebElement needHelp = wait.until(
+            ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[text()='Need Help']")
+            )
+        );
+        ((JavascriptExecutor) driver)
+            .executeScript("arguments[0].click();", needHelp);
+    }
     public void clickMedicinesCategory() {
         jsClick(medicinesCategory);
     }
 
     public boolean areHelpCategoriesVisible() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[text()='Medicines']")
+            ));
 
-        String pageText = driver.getPageSource();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[text()='Lab Tests']")
+            ));
 
-        return pageText.contains("Medicines")
-                || pageText.contains("Doctor Appointments")
-                || pageText.contains("Lab Tests")
-                || pageText.contains("Unsubscribe")
-                || pageText.contains("OneApollo Membership")
-                || pageText.contains("Circle Membership")
-                || pageText.contains("Account & Health Records")
-                || pageText.contains("Apollo SBI Card Select")
-                || pageText.contains("Insurance Related Query");
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[text()='Doctor Appointments']")
+            ));
+
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public boolean isMedicinesPageLoaded() {
+        try {
+            wait.until(ExpectedConditions.or(
 
-        wait.until(ExpectedConditions.urlContains("apollopharmacy"));
+                ExpectedConditions.urlContains("apollopharmacy"),
 
-        return driver.getCurrentUrl().contains("apollopharmacy")
-                || driver.getPageSource().contains("Medicines");
+                ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//*[contains(text(),'Medicines')]")
+                )
+
+            ));
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

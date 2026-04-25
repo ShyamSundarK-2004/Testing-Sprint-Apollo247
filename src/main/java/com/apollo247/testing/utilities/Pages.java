@@ -30,6 +30,8 @@ import com.apollo247.testing.pages.UploadPrescriptionPage;
 import com.apollo247.testing.pages.VoliniPage;
 import com.apollo247.testing.pages.filterDocterPage;
 
+
+
 public class Pages {
 
 	public DashboardPage dashboardPage;
@@ -144,5 +146,6 @@ public class Pages {
 		// test cart page driver initialization
 		testCartPage = new TestCartPage(driver);
 		PageFactory.initElements(driver, testCartPage);
+
 	}
 }
