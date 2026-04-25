@@ -1,122 +1,190 @@
-# 🧪 Lab Test Module Automation (Branch)
+# Apollo247 Lab Test Automation
 
-## 📌 Overview
-This branch contains automation scripts specifically developed for the **Lab Test module** of Apollo247 using Selenium with BDD (Cucumber).
+## Overview
 
-The implementation focuses on validating critical Lab Test workflows including search functionality, prescription upload, radiology requests, order filtering, and end-to-end booking.
+This branch contains a dedicated automation framework for the Lab Test module of Apollo247 built using Selenium with BDD (Cucumber).
 
----
+It automates real-time workflows such as search, prescription upload, radiology requests, order filtering, and end-to-end booking.
 
-## 🎯 Scope
-- Covers only Lab Test module  
-- Includes both positive and negative scenarios  
-- Uses data-driven and BDD approach  
-- Simulates real user workflows  
+The implementation validates UI behavior, business logic, and complete user flow specific to the Lab Test module.
 
 ---
 
-## 🧰 Tech Stack
-- Java  
-- Selenium WebDriver  
-- Cucumber (BDD)  
-- TestNG  
-- Maven  
+## Scope
+
+* Lab Test module automation only
+* Covers positive, negative, and end-to-end scenarios
+* Validates UI behavior and workflows
+* Supports data-driven testing using Scenario Outline
+* Designed for scalability and maintainability
 
 ---
 
-## 🏗️ Implementation Design
-- Page Object Model (POM) for UI abstraction  
-- Step Definitions mapped to feature steps  
-- Background for common navigation setup  
-- Scenario Outline for data-driven testing  
-- Hooks for setup and teardown  
+## Tech Stack
+
+* Java
+* Selenium WebDriver
+* Cucumber (BDD)
+* TestNG
+* Maven
 
 ---
 
-## 🧪 Scenarios Covered
+## Framework Design
 
-### 🔍 Search Functionality
-- Validates lab test search using multiple inputs  
-- Handles both valid and invalid data  
-- Ensures accurate result behavior  
-
----
-
-### 📄 Prescription Upload
-
-#### ✅ Positive Case
-- Upload valid prescription  
-- Verify proceed button is enabled  
-
-#### ❌ Negative Case
-- Upload invalid prescription format  
-- Verify error popup is displayed  
+* Page Object Model (POM)
+* Reusable Step Definitions
+* Scenario Outline for data-driven testing
+* Hooks for setup and teardown
+* Explicit waits using WebDriverWait
+* Modular and scalable design
 
 ---
 
-### 🏥 Radiology Flow
-- Navigate to radiology section  
-- Enter required details (city, hospital, date, test, file)  
-- Validate request call button  
+## Module Covered
+
+### Lab Test Module
+
+#### Overview
+
+Automates critical workflows of the Lab Test module including search, prescription upload, radiology flow, order filtering, and complete booking process.
 
 ---
 
-### 📦 Order Filtering
-- Select patient from dropdown  
-- Validate filtered orders based on selection  
+## Scenarios Covered
+
+### 1. Search Functionality
+
+* Validate search with multiple inputs
+* Handle valid and invalid scenarios
+* Verify accurate results
 
 ---
 
-### 🔁 End-to-End Booking Flow
-- Search and select lab test  
-- Add test to cart  
-- Enter patient details (data-driven)  
-- Select slot and address  
-- Proceed to payment  
-- Validate payment page  
+### 2. Prescription Upload
+
+#### Positive Case
+
+* Upload valid prescription
+* Verify proceed button is enabled
+
+#### Negative Case
+
+* Upload invalid prescription
+* Validate error popup
 
 ---
 
-## 📁 Feature Design Highlights
+### 3. Radiology Flow
 
-### Background
-- Navigates user to Lab Test page before each scenario  
-- Ensures correct module is loaded  
-
----
-
-### Tags Used
-- @labTest  
-- @searchScenario  
-- @prescriptionScenario  
-- @radiologyScenario  
-- @myOrder  
-- @EndToEndScenario  
-- @smoke  
-- @sanity  
-- @regression  
+* Navigate to radiology section
+* Enter required details (city, hospital, date, test, file)
+* Validate request call functionality
 
 ---
 
-## 🧪 Execution
-- Executed using TestNG Cucumber Runner  
-- Supports tag-based execution  
-- Extendable for parallel execution  
+### 4. Order Filtering
+
+* Select patient from dropdown
+* Validate filtered orders
 
 ---
 
-## ⚙️ How to Run
-1. Clone repository  
-2. Switch to this branch  
-3. Open in IDE (Eclipse/IntelliJ)  
-4. Run TestRunner class  
+### 5. End-to-End Booking Flow
+
+* Search and select lab test
+* Add to cart
+* Enter patient details (data-driven)
+* Select slot and address
+* Proceed to payment
+* Validate payment page
 
 ---
 
-## 💡 Note
-This branch focuses only on Lab Test module automation and is part of a scalable automation framework.
+## Key Features
+
+* BDD with Scenario and Scenario Outline
+* Positive and Negative test coverage
+* End-to-End workflow validation
+* Reusable Step Definitions
+* Page Object Model design
+* Scalable automation structure
 
 ---
 
-## 👨‍💻 Author
+## Project Structure
+
+```
+src
+ ├── main
+ │    ├── java
+ │    │     └── pages
+ │    └── resources
+ ├── test
+ │    ├── java
+ │    │     └── stepdefinitions
+ │    └── resources
+ │          └── features
+```
+
+---
+
+## Tags Used
+
+```
+@labTest  
+@searchScenario  
+@prescriptionScenario  
+@radiologyScenario  
+@myOrder  
+@EndToEndScenario  
+@smoke  
+@sanity  
+@regression  
+```
+
+---
+
+## Execution
+
+### Using Maven
+
+```
+mvn clean test
+```
+
+### Using TestNG
+
+* Run the TestRunner class
+* Execute scenarios using tags
+
+---
+
+## Reporting
+
+* Screenshots captured for important steps
+* Can be integrated with:
+
+  * Extent Reports
+  * Cucumber Reports
+
+---
+
+## Future Enhancements
+
+* Parallel execution using TestNG
+* Selenium Grid integration
+* CI/CD pipeline (Jenkins or GitHub Actions)
+* Advanced reporting dashboards
+
+---
+
+## Note
+
+This branch is focused exclusively on Lab Test module automation and is part of a larger scalable automation framework.
+
+---
+
+## Author
+
 Shyam Sundar K
