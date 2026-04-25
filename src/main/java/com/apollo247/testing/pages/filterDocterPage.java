@@ -1,9 +1,9 @@
 package com.apollo247.testing.pages;
 
 import java.time.Duration;
+import java.util.List;
 
-
-
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -30,11 +30,55 @@ public class filterDocterPage{
 	@FindBy(xpath = "//span[text()='English']")
 	private WebElement language;
 	 
-	@FindBy(xpath ="//button[.//span[text()='Continue']]")
-	private WebElement  Continuebutton;
+	@FindBy(xpath ="//button/..//span[text()='View Profile']")
+	private WebElement  viewProfile;
+	
+	@FindBy(xpath="//span[text()='Yes']")
+	private WebElement recommend;
+	
+	
 
-	public WebElement getContinuebutton() {
-		return Continuebutton;
+	@FindBy(xpath="//span[text()='Write Review']")
+	private WebElement review;
+
+	@FindBy(xpath="//button[text()='Doctor Behaviour']")
+	private WebElement behaviour;
+	
+	@FindBy(css="[placeholder=\"Type here...\"]")
+	private WebElement writereview;
+	
+	@FindBy(xpath="//span[text()='Submit']")
+	private WebElement Submitbtn;
+	 
+	@FindBy(xpath="//h4[text()='Thank you for your feedback !']")
+	private WebElement Thankyou;
+
+	public WebElement getThankyou() {
+		return Thankyou;
+	}
+
+	public WebElement getSubmitbtn() {
+		return Submitbtn;
+	}
+
+	public WebElement getReview() {
+		return review;
+	}
+
+	public WebElement getBehaviour() {
+		return behaviour;
+	}
+
+	public WebElement getWritereview() {
+		return writereview;
+	}
+
+	public WebElement getRecommend() {
+		return recommend;
+	}
+
+	public WebElement getViewProfile() {
+		return viewProfile;
 	}
 
 	public WebElement getGeneralPhysician() {
@@ -84,13 +128,38 @@ public class filterDocterPage{
 
 	    doctorBtn.click();  // normal click podhum
 	}
-	public void Clickconbtn() {
-		wait.until(ExpectedConditions.visibilityOf(Continuebutton)).click();
-		wait.until(ExpectedConditions.elementToBeClickable(Continuebutton)).click();
+	public void view() {
+		wait.until(ExpectedConditions.elementToBeClickable(viewProfile)).click();
+		
 	}
 	public void ClickGeneral() {
-		getGeneralPhysician().click();
+		WebElement general = wait.until(
+		        ExpectedConditions.elementToBeClickable(generalPhysician ) );
+		    general.click();
+		
 	}
+	
+	public void writeReviewFlow(String reviewText) {
+
+	    // Click Recommend = Yes
+	    wait.until(ExpectedConditions.elementToBeClickable(recommend)).click();
+
+	    // Click Write Review
+	    wait.until(ExpectedConditions.elementToBeClickable(review)).click();
+
+	    // Select behaviour
+	    wait.until(ExpectedConditions.elementToBeClickable(behaviour)).click();
+
+	    // Enter review text
+	    wait.until(ExpectedConditions.visibilityOf(writereview)).sendKeys(reviewText);
+
+	    // Click Submit
+	    wait.until(ExpectedConditions.elementToBeClickable(Submitbtn)).click();
+	}
+	public String ThankYouMessage() {
+	    return wait.until(ExpectedConditions.visibilityOf(Thankyou)).getText();
+	}
+	
 
 	
 }

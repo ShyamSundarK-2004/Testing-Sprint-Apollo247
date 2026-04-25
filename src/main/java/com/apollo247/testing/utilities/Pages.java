@@ -6,6 +6,7 @@ import com.apollo247.testing.pages.DashboardPage;
 import com.apollo247.testing.pages.HealthtoolPage;
 import com.apollo247.testing.pages.LocationPage;
 import com.apollo247.testing.pages.MyAppointmentPage;
+import com.apollo247.testing.pages.NegativeScenario;
 import com.apollo247.testing.pages.SearchDoctorPage;
 import com.apollo247.testing.pages.filterDocterPage;
 
@@ -17,6 +18,7 @@ public class Pages {
 	public  MyAppointmentPage AppointmentDocter;
 	public  LocationPage LocationDocter;
 	public  HealthtoolPage HeartToolPage;
+	public  NegativeScenario NegativePage;
 
 	// all the pages are initialized with the driver object
 	public Pages(WebDriver driver) {
@@ -39,6 +41,8 @@ public class Pages {
 		//Healthtool
 		HeartToolPage=new HealthtoolPage(driver);
 		PageFactory.initElements(driver, HeartToolPage);
+		NegativePage=new NegativeScenario(driver);
+		PageFactory.initElements(driver, NegativePage);
 		
 		
 	}
