@@ -46,26 +46,11 @@ public class HealthtoolPage {
     @FindBy(xpath = "//span[text()='CALCULATE']")
     private WebElement calculateBtn;
 
-    @FindBy(xpath = "//*[contains(text(),'Your BMI is') or " +
-                    "contains(text(),'BMI') or " +
-                    "contains(text(),'bmi')]")
-    WebElement bmiResultText;
-
-    @FindBy(xpath = "//*[contains(text(),'Underweight') or " +
-                    "contains(text(),'Normal') or " +
-                    "contains(text(),'Overweight') or " +
-                    "contains(text(),'Obese')]")
-    WebElement bmiCategoryText;
-
-    @FindBy(xpath = "//*[contains(text(),'Underweight')]")
-    WebElement underweightLabel;
-
-    @FindBy(xpath = "//*[contains(text(),'Overweight')]")
-    WebElement overweightLabel;
-
-    @FindBy(xpath = "//*[contains(text(),'Normal')]")
-    WebElement normalLabel;
-
+    @FindBy(xpath = "//p[contains(@class,'resultSubTitle')]")
+    private WebElement bmiResultText;
+    
+    @FindBy(xpath="//div[contains(@class,'resultContainer')]//h2")
+    private WebElement bmivalue;
 	public WebElement getHeartHealthToolCard() {
 		return heartHealthToolCard;
 	}
@@ -101,21 +86,6 @@ public class HealthtoolPage {
 		return bmiResultText;
 	}
 
-	public WebElement getBmiCategoryText() {
-		return bmiCategoryText;
-	}
-
-	public WebElement getUnderweightLabel() {
-		return underweightLabel;
-	}
-
-	public WebElement getOverweightLabel() {
-		return overweightLabel;
-	}
-
-	public WebElement getNormalLabel() {
-		return normalLabel;
-	}
 	public void clickHealthToolCard() {
 		wait.until(ExpectedConditions.elementToBeClickable(viewall)).click();
 	    heartHealthToolCard.click();
@@ -142,37 +112,46 @@ public class HealthtoolPage {
 	}
 
 	public void Female() {
-	    femaleOption.click();
+		wait.until(ExpectedConditions.elementToBeClickable(femaleOption)).click();
 	}
 
 	public void clickNavigate() {
-	    navigateBtn.click();
+		wait.until(ExpectedConditions.elementToBeClickable(navigateBtn)).click();
 	}
 
 	public void Height(String height) {
-	    heightInput.sendKeys(height);
+		   wait.until(ExpectedConditions.visibilityOf(heightInput));
+		    heightInput.clear();
+		    heightInput.sendKeys(height);
 	}
 
 	public void clickNextArrow() {
-	    nextArrowBtn.click();
+		wait.until(ExpectedConditions.elementToBeClickable(nextArrowBtn)).click();
 	}
 
 	public void Weight(String weight) {
+		wait.until(ExpectedConditions.visibilityOf(weightInput));
+	    weightInput.clear();
 	    weightInput.sendKeys(weight);
 	}
 
 	public void clickCalculate() {
-	    calculateBtn.click();
+		wait.until(ExpectedConditions.elementToBeClickable(calculateBtn)).click();
+
+	    // Wait for result using better locator
+	    wait.until(ExpectedConditions.visibilityOf(bmivalue));
 	}
 
-	public boolean isBMIResultDisplayed() {
-	    return bmiResultText.isDisplayed();
+	public String getActualCategory() {
+	    wait.until(ExpectedConditions.visibilityOf(bmiResultText));
+
+	    String text = bmiResultText.getText(); 
+	    System.out.println("Raw Text: " + text);
+
+	    // "Your BMI is Underweight" → "Underweight"
+	    return text.replace("Your BMI is", "").trim();
 	}
 
-	public String getBMICategory() {
-	    return bmiCategoryText.getText();
-	}
-	
 
 
 }

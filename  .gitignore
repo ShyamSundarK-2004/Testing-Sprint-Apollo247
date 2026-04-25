@@ -1,0 +1,18 @@
+# Maven
+target/
+
+# TestNG
+test-output/
+# Logs
+*.log
+
+# Eclipse / IDE
+.classpath
+.project
+.settings/
+
+# Selenium Generated Files
+Reports/
+Screenshots/
+
+

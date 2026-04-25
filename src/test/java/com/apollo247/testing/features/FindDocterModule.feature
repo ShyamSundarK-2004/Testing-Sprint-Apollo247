@@ -2,15 +2,19 @@ Feature: Apollo 247 End-to-End Functional Testing
 Background:
 When user clicks the find_Docter module
 # Scenario 1: Doctor Booking
-@doctorBooking @smoke   
+
+@doctorBooking @smoke
 Scenario: Book a hospital visit appointment
-  When  user searches for "Andrology" specialist in "Chennai" on date "20"
-  And user selects doctor 
-  And user selects available slot
-  And user adds new patient with details
-  | firstName  | lastName    | gender | email                | year | month | day |
-  | Babu       | Subramani   | Male   | babuindu18@gmail.com | 1983 | Jan   | 29  |
-  Then booking details should be displayed
+
+When user searches for speciality
+| speciality |
+| Andrology  | 
+And user selects first available doctor
+And user clicks on schedule appointment
+And user enters phone number
+| phone      |
+| 9876543210 |
+Then validate phone number and amount displayed
 
 
 # Scenario 2: Filter Doctor and Book
@@ -21,8 +25,8 @@ Scenario: Filter the doctor and book appointment
   And user filters doctors by experience "6-10"
   And user filters doctors by language "English"
   And user clicks on first displayed docter
-  And select the slot and continue to book
-  Then verify the booking details
+  And user clicks the view profile and write review "handled in calm way"
+  Then verify the feedback
 
 
 # Scenario 3: Rebook Appointment
@@ -43,7 +47,8 @@ Scenario: Verify BMI result for Female user using Excel data
   And User selects gender as Female
   And User navigates to height input
   And User enters BMI data from excel
-  Then BMI result should be displayed
+  And User clicks CALCULATE button
+  Then BMI category should match expected value from excel
 
   
 # Scenario 5: Docter description validation 
@@ -56,6 +61,19 @@ Scenario Outline: Validate doctor description for multiple doctors
 
 Examples:
   | doctorName         | expectedDescription                                                                     |
-  | Dr. Ajay K Sinha    | Dr. Ajay K Sinha has over 30 years of experience and is fluent in English, Hindi, Punjabi.|
-  | Dr. Tripti Agrawal | Dr. Tripti Agrawal has over 25 years of experience and is fluent in English, Hindi.      |
+  | Dr. S K Agarwal    | Dr. S K Agarwal has over 43 years of experience and is fluent in English, Hindi.        |
+  | Dr. Pawan Sharma   | Dr. Pawan Sharma has over 8 years of experience and is fluent in English, Hindi.        |
   
+# Scenario 6: Find Doctor Negative Scenarios
+@Negative
+Scenario: Validate error when location is not selected
+  When User selects speciality "Andrology"
+  And User selects date "24"
+  And User clicks on submit without location
+  Then Pincode validation message should be displayed
+@Negative1
+Scenario: Validate no doctors found for invalid speciality
+When user searches for the  speciality
+| speciality |
+| Ayurveda Dermatology |
+Then no doctors found message should be displayed
