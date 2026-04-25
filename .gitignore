@@ -11,10 +11,8 @@ test-output/
 .classpath
 .project
 .settings/
+.metadata/
 
 # Selenium Generated Files
 Reports/
 Screenshots/
-
-#readme file
-README.md
