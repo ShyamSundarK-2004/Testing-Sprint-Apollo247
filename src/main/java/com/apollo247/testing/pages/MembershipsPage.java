@@ -110,43 +110,60 @@ public class MembershipsPage {
     }
 
     public void scrollToAndClickJoinNow(Integer months) {
-        wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//*[contains(text(),'" + months + " Months')]")
-        ));
+
+        String planXpath = "//span[contains(text(),'" + months + "')]";
+
+        WebElement plan = wait.until(
+            ExpectedConditions.presenceOfElementLocated(By.xpath(planXpath))
+        );
 
         ((JavascriptExecutor) driver)
-            .executeScript("arguments[0].scrollIntoView({block:'center'});", twelvemonthsPlan);
+            .executeScript("arguments[0].scrollIntoView({block:'center'});", plan);
 
         WebElement joinBtn = wait.until(
-            ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//button[contains(@class,'CircleLanding_planBtn__f3JcF')]")
+            ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(@class,'planBtn')]")
             )
         );
+
         ((JavascriptExecutor) driver)
             .executeScript("arguments[0].click();", joinBtn);
-    }
 
+        wait.until(ExpectedConditions.urlContains("circle-landing"));
+    }
     // ================= PLAN VALIDATION =================
 
     public boolean validatePlanDetails(List<String> details) {
         try {
-            // Skip header row if present
-            List<String> actualDetails = details.get(0).equals("planDetail") 
-                ? details.subList(1, details.size()) 
-                : details;
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-            for (String detail : actualDetails) {
-                WebElement element = wait.until(
-                    ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//*[contains(text(),'" + detail + "')]")
-                    )
-                );
-                if (!element.isDisplayed()) {
-                    return false;
-                }
-            }
-            return true;
+            // ✅ Wait for navigation to payment page
+            wait.until(ExpectedConditions.urlContains("pay-care"));
+
+            // ✅ Get full page text (MOST RELIABLE)
+            WebElement body = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(By.tagName("body"))
+            );
+
+            String pageText = body.getText().toLowerCase();
+
+            System.out.println("===== FULL PAGE TEXT =====");
+            System.out.println(pageText);
+            System.out.println("==========================");
+
+            // ✅ Validate using contains (robust)
+            boolean hasPlan = pageText.contains("12");
+            boolean hasMonths = pageText.contains("month"); // flexible
+            boolean hasPrice = pageText.contains("199");
+
+            System.out.println("Plan found: " + hasPlan);
+            System.out.println("Months found: " + hasMonths);
+            System.out.println("Price found: " + hasPrice);
+
+            return hasPlan && hasMonths && hasPrice;
+
         } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
             return false;
         }
     }

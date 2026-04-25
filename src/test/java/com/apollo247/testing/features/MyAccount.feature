@@ -50,9 +50,9 @@ When user navigates to My Memberships
 And user clicks BUY NOW
 And user scrolls to 12 months plan and clicks Join Now
 Then the following plan details should be visible on the page
-| planDetail |
-| 12 Months  |
-| 199        |
+| planDetail       |
+| 12 months plan   |
+| Rs. 199          |
 
 @Notifications @NavigationCheck
 Scenario: Verify Notification Preferences page loads successfully

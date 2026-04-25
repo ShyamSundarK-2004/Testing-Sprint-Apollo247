@@ -17,6 +17,7 @@ public class ManageFamilyPage {
 
     WebDriver driver;
     WebDriverWait wait;
+    private final ExcelUtilities excel = new ExcelUtilities();
 
     public ManageFamilyPage(WebDriver driver) {
         this.driver = driver;
@@ -212,32 +213,35 @@ public class ManageFamilyPage {
     // ================= EXCEL FLOW =================
 
     public void addFamilyMembersFromExcel() {
-        try {
-            int row = 1;
+        int row = 1;
 
-            while (true) {
+        while (true) {
+            String fName;
 
-                String fName    = ExcelUtilities.getExcelData("FamilyMembers", row, 0);
-                String lName    = ExcelUtilities.getExcelData("FamilyMembers", row, 1);
-                String dobValue = ExcelUtilities.getExcelData("FamilyMembers", row, 2);
-
-                if (fName == null || fName.trim().isEmpty()) {
-                    break;
-                }
-
-                clickAddNewProfile();
-                wait.until(ExpectedConditions.visibilityOf(firstName));
-
-                addFamilyMember(fName, lName, dobValue);
-
-                row++;
+            try {
+                fName = excel.getExcelData("FamilyMembers", row, 0);
+            } catch (Exception e) {
+                // Row doesn't exist — end of data
+                break;
             }
 
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to add family members from Excel: " + e.getMessage());
+            if (fName == null || fName.trim().isEmpty()) {
+                break;
+            }
+
+            String lName    = excel.getExcelData("FamilyMembers", row, 1);
+            String dobValue = excel.getExcelData("FamilyMembers", row, 2);
+
+            clickAddNewProfile();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("[placeholder='First Name']")
+            ));
+
+            addFamilyMember(fName, lName, dobValue);
+
+            row++;
         }
     }
-
     // ================= POPUP HANDLING =================
 
     public void closePopup(SearchContext shadowRoot) {

@@ -1,4 +1,20 @@
-/test-output/
-/target/
+# Maven
+target/
+
+# TestNG
+test-output/
+
+# Logs
 *.log
-*.classpath
+
+# Eclipse / IDE
+.classpath
+.project
+.settings/
+
+# Selenium Generated Files
+Reports/
+Screenshots/
+
+
+ethu final
