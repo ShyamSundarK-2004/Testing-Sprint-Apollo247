@@ -3,6 +3,7 @@ package com.apollo247.testing.pages;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
@@ -87,33 +88,44 @@ public class HealthInsurance_InsuranceForm {
 	public void fillMemberDetails(String firstName, String lastName, String dob, String feet, String inch,
 			String weight) {
 
-//first Name
+		// first Name
 		utility.waitUntilElementIsVisibility(10L, firstNameField);
-//firstNameField.click();
+		// firstNameField.click();
 		firstNameField.sendKeys(firstName);
 
-//lastName
+		// lastName
 		utility.waitUntilElementIsVisibility(10L, lastNameField);
-//lastNameField.click();
+		// lastNameField.click();
 		lastNameField.sendKeys(lastName);
 
-// DOB
-		dobElement.click();
+		// DOB
+		// Wait for page stable
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("[class*='Loader_overlay']")));
+
+		// Scroll into view
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", dobElement);
+
+		// Click using JS (avoids overlay issues)
+		((JavascriptExecutor) driver).executeScript("arguments[0].click();", dobElement);
+
+		// Select date
 		By dateLocator = By.xpath("//abbr[@aria-label='" + dob + "']");
 		wait.until(ExpectedConditions.elementToBeClickable(dateLocator)).click();
-		dateDone.click();
 
-// Height - Feet
-		selectDropdownByText(feetBtn, feet+" ft");
+		// Done button
+		wait.until(ExpectedConditions.elementToBeClickable(dateDone)).click();
 
-// Height - Inches
-		selectDropdownByText(inchsBtn, inch+" in");
+		// Height - Feet
+		selectDropdownByText(feetBtn, feet + " ft");
 
-// Weight
+		// Height - Inches
+		selectDropdownByText(inchsBtn, inch + " in");
+
+		// Weight
 		weightField.clear();
 		weightField.sendKeys(weight);
 
-// Click Next
+		// Click Next
 		NextBtn.click();
 	}
 
@@ -369,18 +381,106 @@ public class HealthInsurance_InsuranceForm {
 	}
 
 	public void acceptsTC() {
-		driver.findElement(By.xpath(
-				"//p[contains(text(),'I hereby confirm and declare that all information provided by me is true')]"))
-				.click();
+		try {
+			// Wait for Declaration section to load
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='checkbox']")));
+			Thread.sleep(1000);
 
-		driver.findElement(By.xpath(
-				"//p[contains(text(),'I hereby declare, on my behalf and on behalf of all persons proposed to be insured, that the above statements, answers and/or particulars given by me are true and complete in all respects to the best of my knowledge and that I am authorized to propose on behalf of these other persons.')]"))
-				.click();
-		driver.findElement(By.xpath(
-				"//p[contains(text(),'I/We authorize the Company to share information pertaining to my / our proposal including the medical records of the Insured / Proposer for the sole purpose of Service Delivery with our empaneled provider.')]"))
-				.click();
-		safeClick(By.xpath("//button[.//span[normalize-space()='Next']]"));
+			// Strategy 1: Direct XPath - Click checkbox 1
+			try {
+				By checkbox1 = By.xpath(
+						"//p[contains(normalize-space(),'I hereby confirm and declare that all information provided by me is true')]/ancestor::*[1]//input[@type='checkbox']");
+				WebElement chk1 = wait.until(ExpectedConditions.presenceOfElementLocated(checkbox1));
+				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", chk1);
+				Thread.sleep(300);
+				chk1.click();
+				Thread.sleep(500);
+			} catch (Exception e1) {
+				// Strategy 2: Try preceding-sibling
+				try {
+					By checkbox1Alt = By.xpath(
+							"//p[contains(normalize-space(),'I hereby confirm and declare')]/preceding-sibling::input[@type='checkbox']");
+					WebElement chk1Alt = driver.findElement(checkbox1Alt);
+					((JavascriptExecutor) driver).executeScript("arguments[0].click();", chk1Alt);
+					Thread.sleep(500);
+				} catch (Exception e2) {
+					// Strategy 3: Click all checkboxes by index
+					List<WebElement> allCheckboxes = driver.findElements(By.xpath("//input[@type='checkbox']"));
+					if (!allCheckboxes.isEmpty()) {
+						((JavascriptExecutor) driver).executeScript("arguments[0].click();", allCheckboxes.get(0));
+						Thread.sleep(500);
+					}
+				}
+			}
 
+			// Strategy 1: Direct XPath - Click checkbox 2
+			try {
+				By checkbox2 = By.xpath(
+						"//p[contains(normalize-space(),'I hereby declare, on my behalf and on behalf of all persons proposed to be insured')]/ancestor::*[1]//input[@type='checkbox']");
+				WebElement chk2 = wait.until(ExpectedConditions.presenceOfElementLocated(checkbox2));
+				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", chk2);
+				Thread.sleep(300);
+				chk2.click();
+				Thread.sleep(500);
+			} catch (Exception e1) {
+				// Strategy 2: Try preceding-sibling
+				try {
+					By checkbox2Alt = By.xpath(
+							"//p[contains(normalize-space(),'I hereby declare, on my behalf')]/preceding-sibling::input[@type='checkbox']");
+					WebElement chk2Alt = driver.findElement(checkbox2Alt);
+					((JavascriptExecutor) driver).executeScript("arguments[0].click();", chk2Alt);
+					Thread.sleep(500);
+				} catch (Exception e2) {
+					// Strategy 3: Click all checkboxes by index
+					List<WebElement> allCheckboxes = driver.findElements(By.xpath("//input[@type='checkbox']"));
+					if (allCheckboxes.size() >= 2) {
+						((JavascriptExecutor) driver).executeScript("arguments[0].click();", allCheckboxes.get(1));
+						Thread.sleep(500);
+					}
+				}
+			}
+
+			// Strategy 1: Direct XPath - Click checkbox 3
+			try {
+				By checkbox3 = By.xpath(
+						"//p[contains(normalize-space(),'I/We authorize the Company to share information pertaining to my / our proposal')]/ancestor::*[1]//input[@type='checkbox']");
+				WebElement chk3 = wait.until(ExpectedConditions.presenceOfElementLocated(checkbox3));
+				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", chk3);
+				Thread.sleep(300);
+				chk3.click();
+				Thread.sleep(500);
+			} catch (Exception e1) {
+				// Strategy 2: Try preceding-sibling
+				try {
+					By checkbox3Alt = By.xpath(
+							"//p[contains(normalize-space(),'I/We authorize the Company')]/preceding-sibling::input[@type='checkbox']");
+					WebElement chk3Alt = driver.findElement(checkbox3Alt);
+					((JavascriptExecutor) driver).executeScript("arguments[0].click();", chk3Alt);
+					Thread.sleep(500);
+				} catch (Exception e2) {
+					// Strategy 3: Click all checkboxes by index
+					List<WebElement> allCheckboxes = driver.findElements(By.xpath("//input[@type='checkbox']"));
+					if (allCheckboxes.size() >= 3) {
+						((JavascriptExecutor) driver).executeScript("arguments[0].click();", allCheckboxes.get(2));
+						Thread.sleep(500);
+					}
+				}
+			}
+
+			// Click Next button
+			Thread.sleep(1000);
+			WebElement nextBtn = wait.until(
+					ExpectedConditions.elementToBeClickable(By.xpath("//button[.//span[normalize-space()='Next']]")));
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", nextBtn);
+			Thread.sleep(500);
+			nextBtn.click();
+			Thread.sleep(2000);
+
+		} catch (Exception e) {
+			System.out.println("Error in acceptsTC: " + e.getMessage());
+			throw new RuntimeException("Failed to accept Terms and Conditions: " + e.getMessage());
+		}
 	}
 
 	public boolean reviewPolicyDetails(String actualstr) {

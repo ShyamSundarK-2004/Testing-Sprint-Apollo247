@@ -14,25 +14,24 @@ public class HealthInsurance_PolicyReview {
 	public WebDriverWait wait;
 	public WebDriver driver;
 	public WebdriverUtility utility;
-	
-	public HealthInsurance_PolicyReview (WebDriver driver) {
+
+	public HealthInsurance_PolicyReview(WebDriver driver) {
 		wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 		this.driver = driver;
 		this.utility = new WebdriverUtility();
 		this.utility.initializeDriver(driver); // Pass the active driver to utility
 	}
-	
-	//-------locator findings-----------
-	
+
+	// -------locator findings-----------
+
 	@FindBy(xpath = "//span[normalize-space()='Proceed']")
 	WebElement policyProceedButton;
-	
-	
-	//--------getters----------
-	
-	//---Business Logic--------
+
+	// --------getters----------
+
+	// ---Business Logic--------
 	public void clickPolicyProceedButton() {
-		//policyProceedButton.click();
+		// policyProceedButton.click();
 		utility.waituntilPresenceOfElementLocated(10L, By.xpath("//span[normalize-space()='Proceed']")).click();
 	}
 

@@ -14,7 +14,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-
 import com.apollo247.testing.utilities.WebdriverUtility;
 
 public class HealthInsurancePage {
@@ -80,48 +79,45 @@ public class HealthInsurancePage {
 	public void performEnterPinCode(String pincode) {
 		WebElement pinInput = utility.waitUntilElementIsCLickable(10L, getEnterPinCode());
 
-	    // Clear before entering
-	    pinInput.clear();
-	    pinInput.sendKeys(pincode);
+		// Clear before entering
+		pinInput.clear();
+		pinInput.sendKeys(pincode);
 
-	    WebElement submitBtn = utility.waitUntilElementIsCLickable(10L, getSubmitButton());
+		WebElement submitBtn = utility.waitUntilElementIsCLickable(10L, getSubmitButton());
 
-	    try {
-	        submitBtn.click();
-	    } catch (Exception e) {
-	        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", submitBtn);
-	    }
+		try {
+			submitBtn.click();
+		} catch (Exception e) {
+			((JavascriptExecutor) driver).executeScript("arguments[0].click();", submitBtn);
+		}
 	}
 
 	public void selectGender(String gender) {
 
-	    By locator = By.xpath("//button[normalize-space()='" + gender + "']");
-	    By modal = By.cssSelector(".PincodeModal_middleSection__RCZiF");
+		By locator = By.xpath("//button[normalize-space()='" + gender + "']");
+		By modal = By.cssSelector(".PincodeModal_middleSection__RCZiF");
 
-	    // ✅ Step 1: Wait ONCE for modal to disappear
-	    wait.until(ExpectedConditions.invisibilityOfElementLocated(modal));
-	    //utility.waitUntilInvisibilityOfElementLocated(10L, modal);
+		// ✅ Step 1: Wait ONCE for modal to disappear
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(modal));
+		// utility.waitUntilInvisibilityOfElementLocated(10L, modal);
 
-	    // ✅ Step 2: Retry click (only for stale/intercept issues)
-	    for (int i = 0; i < 3; i++) {
-	        try {
-	            WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
-	            element.click();
-	            return; // ✅ success → exit method
-	        } 
-	        catch (StaleElementReferenceException e) {
-	            System.out.println("Retrying due to stale element...");
-	        } 
-	        catch (ElementClickInterceptedException e) {
-	            System.out.println("Retrying due to click interception...");
-	            ((JavascriptExecutor) driver).executeScript("arguments[0].click();",
-	                    driver.findElement(locator));
-	            return;
-	        }
-	    }
+		// ✅ Step 2: Retry click (only for stale/intercept issues)
+		for (int i = 0; i < 3; i++) {
+			try {
+				WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+				element.click();
+				return; // ✅ success → exit method
+			} catch (StaleElementReferenceException e) {
+				System.out.println("Retrying due to stale element...");
+			} catch (ElementClickInterceptedException e) {
+				System.out.println("Retrying due to click interception...");
+				((JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(locator));
+				return;
+			}
+		}
 
-	    // ❌ If still failing → fail properly
-	    throw new RuntimeException("Unable to click gender: " + gender);
+		// ❌ If still failing → fail properly
+		throw new RuntimeException("Unable to click gender: " + gender);
 	}
 
 	public void clickViewButton(String buttonName) {
@@ -188,6 +184,7 @@ public class HealthInsurancePage {
 		// Wait for dropdown to disappear
 		wait.until(ExpectedConditions.invisibilityOfElementLocated(dropdown));
 	}
+
 	public void clickCancelSelectLocation() {
 		cancelSelectLocation.click();
 	}

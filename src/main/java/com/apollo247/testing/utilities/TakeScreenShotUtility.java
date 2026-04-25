@@ -21,6 +21,10 @@ public class TakeScreenShotUtility {
 		TakesScreenshot ts = (TakesScreenshot) driver;
 		File temp = ts.getScreenshotAs(OutputType.FILE);
 		File perm = new File(path);
+		
+		// Create Screenshots directory if it doesn't exist
+		perm.getParentFile().mkdirs();
+		
 		FileHandler.copy(temp, perm);
 		return perm.getAbsolutePath();
 	}

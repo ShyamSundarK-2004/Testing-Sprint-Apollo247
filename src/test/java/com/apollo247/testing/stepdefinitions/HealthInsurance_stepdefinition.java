@@ -7,7 +7,9 @@ import org.testng.asserts.SoftAssert;
 
 import com.apollo247.testing.utilities.BaseClass;
 import com.apollo247.testing.utilities.ExcelUtilities;
+import com.apollo247.testing.utilities.ExtendsReportsUtilities;
 import com.apollo247.testing.utilities.SessionManager;
+import com.apollo247.testing.utilities.TakeScreenShotUtility;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -205,12 +207,22 @@ public class HealthInsurance_stepdefinition {
 	}
 
 	@When("User completes step6 Address Details")
-	public void user_completes_step6_address_details() throws InterruptedException {
+	public void user_completes_step6_address_details() throws InterruptedException, IOException {
 		String street = excelUtility.getExcelData(SHEET, row, 28); // StreetAddress
 		String city = excelUtility.getExcelData(SHEET, row, 29); // City
 		String pin = excelUtility.getExcelData(SHEET, row, 30); // Pincode
 
 		b.getPages().healthInsurance_InsuranceForm.fillAddressDetails(street, city, pin);
+
+		// Log step in report
+		ExtendsReportsUtilities.logStep("When", "User fills Address Details");
+
+		// 📸 Take screenshot intentionally (even if step passes)
+		String path = new TakeScreenShotUtility().takeScreenShot(b.getDriver(), "AddressDetails_Filled");
+
+		// Attach screenshot to report
+		ExtendsReportsUtilities.fail("Address details entered (including empty validation case)");
+		ExtendsReportsUtilities.attachScreenshot(path);
 	}
 
 	@When("User completes step7 Nomiee Selection")
@@ -240,6 +252,7 @@ public class HealthInsurance_stepdefinition {
 	public void user_completes_all_the_forms_and_clicks() {
 		b.getPages().healthInsurance_InsuranceForm.clickNextBtn();
 		b.getPages().healthInsurance_InsuranceForm.clickNextBtn();
+
 	}
 
 	@When("User accepts Terms and Conditions")

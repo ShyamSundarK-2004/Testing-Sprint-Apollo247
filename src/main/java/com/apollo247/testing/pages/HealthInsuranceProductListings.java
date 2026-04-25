@@ -1,15 +1,15 @@
 package com.apollo247.testing.pages;
 
 import java.time.Duration;
-
 import java.util.List;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 
 import com.apollo247.testing.utilities.WebdriverUtility;
 
@@ -33,48 +33,49 @@ public class HealthInsuranceProductListings {
 
 	@FindBy(xpath = "//p[.='View Plans']")
 	private WebElement viewPlansHeader;
-	
+
 	@FindBy(xpath = "//p[normalize-space()='Filter']")
 	private WebElement filterButton;
-	
+
 	@FindBy(xpath = "//p[normalize-space()='Sort By']")
 	private WebElement sortByButton;
-	
-	@FindBy (xpath = "//span[normalize-space()='Coverage']")
+
+	@FindBy(xpath = "//span[normalize-space()='Coverage']")
 	private WebElement coverageOption;
-	
+
 	@FindBy(xpath = "//span[normalize-space()='Room rent type']")
 	private WebElement roomRentTypeOption;
-	
-	@FindBy (xpath = "//span[normalize-space()='Apply']")
+
+	@FindBy(xpath = "//span[normalize-space()='Apply']")
 	private WebElement applyButton;
-	
+
 	@FindBy(xpath = "//button[normalize-space()='Apply']")
 	private WebElement sortByApplyButton;
-	
-	@FindBy (xpath = "//span[normalize-space()='clear selection']")
+
+	@FindBy(xpath = "//span[normalize-space()='clear selection']")
 	private WebElement clearSelectionButton;
-	
+
 	@FindBy(id = "premium_desc")
 	private WebElement premiumOption;
-	
+
 	@FindBy(xpath = "//button[contains(@id,'headlessui-listbox-button')]")
 	private WebElement plansCoverageAmountValue;
-	
+
 	@FindBy(xpath = "//h3[normalize-space()='Premium']")
 	private WebElement premiumPlanHeader;
-	
+
 	@FindBy(xpath = "//span[normalize-space()='Proceed to Customise']")
 	private WebElement proceedToCutomizeButton;
-	
-	
+
 	// ----------Getters---------------
 	public WebElement getViewPlans() {
 		return viewPlansButton;
 	}
+
 	public WebElement getPlansCoverageAmountValue() {
 		return plansCoverageAmountValue;
 	}
+
 	public WebElement getPremiumPlanHeader() {
 		return premiumPlanHeader;
 	}
@@ -82,34 +83,40 @@ public class HealthInsuranceProductListings {
 	public WebElement getViewPlansHeader() {
 		return viewPlansHeader;
 	}
+
 	public void clickFilter() {
 		filterButton.click();
-		
+
 	}
+
 	public void clickSortBy() {
 		sortByButton.click();
 	}
-	
+
 	public void clicksortByApplyButton() {
 		sortByApplyButton.click();
 	}
+
 	public void clickCoverageOption() {
-		 coverageOption.click();;
+		coverageOption.click();
+		;
 	}
+
 	public void clickRoomRentTypeOption() {
 		roomRentTypeOption.click();
 	}
+
 	public void clickApplyButton() {
-		 applyButton.click();
+		applyButton.click();
 	}
+
 	public void clickClearSelectionButton() {
 		clearSelectionButton.click();
 	}
-	
+
 	public void clickProceedsPlan() {
 		proceedToCutomizeButton.click();
 	}
-	
 
 	// --------------Business logic--------
 
@@ -148,98 +155,105 @@ public class HealthInsuranceProductListings {
 	}
 
 	public void coverageAmount(String coverageRange) {
-	    clickFilter();
-	    // Click coverage option
-	    clickCoverageOption();
+		clickFilter();
+		// Click coverage option
+		clickCoverageOption();
 
-	    // Dynamic locator for coverage
-	    By coverageLocator = By.xpath(
-	        "//label[contains(normalize-space(),'" + coverageRange + "')]/preceding-sibling::input[@type='radio']"
-	    );
+		// Dynamic locator for coverage
+		By coverageLocator = By.xpath(
+				"//label[contains(normalize-space(),'" + coverageRange + "')]/preceding-sibling::input[@type='radio']");
 
-	    // Wait and click
-	    WebElement coverageElement = wait.until(ExpectedConditions.elementToBeClickable(coverageLocator));
-	    coverageElement.click();
+		// Wait and click
+		WebElement coverageElement = wait.until(ExpectedConditions.elementToBeClickable(coverageLocator));
+		coverageElement.click();
 
-	    // Apply filter
-	    clickApplyButton();
+		// Apply filter
+		clickApplyButton();
 	}
-	
+
 	public void roomRentType(String roomRentType) {
 		clickFilter();
 		clickRoomRentTypeOption();
-		
+
 		By roomRentLocator = By.xpath(
-		        "//label[contains(normalize-space(),'"+roomRentType+"')]/preceding-sibling::input[@type='radio']"
-		    );
-		WebElement roomRentElement = wait.until(ExpectedConditions.elementToBeClickable(roomRentLocator));
-	    roomRentElement.click();
-	    clickApplyButton();
+				"//label[contains(normalize-space(),'" + roomRentType + "')]/preceding-sibling::input[@type='radio']");
+
+		for (int i = 0; i < 3; i++) {
+			try {
+				WebElement element = wait
+						.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(roomRentLocator)));
+				element.click();
+				break;
+			} catch (StaleElementReferenceException e) {
+				if (i == 2)
+					throw e; // fail after retries
+			}
+		}
+
+		wait.until(ExpectedConditions.elementToBeClickable(applyButton)).click();
 	}
-	
+
 	public void sortByPlans(String plan) {
-		
+
 		clickSortBy();
-		
-		By planLocator = By.xpath(
-		        "//label[contains(normalize-space(),'"+plan+"')]/preceding-sibling::input[@type='radio']"
-		    );
+
+		By planLocator = By
+				.xpath("//label[contains(normalize-space(),'" + plan + "')]/preceding-sibling::input[@type='radio']");
 		WebElement planElement = wait.until(ExpectedConditions.elementToBeClickable(planLocator));
-	    planElement.click();
-	    
-	    clicksortByApplyButton();
-		
+		planElement.click();
+
+		clicksortByApplyButton();
+
 	}
-	
+
 	public WebElement coverageRange(String coverageRange) {
 		By coverageLocator = By.xpath(
-		        "//label[contains(normalize-space(),'" + coverageRange + "')]/preceding-sibling::input[@type='radio']"
-		    );
+				"//label[contains(normalize-space(),'" + coverageRange + "')]/preceding-sibling::input[@type='radio']");
 		WebElement coverageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(coverageLocator));
-	    return coverageElement;		
-		
+		return coverageElement;
+
 	}
-	
-	public  boolean isMatch(String rangeStr) {
 
-        // normalize
-		//rangeStr=coverageRange(rangeStr).getText();
-		String valueStr=getPlansCoverageAmountValue().getText();
-    	
-        rangeStr = rangeStr.toLowerCase().replaceAll("[^0-9.\\-a-z]", "");
-        valueStr = valueStr.toLowerCase().replaceAll("[^0-9.a-z]", "");
+	public boolean isMatch(String rangeStr) {
 
-        // extract unit
-        String rangeUnit = rangeStr.contains("crore") ? "crore" : "lakh";
-        String valueUnit = valueStr.contains("crore") ? "crore" : "lakh";
+		// normalize
+		// rangeStr=coverageRange(rangeStr).getText();
+		String valueStr = getPlansCoverageAmountValue().getText();
 
-        // ❌ unit mismatch → reject
-        if (!rangeUnit.equals(valueUnit)) {
-            return false;
-        }
+		rangeStr = rangeStr.toLowerCase().replaceAll("[^0-9.\\-a-z]", "");
+		valueStr = valueStr.toLowerCase().replaceAll("[^0-9.a-z]", "");
 
-        // extract numbers
-        String rangeNumbers = rangeStr.replaceAll("[^0-9.\\-]", "");
-        String valueNumberStr = valueStr.replaceAll("[^0-9.]", "");
+		// extract unit
+		String rangeUnit = rangeStr.contains("crore") ? "crore" : "lakh";
+		String valueUnit = valueStr.contains("crore") ? "crore" : "lakh";
 
-        double value = Double.parseDouble(valueNumberStr);
+		// ❌ unit mismatch → reject
+		if (!rangeUnit.equals(valueUnit)) {
+			return false;
+		}
 
-        double min, max;
+		// extract numbers
+		String rangeNumbers = rangeStr.replaceAll("[^0-9.\\-]", "");
+		String valueNumberStr = valueStr.replaceAll("[^0-9.]", "");
 
-        if (rangeNumbers.contains("-")) {
-            String[] parts = rangeNumbers.split("-");
-            min = Double.parseDouble(parts[0]);
-            max = Double.parseDouble(parts[1]);
-        } else {
-            min = Double.parseDouble(rangeNumbers);
-            max = min;
-        }
+		double value = Double.parseDouble(valueNumberStr);
 
-        return value >= min && value <= max;
-    }
-	
+		double min, max;
+
+		if (rangeNumbers.contains("-")) {
+			String[] parts = rangeNumbers.split("-");
+			min = Double.parseDouble(parts[0]);
+			max = Double.parseDouble(parts[1]);
+		} else {
+			min = Double.parseDouble(rangeNumbers);
+			max = min;
+		}
+
+		return value >= min && value <= max;
+	}
+
 	public boolean isTextMatching(String expectedText) {
-	    String actualText = wait.until(ExpectedConditions.visibilityOf(getPremiumPlanHeader())).getText().trim();
-	    return actualText.equalsIgnoreCase(expectedText.trim());
+		String actualText = wait.until(ExpectedConditions.visibilityOf(getPremiumPlanHeader())).getText().trim();
+		return actualText.equalsIgnoreCase(expectedText.trim());
 	}
 }

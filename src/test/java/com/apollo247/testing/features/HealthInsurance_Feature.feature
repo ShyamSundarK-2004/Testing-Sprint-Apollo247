@@ -1,10 +1,11 @@
-Feature: Apollo 247 Health Insurance - Member Selection Validation
+     Feature: Apollo 247 Health Insurance - Member Selection Validation
 	
-	  Background:
+	 Background:
+
 	    
-	    Given User navigates to Health Insurance page and enter pincode "601201"
+	 Given User navigates to Health Insurance page and enter pincode "601201"
 	
-	##############################################--------Scenario 1------------############################################################
+	 ##############################################--------Scenario 1------------############################################################
 	 @smoke @insurance @memberSelection
      Scenario Outline: Verify valid member selection (Female and Self)
      When User selects "<Gender>" and "<member>" at the age "<age>" as members

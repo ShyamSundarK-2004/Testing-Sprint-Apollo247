@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 
 import com.apollo247.testing.utilities.BaseClass;
 import com.apollo247.testing.utilities.ExtendsReportsUtilities;
@@ -37,17 +38,15 @@ public class Hook extends WebdriverUtility {
 		String browser = readerUtil.getPropertyKeyValue("browser");
 
 		if (browser.equalsIgnoreCase("chrome")) {
-
-			// Configure Chrome options (Headless mode for faster execution)
-			ChromeOptions options = new ChromeOptions();
-			options.addArguments("--headless=new");
-
-			Basedriver = new ChromeDriver(options);
+			// launching browsers
+			ChromeOptions chromeOptions = new ChromeOptions();
+			chromeOptions.addArguments("--headless=new");
+			Basedriver = new ChromeDriver(chromeOptions);
 
 		} else if (browser.equalsIgnoreCase("edge")) {
-
-			// Launch Edge browser
-			Basedriver = new EdgeDriver();
+			EdgeOptions edgeOptions = new EdgeOptions();
+			edgeOptions.addArguments("--headless=new");
+			Basedriver = new EdgeDriver(edgeOptions);
 
 		} else {
 			throw new RuntimeException("Invalid browser: " + browser);
@@ -59,7 +58,7 @@ public class Hook extends WebdriverUtility {
 		// WebDriver common setup
 		initializeDriver(b.getDriver());
 		configMaximizeBrowser();
-		waitForElements(60);
+		waitForElements(70);
 
 		// Manage session (login once, reuse across domains)
 		SessionManager.ManageSession(b.getDriver());
@@ -80,18 +79,17 @@ public class Hook extends WebdriverUtility {
 
 		try {
 
-			// If step fails → capture screenshot + log fail
+			// step fails - capture screenshot + log fail
 			if (scenario.isFailed()) {
 
 				String path = new TakeScreenShotUtility().takeScreenShot(b.getDriver(), scenario.getName());
-
+				// step failed
 				ExtendsReportsUtilities.fail("Step Failed");
 				ExtendsReportsUtilities.attachScreenshot(path);
 
 			} else {
-
-				// If step passes → log success
-				ExtendsReportsUtilities.pass("Step Passed");
+				// step passes
+				ExtendsReportsUtilities.pass("Step executed successfully");
 			}
 
 		} catch (Exception e) {
@@ -102,7 +100,7 @@ public class Hook extends WebdriverUtility {
 	@After
 	public void tearDown() {
 
-		// Flush Extent report (write results to file)
+		// Flush Extent report
 		ExtendsReportsUtilities.flushReport();
 
 		// Close browser and cleanup

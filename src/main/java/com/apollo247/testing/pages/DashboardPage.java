@@ -137,6 +137,7 @@ public class DashboardPage {
 
 	// closing dom popup
 	public void closeDomPopup() {
+
 		try {
 			// Wait for shadow host and locate the hidden host
 			WebElement domPopup = utilities.waituntilPresenceOfElementLocated(10L,
@@ -148,11 +149,14 @@ public class DashboardPage {
 			// Find close button inside shadow DOM
 			WebElement closeBtn = shadowDom.findElement(By.id("close"));
 
-			closeBtn.click();
-		} catch (Exception e) {
-			System.out.println("No Popup found");
-		}
+			if (closeBtn.isDisplayed()) {
+				closeBtn.click();
+				System.out.println("Popup closed successfully.");
+			}
 
+		} catch (Exception e) {
+
+		}
 	}
 
 	// clicking on header login button
@@ -185,6 +189,10 @@ public class DashboardPage {
 		moduleName.click();
 	}
 
+	public void clickBuyMedicines() {
+		utilities.waitUntilElementIsCLickable(20L, getBuyMedicineModule()).click();
+	}
+
 	public void clickonHealthInsuranceModule() {
 		By buyInsuranceLocator = By.cssSelector("[href='https://apollo247insurance.com/health-insurance']");
 		utilities.waituntilPresenceOfElementLocated(10L, buyInsuranceLocator).click();
@@ -203,8 +211,8 @@ public class DashboardPage {
 		}
 	}
 
-	public void clickBuyMedicines() {
-		getBuyMedicineModule().click();
+	public void clickProfileIcon() {
+		clickOnMyAccountBtn();
 	}
 
 }
