@@ -15,15 +15,15 @@ import io.cucumber.java.en.When;
 
 public class LabTestSteps {
 
-	BaseClass b;
+	private BaseClass b;
 	ExcelUtilities excelUtility = new ExcelUtilities();
 
-	// Constructor Injection → gets BaseClass instance
+	// Constructor Injection gets BaseClass instance
 	public LabTestSteps(BaseClass b) {
 		this.b = b;
 	}
 
-	// ================= Background Scenarios =================
+	// ====== Background Scenarios ======
 
 	@Given("User is on Lab Tests page")
 	public void user_is_on_lab_tests_page() {
@@ -45,7 +45,7 @@ public class LabTestSteps {
 		assertTrue(title.contains("lab-tests"), "Page not Navigated to the Lab Test module");
 	}
 
-	// ================= SEARCH Scenarios =================
+	// ====== SEARCH Scenarios ======
 
 	@When("User searches for {string}")
 	public void user_searches_for(String testName) {
@@ -57,7 +57,7 @@ public class LabTestSteps {
 	@Then("validate search result for {string},{string}")
 	public void validate_search_result_for(String testName, String type) {
 		;
-		// Switch based on type (valid / invalid)
+		// Switch case based on type of test input
 		switch (type.toLowerCase()) {
 
 		case "valid":
@@ -78,7 +78,7 @@ public class LabTestSteps {
 		}
 	}
 
-	// ================= VALID PRESCRIPTION UPLOAD FLOW =================
+	// ====== VALID PRESCRIPTION UPLOAD FLOW ======
 
 	@When("User clicks on book test using prescription")
 	public void user_clicks_on_book_test_using_prescription() {
@@ -91,7 +91,7 @@ public class LabTestSteps {
 	public void user_uploads_valid_prescription() {
 
 		// File path for upload
-		String path = "C:\\Users\\Shyam Sundar\\Documents\\prescription2.jpeg";
+		String path = System.getProperty("user.dir") + "/src/test/resources/TestData/prescription2.jpeg";
 
 		// Upload file
 		b.getPages().bookByPrescriptionPage.uploadFile(path);
@@ -106,11 +106,11 @@ public class LabTestSteps {
 
 	}
 
-	// ================= INVALID PRESCRIPTION UPLOAD FLOW =================
+	// ====== INVALID PRESCRIPTION UPLOAD FLOW ======
 
 	@When("User uploads invalid prescription")
 	public void user_uploads_invalid_prescription() {
-		String path = "C:\\Users\\Shyam Sundar\\Documents\\prescription.webp";
+		String path = System.getProperty("user.dir") + "/src/test/resources/TestData/prescription.webp";
 
 		// Upload invalid file
 		b.getPages().bookByPrescriptionPage.uploadFile(path);
@@ -127,7 +127,7 @@ public class LabTestSteps {
 		b.getPages().bookByPrescriptionPage.closeInvalidMessagePopup();
 	}
 
-	// ================= RADIOLOGY =================
+	// ====== RADIOLOGY ======
 
 	@When("User clicks on lab test search bar")
 	public void user_clicks_on_lab_test_search_bar() {
@@ -175,7 +175,7 @@ public class LabTestSteps {
 		assertTrue(b.getPages().radiologyPage.isRequestCallBtnEnabled(), "Request Call Button is not Enabled");
 	}
 
-	// ================= MY ORDERS =================
+	// ====== MY ORDERS ======
 
 	@Given("User should be on orders page")
 	public void user_should_be_on_orders_page() {
@@ -205,7 +205,7 @@ public class LabTestSteps {
 		assertTrue(flag, "No Orders found for this user : " + userName);
 	}
 
-	// ================= END TO END FLOW =================
+	// ====== END TO END FLOW ======
 
 	@When("User searches for a test and selects test {string}")
 	public void user_searches_for_a_test_and_selects_test(String testName) {
@@ -236,12 +236,13 @@ public class LabTestSteps {
 		// Reading Patients data's from excel
 		String firstName = excelUtility.getExcelData("Patients_Data", row, 0);
 		String lastName = excelUtility.getExcelData("Patients_Data", row, 1);
-		String DOB = excelUtility.getExcelData("Patients_Data", row, 2);
+		String dateOfBirth = excelUtility.getExcelData("Patients_Data", row, 2);
 		String gender = excelUtility.getExcelData("Patients_Data", row, 3);
 		String relation = excelUtility.getExcelData("Patients_Data", row, 4);
 		String emailID = excelUtility.getExcelData("Patients_Data", row, 5);
 		// filling in UI
-		b.getPages().patientDetailsPage.enterPatientDetails(firstName, lastName, DOB, gender, relation, emailID);
+		b.getPages().patientDetailsPage.enterPatientDetails(firstName, lastName, dateOfBirth, gender, relation,
+				emailID);
 		// saving the patient details
 		b.getPages().patientDetailsPage.clickSaveBtn();
 		// click on confirm patient details

@@ -24,7 +24,7 @@ public class Hook extends WebdriverUtility {
 	private BaseClass b;
 	WebDriver Basedriver;
 
-	// Constructor Injection → gets shared BaseClass instance
+	// Constructor Injection gets shared BaseClass instance
 	public Hook(BaseClass b) {
 		this.b = b;
 	}
@@ -36,14 +36,14 @@ public class Hook extends WebdriverUtility {
 
 		// Read browser from properties file
 		String browser = readerUtil.getPropertyKeyValue("browser");
-//		String serverUrl = readerUtil.getPropertyKeyValue("serverUrl");
+		// String serverUrl = readerUtil.getPropertyKeyValue("serverUrl");
 
 		if (browser.equalsIgnoreCase("chrome")) {
 			// launching browsers in selenium grid
 			ChromeOptions chromeOptions = new ChromeOptions();
 			chromeOptions.addArguments("--headless=new");
 			// creating remotewebdriver to handle all browsers
-//			Basedriver = new RemoteWebDriver(new URL(serverUrl), chromeOptions);
+			// Basedriver = new RemoteWebDriver(new URL(serverUrl), chromeOptions);
 
 			Basedriver = new ChromeDriver(chromeOptions);
 
@@ -51,7 +51,7 @@ public class Hook extends WebdriverUtility {
 			EdgeOptions edgeOptions = new EdgeOptions();
 			edgeOptions.addArguments("--headless=new");
 			// creating remotewebdriver to handle all browsers
-//			Basedriver = new RemoteWebDriver(new URL(serverUrl), edgeOptions);
+			// Basedriver = new RemoteWebDriver(new URL(serverUrl), edgeOptions);
 
 			Basedriver = new EdgeDriver(edgeOptions);
 
@@ -59,7 +59,7 @@ public class Hook extends WebdriverUtility {
 			throw new RuntimeException("Invalid browser: " + browser);
 		}
 
-		// Store driver in BaseClass (shared across steps)
+		// Store driver in BaseClass
 		b.setDriver(Basedriver);
 
 		// WebDriver common setup
@@ -67,7 +67,7 @@ public class Hook extends WebdriverUtility {
 		configMaximizeBrowser();
 		waitForElements(70);
 
-		// Manage session (login once, reuse across domains)
+		// Manage session
 		SessionManager.ManageSession(b.getDriver());
 
 		// Initialize all page objects
@@ -77,7 +77,7 @@ public class Hook extends WebdriverUtility {
 		// Close any popup if present on dashboard
 		pages.dashboardPage.closeDomPopup();
 
-		// Create new test in Extent Report (Scenario level)
+		// Create new test in Extent Report for each scenario
 		ExtendsReportsUtilities.createTest(scenario.getName());
 	}
 
@@ -86,11 +86,11 @@ public class Hook extends WebdriverUtility {
 
 		try {
 
-			// step fails - capture screenshot + log fail
+			// Scenario fails
 			if (scenario.isFailed()) {
 
 				String path = new TakeScreenShotUtility().takeScreenShot(b.getDriver(), scenario.getName());
-				// step failed
+				// capture screenshot and log fail
 				ExtendsReportsUtilities.fail("Step Failed");
 				ExtendsReportsUtilities.attachScreenshot(path);
 
@@ -110,7 +110,7 @@ public class Hook extends WebdriverUtility {
 		// Flush Extent report
 		ExtendsReportsUtilities.flushReport();
 
-		// Close browser and cleanup
+		// Close browser and cleanup driver instance
 		quitBroswerWindow();
 		b.unload();
 	}

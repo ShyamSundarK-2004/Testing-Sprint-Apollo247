@@ -7,7 +7,6 @@ import java.util.Random;
 
 public class JavaUtilities {
 
-	// java utlitility
 
 	// Generate random number
 	public int getRandomNumber(int range) {

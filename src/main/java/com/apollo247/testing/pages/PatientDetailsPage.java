@@ -137,8 +137,8 @@ public class PatientDetailsPage {
 		getLastNameField().sendKeys(lastName);
 	}
 
-	public void enterDOB(String DOB) {
-		getDOBField().sendKeys(DOB);
+	public void enterDOB(String dateOfBirth) {
+		getDOBField().sendKeys(dateOfBirth);
 	}
 
 	public void selectGender(String gender) {
@@ -175,7 +175,7 @@ public class PatientDetailsPage {
 
 			if (text.toLowerCase().contains(patientName.toLowerCase())) {
 
-				// 🔥 Click + button inside this patient tile
+				// add created patient details
 				WebElement plusBtn = patient.findElement(By.xpath(".//img[contains(@src,'circleplus')]"));
 
 				jsUtil.jsClick(plusBtn);

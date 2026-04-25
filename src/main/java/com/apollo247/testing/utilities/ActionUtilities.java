@@ -9,12 +9,12 @@ public class ActionUtilities {
 
 	private Actions action;
 
-	// constructor (VERY IMPORTANT)
+	// constructor
 	public ActionUtilities(WebDriver driver) {
 		this.action = new Actions(driver);
 	}
 
-	// Pause action (must perform)
+	// Pause action
 	public void pauseOnAction(long timeInMillis) {
 		action.pause(timeInMillis).perform();
 	}
@@ -29,12 +29,12 @@ public class ActionUtilities {
 		action.moveToElement(element).click().sendKeys(value).perform();
 	}
 
-	// Press ESC (IMPORTANT for your case)
+	// Press ESC
 	public void pressEscape() {
 		action.sendKeys(Keys.ESCAPE).perform();
 	}
 
-	// Click on page (to remove overlay)
+	// Click on page
 	public void clickOnPage() {
 		action.moveByOffset(0, 0).click().perform();
 	}

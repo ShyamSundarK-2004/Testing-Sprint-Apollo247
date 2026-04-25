@@ -1,6 +1,6 @@
 Feature: Automation Testing on Lab Test Module
 
-  # Common setup for all scenarios
+  # Common set for all scenarios
   Background:
     Given User is on Lab Tests page
     Then check user in on correct module
@@ -35,8 +35,8 @@ Feature: Automation Testing on Lab Test Module
     And User clicks on explore radiology option and switch to radiology tab
     Then User should be on radiology page
     When User enters radiology details
-      | city    | hospital                  | date     | tests         | filePath                                               |
-      | Chennai | Anna Nagar- Apollo Clinic | April-25 | X-Ray,CT Scan | C:\\Users\\Shyam Sundar\\Documents\\prescription2.jpeg |
+      | city    | hospital                  | date     | tests         | filePath                                         |
+      | Chennai | Anna Nagar- Apollo Clinic | April-25 | X-Ray,CT Scan | "/src/test/resources/TestData/prescription.webp" |
     Then User should see request call button is enabled
 
   @labTest @myOrder @regression

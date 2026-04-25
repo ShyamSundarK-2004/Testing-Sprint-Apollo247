@@ -149,15 +149,6 @@ public class RadiologyPage {
 		return utilities.fetchApplicationURL();
 	}
 
-//	public void chooseCity(String cityName) {
-//		jsUtil.jsScrollIntoView(getChooseCityField());
-//		utilities.waitUntilElementIsCLickable(35L, getChooseCityField());
-//		jsUtil.jsClick(getChooseCityField());
-//		By city = By.xpath("//li[normalize-space() = '" + cityName + "']");
-//		WebElement chooseCity = utilities.waitUntilVisibilityOfElementLocated(30L, city);
-//		chooseCity.click();
-//	}
-
 	public void chooseCity(String cityName) {
 
 		// Click city field
@@ -165,7 +156,7 @@ public class RadiologyPage {
 		jsUtil.jsScrollIntoView(cityField);
 		utilities.waitUntilElementIsCLickable(15L, cityField);
 		getChooseCityField().click();
-		// Wait for dropdown (IMPORTANT)
+		// Wait for dropdown
 		By dropdown = By.xpath("//ul[contains(@class,'AphSelect_menu')]");
 		utilities.waitUntilVisibilityOfElementLocated(30L, dropdown);
 
@@ -229,7 +220,7 @@ public class RadiologyPage {
 	}
 
 	public void UploadPrescription(String path) {
-		getUploadPrescriptionField().sendKeys(path);
+		getUploadPrescriptionField().sendKeys(System.getProperty("user.dir") + path);
 	}
 
 	public boolean isRequestCallBtnEnabled() {
