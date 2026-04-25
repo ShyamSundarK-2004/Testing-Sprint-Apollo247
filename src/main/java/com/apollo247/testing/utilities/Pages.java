@@ -1,4 +1,5 @@
 package com.apollo247.testing.utilities;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
@@ -31,6 +32,7 @@ import com.apollo247.testing.pages.TestPage;
 import com.apollo247.testing.pages.UploadPrescriptionPage;
 import com.apollo247.testing.pages.VoliniPage;
 import com.apollo247.testing.pages.filterDocterPage;
+
 public class Pages {
 	public DashboardPage dashboardPage;
 	public LabTestPage labTestPage;
@@ -66,27 +68,22 @@ public class Pages {
 	// all the pages are initialized with the driver object
 
 	public Pages(WebDriver driver) {
-		dashboardPage= new DashboardPage(driver);
+
+		// initializing driver for dashboard page
+		dashboardPage = new DashboardPage(driver);
 		PageFactory.initElements(driver, dashboardPage);
+
 		apolloproductsPage = new ApolloProductsPage(driver);
+		PageFactory.initElements(driver, apolloproductsPage);
+
 		buyMedicineCartPage = new BuyMedicineCartPage(driver);
+		PageFactory.initElements(driver, buyMedicineCartPage);
+
 		buyMedicinePage = new BuyMedicinePage(driver);
+		PageFactory.initElements(driver, buyMedicinePage);
+
 		voliniPage = new VoliniPage(driver);
-		// labtest page driver initialization
-		labTestPage = new LabTestPage(driver);
-		PageFactory.initElements(driver, labTestPage);
-
-		// upload_prescription page driver initialization
-		bookByPrescriptionPage = new UploadPrescriptionPage(driver);
-		PageFactory.initElements(driver, bookByPrescriptionPage);
-
-		// radiology page driver initialization
-		radiologyPage = new RadiologyPage(driver);
-		PageFactory.initElements(driver, radiologyPage);
-
-		// orders page driver initialization
-		myOrderPage = new MyOrderPage(driver);
-		PageFactory.initElements(driver, myOrderPage);
+		PageFactory.initElements(driver, voliniPage);
 
 		// SearchDocter
 		SearchDocter = new SearchDoctorPage(driver);
@@ -103,8 +100,8 @@ public class Pages {
 		// Healthtool
 		HeartToolPage = new HealthtoolPage(driver);
 		PageFactory.initElements(driver, HeartToolPage);
-		//Negative
-		NegativePage=new NegativeScenario(driver);
+		// Negative
+		NegativePage = new NegativeScenario(driver);
 		PageFactory.initElements(driver, NegativePage);
 
 		healthInsurancePage = new HealthInsurancePage(driver);
@@ -115,7 +112,7 @@ public class Pages {
 
 		manageFamilyPage = new ManageFamilyPage(driver);
 		PageFactory.initElements(driver, manageFamilyPage);
-		
+
 		myappointmentsPage = new MyAppointmentsPage(driver);
 		PageFactory.initElements(driver, myappointmentsPage);
 
@@ -130,22 +127,30 @@ public class Pages {
 
 		logoutPage = new LogoutPage(driver);
 		PageFactory.initElements(driver, logoutPage);
-		
-		healthInsurance_PolicyReview=new HealthInsurance_PolicyReview(driver);
-		PageFactory.initElements(driver, healthInsurance_PolicyReview);
-		
-		healthInsurance_InsuranceForm =new HealthInsurance_InsuranceForm(driver);
-		PageFactory.initElements(driver, healthInsurance_InsuranceForm);
-		
-		
-		
-		
 
-		
-		PageFactory.initElements(driver, apolloproductsPage);
-		PageFactory.initElements(driver, buyMedicineCartPage);
-		PageFactory.initElements(driver, buyMedicinePage);
-		PageFactory.initElements(driver, voliniPage);
+		healthInsurance_PolicyReview = new HealthInsurance_PolicyReview(driver);
+		PageFactory.initElements(driver, healthInsurance_PolicyReview);
+
+		healthInsurance_InsuranceForm = new HealthInsurance_InsuranceForm(driver);
+		PageFactory.initElements(driver, healthInsurance_InsuranceForm);
+
+		// ====== LABTEST MODULE PAGES ======
+
+		// labtest page driver initialization
+		labTestPage = new LabTestPage(driver);
+		PageFactory.initElements(driver, labTestPage);
+
+		// upload_prescription page driver initialization
+		bookByPrescriptionPage = new UploadPrescriptionPage(driver);
+		PageFactory.initElements(driver, bookByPrescriptionPage);
+
+		// radiology page driver initialization
+		radiologyPage = new RadiologyPage(driver);
+		PageFactory.initElements(driver, radiologyPage);
+
+		// orders page driver initialization
+		myOrderPage = new MyOrderPage(driver);
+		PageFactory.initElements(driver, myOrderPage);
 
 		// search results page driver initialization
 		searchResultPage = new SearchResultPage(driver);
@@ -162,6 +167,6 @@ public class Pages {
 		// test cart page driver initialization
 		testCartPage = new TestCartPage(driver);
 		PageFactory.initElements(driver, testCartPage);
-		
+
 	}
 }
