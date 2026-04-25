@@ -6,8 +6,6 @@ import java.util.Properties;
 
 public class ReaderUtilities {
 
-	// file utlitility
-
 	// read
 	public String getPropertyKeyValue(String key) throws IOException {
 		FileInputStream fs = new FileInputStream("./src/test/resources/Reader/common.properties");

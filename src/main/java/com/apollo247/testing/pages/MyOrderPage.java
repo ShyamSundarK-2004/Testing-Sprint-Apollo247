@@ -40,7 +40,7 @@ public class MyOrderPage {
 	}
 	// ====== Business Logic ======
 
-	public String getCurrentUrl(String url) {
+	public String getCurrentPageUrl(String url) {
 		utilities.waitUntilUrlContains(15L, url);
 		return utilities.fetchApplicationURL();
 	}

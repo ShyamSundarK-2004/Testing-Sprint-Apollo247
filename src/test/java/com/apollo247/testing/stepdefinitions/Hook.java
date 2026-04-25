@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 
 import com.apollo247.testing.utilities.BaseClass;
 import com.apollo247.testing.utilities.ExtendsReportsUtilities;
@@ -23,7 +24,7 @@ public class Hook extends WebdriverUtility {
 	private BaseClass b;
 	WebDriver Basedriver;
 
-	// Constructor Injection → gets shared BaseClass instance
+	// Constructor Injection gets shared BaseClass instance
 	public Hook(BaseClass b) {
 		this.b = b;
 	}
@@ -35,33 +36,38 @@ public class Hook extends WebdriverUtility {
 
 		// Read browser from properties file
 		String browser = readerUtil.getPropertyKeyValue("browser");
+		// String serverUrl = readerUtil.getPropertyKeyValue("serverUrl");
 
 		if (browser.equalsIgnoreCase("chrome")) {
+			// launching browsers in selenium grid
+			ChromeOptions chromeOptions = new ChromeOptions();
+			chromeOptions.addArguments("--headless=new");
+			// creating remotewebdriver to handle all browsers
+			// Basedriver = new RemoteWebDriver(new URL(serverUrl), chromeOptions);
 
-			// Configure Chrome options (Headless mode for faster execution)
-			ChromeOptions options = new ChromeOptions();
-			options.addArguments("--headless=new");
-
-			Basedriver = new ChromeDriver(options);
+			Basedriver = new ChromeDriver(chromeOptions);
 
 		} else if (browser.equalsIgnoreCase("edge")) {
+			EdgeOptions edgeOptions = new EdgeOptions();
+			edgeOptions.addArguments("--headless=new");
+			// creating remotewebdriver to handle all browsers
+			// Basedriver = new RemoteWebDriver(new URL(serverUrl), edgeOptions);
 
-			// Launch Edge browser
-			Basedriver = new EdgeDriver();
+			Basedriver = new EdgeDriver(edgeOptions);
 
 		} else {
 			throw new RuntimeException("Invalid browser: " + browser);
 		}
 
-		// Store driver in BaseClass (shared across steps)
+		// Store driver in BaseClass
 		b.setDriver(Basedriver);
 
 		// WebDriver common setup
 		initializeDriver(b.getDriver());
 		configMaximizeBrowser();
-		waitForElements(60);
+		waitForElements(70);
 
-		// Manage session (login once, reuse across domains)
+		// Manage session
 		SessionManager.ManageSession(b.getDriver());
 
 		// Initialize all page objects
@@ -71,7 +77,7 @@ public class Hook extends WebdriverUtility {
 		// Close any popup if present on dashboard
 		pages.dashboardPage.closeDomPopup();
 
-		// Create new test in Extent Report (Scenario level)
+		// Create new test in Extent Report for each scenario
 		ExtendsReportsUtilities.createTest(scenario.getName());
 	}
 
@@ -80,18 +86,17 @@ public class Hook extends WebdriverUtility {
 
 		try {
 
-			// If step fails → capture screenshot + log fail
+			// Scenario fails
 			if (scenario.isFailed()) {
 
 				String path = new TakeScreenShotUtility().takeScreenShot(b.getDriver(), scenario.getName());
-
+				// capture screenshot and log fail
 				ExtendsReportsUtilities.fail("Step Failed");
 				ExtendsReportsUtilities.attachScreenshot(path);
 
 			} else {
-
-				// If step passes → log success
-				ExtendsReportsUtilities.pass("Step Passed");
+				// step passes
+				ExtendsReportsUtilities.pass("Step executed successfully");
 			}
 
 		} catch (Exception e) {
@@ -102,10 +107,10 @@ public class Hook extends WebdriverUtility {
 	@After
 	public void tearDown() {
 
-		// Flush Extent report (write results to file)
+		// Flush Extent report
 		ExtendsReportsUtilities.flushReport();
 
-		// Close browser and cleanup
+		// Close browser and cleanup driver instance
 		quitBroswerWindow();
 		b.unload();
 	}

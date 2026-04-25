@@ -65,16 +65,6 @@ public class TestPage {
 
 	// ====== Business Logics ======
 
-//	public void clickOnAddToCart() {
-//		try {
-//			utilities.waitUntilElementIsCLickable(15L, getNeedAdviceBanner()).click();
-//			jsUtil.jsScrollIntoView(getAddAndProceedToCartBtn());
-//		} catch (Exception e) {
-//		}
-//		utilities.waitUntilTextToBePresentInElement(30L, getAddAndProceedToCartBtn(), "Add");
-//		getAddAndProceedToCartBtn().click();
-//	}
-
 	public void clickOnAddToCart() {
 
 		try {

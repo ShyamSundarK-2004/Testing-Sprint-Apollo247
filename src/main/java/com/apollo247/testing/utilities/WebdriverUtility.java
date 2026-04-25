@@ -145,7 +145,6 @@ public class WebdriverUtility {
 	public void waitUntilTextToBePresentInElement(long timeInSeconds, WebElement element, String text) {
 		wait = new WebDriverWait(driver, Duration.ofSeconds(timeInSeconds));
 		wait.until((ExpectedConditions.textToBePresentInElement(element, text)));
-
 	}
 
 	// popups

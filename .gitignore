@@ -11,6 +11,7 @@ test-output/
 .classpath
 .project
 .settings/
+.metadata/
 
 # Selenium Generated Files
 Reports/
