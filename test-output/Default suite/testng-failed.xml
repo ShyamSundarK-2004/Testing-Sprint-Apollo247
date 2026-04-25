@@ -7,7 +7,7 @@
         <methods>
           <include name="setUpClass"/>
           <include name="tearDownClass"/>
-          <include name="runScenario" invocation-numbers="1 2 4 6"/>
+          <include name="runScenario" invocation-numbers="0"/>
         </methods>
       </class> <!-- com.apollo247.testing.runner.LabTest_RunnerIO -->
     </classes>

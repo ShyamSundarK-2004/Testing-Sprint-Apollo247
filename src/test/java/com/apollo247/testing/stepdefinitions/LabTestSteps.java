@@ -108,14 +108,12 @@ public class LabTestSteps {
 
 	// ================= INVALID PRESCRIPTION UPLOAD FLOW =================
 
-	@Then("verify invalid file message displayed and click on ok")
-	public void verify_invalid_file_message_displayed_and_click_on_ok() {
-
+	@When("User uploads invalid prescription")
+	public void user_uploads_invalid_prescription() {
 		String path = "C:\\Users\\Shyam Sundar\\Documents\\prescription.webp";
 
 		// Upload invalid file
 		b.getPages().bookByPrescriptionPage.uploadFile(path);
-
 	}
 
 	@Then("verify wrong file uploaded popup shown")
@@ -184,7 +182,7 @@ public class LabTestSteps {
 
 		b.getPages().labTestPage.clickOnViewReportInMyOrder();
 
-		String url = b.getPages().myOrderPage.getCurrentUrl("orders");
+		String url = b.getPages().myOrderPage.getCurrentPageUrl("orders");
 
 		// Validate page
 		assertTrue(url.contains("orders"), "Not in MyorderPage");
@@ -274,7 +272,7 @@ public class LabTestSteps {
 
 	@Then("Verify payment page is displayed")
 	public void verify_payment_page_is_displayed() {
-		String url = b.getPages().testCartPage.getCurrentUrl();
+		String url = b.getPages().testCartPage.getCurrentPageUrl();
 		assertTrue(url.contains("payments"), "Payment page is not displayed");
 	}
 

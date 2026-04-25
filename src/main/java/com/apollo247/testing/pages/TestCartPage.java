@@ -60,7 +60,7 @@ public class TestCartPage {
 		getProceedToPay().click();
 	}
 
-	public String getCurrentUrl() {
+	public String getCurrentPageUrl() {
 		utilities.waitUntilUrlContains(15L, "payments");
 		return utilities.fetchApplicationURL();
 	}

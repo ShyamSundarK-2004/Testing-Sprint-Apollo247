@@ -145,6 +145,7 @@ public class RadiologyPage {
 	}
 
 	public String getCurrentPageUrl() {
+		utilities.waitUntilUrlContains(20L, "radiology");
 		return utilities.fetchApplicationURL();
 	}
 

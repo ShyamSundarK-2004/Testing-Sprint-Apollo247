@@ -9,37 +9,37 @@ public class ActionUtilities {
 
 	private Actions action;
 
-	// ✅ constructor (VERY IMPORTANT)
+	// constructor (VERY IMPORTANT)
 	public ActionUtilities(WebDriver driver) {
 		this.action = new Actions(driver);
 	}
 
-	// 🔥 Pause action (must perform)
+	// Pause action (must perform)
 	public void pauseOnAction(long timeInMillis) {
 		action.pause(timeInMillis).perform();
 	}
 
-	// 🔥 Click using Actions
+	// Click using Actions
 	public void clickOnElement(WebElement element) {
 		action.moveToElement(element).click().perform();
 	}
 
-	// 🔥 SendKeys using Actions
+	// SendKeys using Actions
 	public void sendKeys(WebElement element, String value) {
 		action.moveToElement(element).click().sendKeys(value).perform();
 	}
 
-	// 🔥 Press ESC (IMPORTANT for your case)
+	// Press ESC (IMPORTANT for your case)
 	public void pressEscape() {
 		action.sendKeys(Keys.ESCAPE).perform();
 	}
 
-	// 🔥 Click on page (to remove overlay)
+	// Click on page (to remove overlay)
 	public void clickOnPage() {
 		action.moveByOffset(0, 0).click().perform();
 	}
 
-	// 🔥 Navigate dropdown using keyboard
+	// Navigate dropdown using keyboard
 	public void navigateDownDropdown(WebElement element, int count) {
 		action.moveToElement(element).click().perform();
 
@@ -50,7 +50,7 @@ public class ActionUtilities {
 		action.sendKeys(Keys.ENTER).perform();
 	}
 
-	// 🔥 Hover
+	// Hover
 	public void hoverOnElement(WebElement element) {
 		action.moveToElement(element).perform();
 	}

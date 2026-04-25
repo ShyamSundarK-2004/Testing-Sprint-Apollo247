@@ -32,7 +32,7 @@ public class ExtendsReportsUtilities {
 			extent = new ExtentReports();
 			extent.attachReporter(spark);
 
-			extent.setSystemInfo("Project", "Apollo247 Automation");
+			extent.setSystemInfo("Project", "Apollo247 Automation Testing");
 			extent.setSystemInfo("Team", "QA Team");
 			extent.setSystemInfo("Executed By", System.getProperty("user.name"));
 			extent.setSystemInfo("Environment", "QA");
@@ -48,7 +48,7 @@ public class ExtendsReportsUtilities {
 		ExtentTest test = getReportInstance().createTest(scenarioName);
 		scenarioTest.set(test);
 
-		// clear previous step (important)
+		// clear previous step
 		stepNode.set(null);
 	}
 
