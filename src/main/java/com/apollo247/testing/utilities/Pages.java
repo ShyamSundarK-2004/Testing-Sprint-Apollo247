@@ -1,12 +1,15 @@
 package com.apollo247.testing.utilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
+
 import com.apollo247.testing.pages.ApolloProductsPage;
 import com.apollo247.testing.pages.BuyMedicineCartPage;
 import com.apollo247.testing.pages.BuyMedicinePage;
 import com.apollo247.testing.pages.DashboardPage;
 import com.apollo247.testing.pages.HealthInsurancePage;
 import com.apollo247.testing.pages.HealthInsuranceProductListings;
+import com.apollo247.testing.pages.HealthInsurance_InsuranceForm;
+import com.apollo247.testing.pages.HealthInsurance_PolicyReview;
 import com.apollo247.testing.pages.HealthtoolPage;
 import com.apollo247.testing.pages.LabTestPage;
 import com.apollo247.testing.pages.LocationPage;
@@ -56,6 +59,12 @@ public class Pages {
 	public LocationPage LocationDocter;
 	public HealthtoolPage HeartToolPage;
 	public NegativeScenario NegativePage;
+
+	public HealthInsurance_PolicyReview healthInsurance_PolicyReview;
+	public HealthInsurance_InsuranceForm healthInsurance_InsuranceForm;
+
+	// all the pages are initialized with the driver object
+
 	public Pages(WebDriver driver) {
 		dashboardPage= new DashboardPage(driver);
 		PageFactory.initElements(driver, dashboardPage);
@@ -121,6 +130,16 @@ public class Pages {
 
 		logoutPage = new LogoutPage(driver);
 		PageFactory.initElements(driver, logoutPage);
+		
+		healthInsurance_PolicyReview=new HealthInsurance_PolicyReview(driver);
+		PageFactory.initElements(driver, healthInsurance_PolicyReview);
+		
+		healthInsurance_InsuranceForm =new HealthInsurance_InsuranceForm(driver);
+		PageFactory.initElements(driver, healthInsurance_InsuranceForm);
+		
+		
+		
+		
 
 		
 		PageFactory.initElements(driver, apolloproductsPage);
