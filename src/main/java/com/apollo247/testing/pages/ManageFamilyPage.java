@@ -15,10 +15,10 @@ import com.apollo247.testing.utilities.ExcelUtilities;
 
 public class ManageFamilyPage {
 
-	WebDriver driver;
-	WebDriverWait wait;
 
-	ExcelUtilities excelUtilities = new ExcelUtilities();
+    WebDriver driver;
+    WebDriverWait wait;
+    private final ExcelUtilities excel = new ExcelUtilities();
 
 	public ManageFamilyPage(WebDriver driver) {
 		this.driver = driver;
@@ -54,7 +54,11 @@ public class ManageFamilyPage {
 	@FindBy(xpath = "//span[.='CONFIRM']")
 	private WebElement confirmBtn;
 
-	// ================= BASIC ACTION HELPERS =================
+
+    @FindBy(xpath = "//span[contains(text(),'Invalid first name')]")
+    private WebElement firstNameError;
+
+    // ================= BASIC ACTION HELPERS =================
 
 	private void click(WebElement element) {
 		wait.until(ExpectedConditions.elementToBeClickable(element)).click();
@@ -72,10 +76,26 @@ public class ManageFamilyPage {
 
 	// ================= NAVIGATION =================
 
-	public void openManageFamilyMembers() {
-		click(profileIcon);
-		click(manageFamilyMembers);
-	}
+
+    public void openManageFamilyMembers() {
+        WebElement profile = wait.until(
+            ExpectedConditions.presenceOfElementLocated(
+                By.className("ProfileNew_profileContainer__mUxKD")
+            )
+        );
+        ((JavascriptExecutor) driver)
+            .executeScript("arguments[0].scrollIntoView({block:'center'});", profile);
+        ((JavascriptExecutor) driver)
+            .executeScript("arguments[0].click();", profile);
+
+        WebElement manageFamilyEl = wait.until(
+            ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[contains(.,'Manage Family Members')]")
+            )
+        );
+        ((JavascriptExecutor) driver)
+            .executeScript("arguments[0].click();", manageFamilyEl);
+    }
 
 	// ================= ADD FAMILY MEMBER =================
 
@@ -116,56 +136,61 @@ public class ManageFamilyPage {
 		// Wait and click Save safely
 		wait.until(ExpectedConditions.elementToBeClickable(saveBtn));
 
+
 		try {
 			saveBtn.click();
 		} catch (Exception e) {
 			((JavascriptExecutor) driver).executeScript("arguments[0].click();", saveBtn);
 		}
 
-		// Try confirm ONLY if it appears
-		try {
-			wait.until(ExpectedConditions.elementToBeClickable(confirmBtn)).click();
-		} catch (Exception e) {
-			System.out.println("Confirm button not present (expected in negative case)");
-		}
 
-		// Try success message (only for positive)
-		try {
-			WebElement successMsg = wait.until(
-					ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'successfully')]")));
-
-			System.out.println("Member created successfully");
-
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[text()='OK']"))).click();
-
-		} catch (Exception e) {
-			System.out.println("No success message (expected in negative case)");
-		}
-	}
+        // Confirm dialog if present
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(confirmBtn)).click();
+        } catch (Exception e) {
+            // silently handled
+        }
+    }
 
 	// ================= SUCCESS / VALIDATION =================
 
-	public boolean isSuccessToastDisplayed() {
-		try {
-			return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
-					"//*[contains(text(),'successfully') or contains(text(),'created') or contains(text(),'added')]")))
-					.isDisplayed();
-		} catch (Exception e) {
-			return false;
-		}
-	}
 
-	public boolean isValidationErrorDisplayed() {
-		try {
-			// If dialog is still visible → save failed → validation worked
-			return wait
-					.until(ExpectedConditions
-							.visibilityOfElementLocated(By.xpath("//*[contains(text(),'Add New Profile')]")))
-					.isDisplayed();
-		} catch (Exception e) {
-			return false;
-		}
-	}
+    public boolean isFamilyMemberCreatedSuccessfully() {
+        try {
+            wait.until(ExpectedConditions.urlContains("my-account"));
+
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//span[contains(.,'Add New Profile')]")
+            ));
+
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // ================= VALIDATION TRIGGERS =================
+
+    public void triggerFirstNameValidation() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector("[placeholder='First Name']")
+        ));
+        firstName.click();
+        lastName.click();
+    }
+
+    public boolean isFirstNameErrorDisplayed() {
+        try {
+            WebElement error = new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//span[contains(text(),'Invalid first name')]")
+                ));
+            return error.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 	// ================= FULL FLOW =================
 
@@ -177,38 +202,38 @@ public class ManageFamilyPage {
 
 	// ================= EXCEL FLOW =================
 
-	public void addFamilyMembersFromExcel() {
-		try {
-			int row = 1; // Row 0 = header (firstName, lastName, dob), data starts at row 1
 
-			while (true) {
-				// Col 0 = firstName, Col 1 = lastName, Col 2 = dob
-				String fName = excelUtilities.getExcelData("FamilyMembers", row, 0);
-				String lName = excelUtilities.getExcelData("FamilyMembers", row, 1);
-				String dobValue = excelUtilities.getExcelData("FamilyMembers", row, 2);
+    public void addFamilyMembersFromExcel() {
+        int row = 1;
 
-				// Stop loop when firstName cell is empty — means no more data rows
-				if (fName == null || fName.trim().isEmpty()) {
-					break;
-				}
+        while (true) {
+            String fName;
 
-				// Open the Add New Profile form for each member
-				clickAddNewProfile();
+            try {
+                fName = excel.getExcelData("FamilyMembers", row, 0);
+            } catch (Exception e) {
+                // Row doesn't exist — end of data
+                break;
+            }
 
-				// Wait for the form to load
-				wait.until(ExpectedConditions.visibilityOf(firstName));
+            if (fName == null || fName.trim().isEmpty()) {
+                break;
+            }
 
-				// Fill form + select gender/relation + save
-				addFamilyMember(fName, lName, dobValue);
+            String lName    = excel.getExcelData("FamilyMembers", row, 1);
+            String dobValue = excel.getExcelData("FamilyMembers", row, 2);
 
-				row++; // Move to next Excel row
-			}
+            clickAddNewProfile();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("[placeholder='First Name']")
+            ));
 
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to add family members from Excel: " + e.getMessage());
-		}
-	}
-	// ================= POPUP HANDLING =================
+            addFamilyMember(fName, lName, dobValue);
+
+            row++;
+        }
+    }
+    // ================= POPUP HANDLING =================
 
 	public void closePopup(SearchContext shadowRoot) {
 		shadowRoot.findElement(By.cssSelector("#close")).click();

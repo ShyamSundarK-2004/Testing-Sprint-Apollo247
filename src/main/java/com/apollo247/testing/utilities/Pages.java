@@ -1,5 +1,4 @@
 package com.apollo247.testing.utilities;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
@@ -9,6 +8,8 @@ import com.apollo247.testing.pages.BuyMedicinePage;
 import com.apollo247.testing.pages.DashboardPage;
 import com.apollo247.testing.pages.HealthInsurancePage;
 import com.apollo247.testing.pages.HealthInsuranceProductListings;
+import com.apollo247.testing.pages.HealthInsurance_InsuranceForm;
+import com.apollo247.testing.pages.HealthInsurance_PolicyReview;
 import com.apollo247.testing.pages.HealthtoolPage;
 import com.apollo247.testing.pages.LabTestPage;
 import com.apollo247.testing.pages.LocationPage;
@@ -19,6 +20,7 @@ import com.apollo247.testing.pages.MyAppointmentPage;
 import com.apollo247.testing.pages.MyAppointmentsPage;
 import com.apollo247.testing.pages.MyOrderPage;
 import com.apollo247.testing.pages.NeedHelpPage;
+import com.apollo247.testing.pages.NegativeScenario;
 import com.apollo247.testing.pages.NotificationsPage;
 import com.apollo247.testing.pages.PatientDetailsPage;
 import com.apollo247.testing.pages.RadiologyPage;
@@ -29,9 +31,7 @@ import com.apollo247.testing.pages.TestPage;
 import com.apollo247.testing.pages.UploadPrescriptionPage;
 import com.apollo247.testing.pages.VoliniPage;
 import com.apollo247.testing.pages.filterDocterPage;
-
 public class Pages {
-
 	public DashboardPage dashboardPage;
 	public LabTestPage labTestPage;
 	public UploadPrescriptionPage bookByPrescriptionPage;
@@ -41,15 +41,8 @@ public class Pages {
 	public TestPage testPage;
 	public PatientDetailsPage patientDetailsPage;
 	public TestCartPage testCartPage;
-
-	public SearchDoctorPage Searchdocter;
-	public filterDocterPage FilterDocter;
-	public MyAppointmentPage AppointmentDocter;
-	public LocationPage LocationDocter;
-	public HealthtoolPage HeartToolPage;
 	public HealthInsurancePage healthInsurancePage;
 	public HealthInsuranceProductListings healthInsuranceProductListings;
-
 	public ManageFamilyPage manageFamilyPage;
 	public MyAppointmentsPage myappointmentsPage;
 	public MembershipsPage membershipsPage;
@@ -60,10 +53,21 @@ public class Pages {
 	public BuyMedicineCartPage buyMedicineCartPage;
 	public BuyMedicinePage buyMedicinePage;
 	public VoliniPage voliniPage;
+	public SearchDoctorPage SearchDocter;
+	public filterDocterPage FilterDocter;
+	public MyAppointmentPage AppointmentDocter;
+	public LocationPage LocationDocter;
+	public HealthtoolPage HeartToolPage;
+	public NegativeScenario NegativePage;
+
+	public HealthInsurance_PolicyReview healthInsurance_PolicyReview;
+	public HealthInsurance_InsuranceForm healthInsurance_InsuranceForm;
+
+	// all the pages are initialized with the driver object
 
 	public Pages(WebDriver driver) {
-
-		dashboardPage = new DashboardPage(driver);
+		dashboardPage= new DashboardPage(driver);
+		PageFactory.initElements(driver, dashboardPage);
 		apolloproductsPage = new ApolloProductsPage(driver);
 		buyMedicineCartPage = new BuyMedicineCartPage(driver);
 		buyMedicinePage = new BuyMedicinePage(driver);
@@ -85,8 +89,8 @@ public class Pages {
 		PageFactory.initElements(driver, myOrderPage);
 
 		// SearchDocter
-		Searchdocter = new SearchDoctorPage(driver);
-		PageFactory.initElements(driver, Searchdocter);
+		SearchDocter = new SearchDoctorPage(driver);
+		PageFactory.initElements(driver, SearchDocter);
 		// filter
 		FilterDocter = new filterDocterPage(driver);
 		PageFactory.initElements(driver, FilterDocter);
@@ -99,6 +103,9 @@ public class Pages {
 		// Healthtool
 		HeartToolPage = new HealthtoolPage(driver);
 		PageFactory.initElements(driver, HeartToolPage);
+		//Negative
+		NegativePage=new NegativeScenario(driver);
+		PageFactory.initElements(driver, NegativePage);
 
 		healthInsurancePage = new HealthInsurancePage(driver);
 		PageFactory.initElements(driver, healthInsurancePage);
@@ -108,6 +115,7 @@ public class Pages {
 
 		manageFamilyPage = new ManageFamilyPage(driver);
 		PageFactory.initElements(driver, manageFamilyPage);
+		
 		myappointmentsPage = new MyAppointmentsPage(driver);
 		PageFactory.initElements(driver, myappointmentsPage);
 
@@ -122,8 +130,18 @@ public class Pages {
 
 		logoutPage = new LogoutPage(driver);
 		PageFactory.initElements(driver, logoutPage);
+		
+		healthInsurance_PolicyReview=new HealthInsurance_PolicyReview(driver);
+		PageFactory.initElements(driver, healthInsurance_PolicyReview);
+		
+		healthInsurance_InsuranceForm =new HealthInsurance_InsuranceForm(driver);
+		PageFactory.initElements(driver, healthInsurance_InsuranceForm);
+		
+		
+		
+		
 
-		PageFactory.initElements(driver, dashboardPage);
+		
 		PageFactory.initElements(driver, apolloproductsPage);
 		PageFactory.initElements(driver, buyMedicineCartPage);
 		PageFactory.initElements(driver, buyMedicinePage);
@@ -144,5 +162,6 @@ public class Pages {
 		// test cart page driver initialization
 		testCartPage = new TestCartPage(driver);
 		PageFactory.initElements(driver, testCartPage);
+		
 	}
 }

@@ -11,8 +11,8 @@ import io.cucumber.testng.CucumberOptions;
     plugin = {
         "pretty",
         "html:Reports/account-module-report.html",
-        "json:Reports/account-module-report.json"
-
+        "json:Reports/account-module-report.json",
+        "com.apollo247.testing.utilities.ExtentCucumberListener"
     },
     monochrome = true
 )
