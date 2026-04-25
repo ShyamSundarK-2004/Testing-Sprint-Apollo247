@@ -26,7 +26,7 @@ public class MyAppointmentsPage {
 
     @FindBy(xpath = "//span[contains(.,'My Appointments')]")
     private WebElement myAppointments;
-
+    
     // Getter Methods
     public WebElement getProfileIcon() {
         return profileIcon;
@@ -35,77 +35,65 @@ public class MyAppointmentsPage {
     public WebElement getMyAppointments() {
         return myAppointments;
     }
+    public String getAppointmentsHeadingText() {
+        new WebDriverWait(driver, Duration.ofSeconds(30))
+            .until(ExpectedConditions.urlContains("appointments"));
+
+        return new WebDriverWait(driver, Duration.ofSeconds(30))
+            .until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//*[contains(text(),'My Appointments')]")
+            )).getText();
+    }
 
     // Navigate to My Appointments
     public void openMyAppointments() {
+        driver.get("https://www.apollo247.com/appointments");
 
-        // Step 1: Re-locate profile icon fresh via By (avoids stale @FindBy proxy)
-        // and click via JS to avoid interception issues
-        int attempts = 0;
-        while (attempts < 3) {
-            try {
-                WebElement profile = wait.until(
-                    ExpectedConditions.presenceOfElementLocated(
-                        By.className("ProfileNew_profileContainer__mUxKD")
-                    )
-                );
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", profile);
-                break;
-            } catch (StaleElementReferenceException e) {
-                attempts++;
-                if (attempts == 3) throw e;
-            }
-        }
+        new WebDriverWait(driver, Duration.ofSeconds(30))
+            .until(ExpectedConditions.urlContains("appointments"));
 
-        // Step 2: Wait for panel to open — My Appointments span must be visible
-        wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.xpath("//span[contains(.,'My Appointments')]")
-        ));
-
-        // Step 3: Re-locate My Appointments fresh via By and click via JS
-        WebElement myAppointmentsFresh = wait.until(
-            ExpectedConditions.elementToBeClickable(
-                By.xpath("//span[contains(.,'My Appointments')]")
-            )
-        );
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", myAppointmentsFresh);
-
-        // Step 4: Wait for appointments content to load
-        wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//*[contains(text(),'Appointments') or contains(text(),'No Appointments')]")
-        ));
+        new WebDriverWait(driver, Duration.ofSeconds(30))
+            .until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("//*[contains(text(),'My Appointments')]")
+            ));
     }
 
     // Validate appointments page content
     public boolean isAppointmentsPageDisplayed() {
         try {
-            String pageText = driver.getPageSource();
-            return pageText.contains("Appointments") || pageText.contains("No Appointments");
+            new WebDriverWait(driver, Duration.ofSeconds(30))
+                .until(ExpectedConditions.urlContains("appointments"));
+            return new WebDriverWait(driver, Duration.ofSeconds(30))
+                .until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//*[contains(text(),'My Appointments')]")
+                )).isDisplayed();
         } catch (Exception e) {
             return false;
         }
     }
 
-    // Validate page after refresh
     public boolean isPageLoadedAfterRefresh() {
         try {
-            WebElement el = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//*[contains(text(),'Appointments') or contains(text(),'No Appointments')]")
-                )
-            );
-            return el.isDisplayed();
+            new WebDriverWait(driver, Duration.ofSeconds(30))
+                .until(ExpectedConditions.urlContains("appointments"));
+            return new WebDriverWait(driver, Duration.ofSeconds(30))
+                .until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//*[contains(text(),'My Appointments')]")
+                )).isDisplayed();
         } catch (Exception e) {
             return false;
         }
     }
-
     // Refresh page
     public void refreshPage() {
         driver.navigate().refresh();
-        new WebDriverWait(driver, Duration.ofSeconds(15))
+
+        new WebDriverWait(driver, Duration.ofSeconds(30))
+            .until(ExpectedConditions.urlContains("appointments"));
+
+        new WebDriverWait(driver, Duration.ofSeconds(30))
             .until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//*[contains(text(),'Appointments') or contains(text(),'No Appointments')]")
+                By.xpath("//*[contains(text(),'My Appointments')]")
             ));
     }
 

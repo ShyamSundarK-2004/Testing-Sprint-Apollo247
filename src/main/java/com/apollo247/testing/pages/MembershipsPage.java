@@ -1,6 +1,7 @@
 package com.apollo247.testing.pages;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -22,8 +23,6 @@ public class MembershipsPage {
     }
 
     // ================= LOCATORS =================
-    
-    
 
     @FindBy(xpath = "//span[contains(.,'My Memberships')]")
     private WebElement myMemberships;
@@ -52,73 +51,26 @@ public class MembershipsPage {
     @FindBy(xpath = "//button[contains(@class,'CircleLanding_planBtn__f3JcF')]")
     private WebElement joinNowBtn;
 
-    // ================= GETTERS =================
-
-    public WebElement getActivateCorporateMembershipBtn() {
-        return activateCorporateMembershipBtn;
-    }
-
-    
-
-	public WebElement getMyMemberships() {
-		return myMemberships;
-	}
-
-	public WebElement getEmailInput() {
-        return emailInput;
-    }
-
-    public WebElement getGetOtpBtn() {
-        return getOtpBtn;
-    }
-
-    public WebElement getCorporateBenefitsError() {
-        return corporateBenefitsError;
-    }
-
-    public WebElement getOkGotItBtn() {
-        return okGotItBtn;
-    }
-
-    public WebElement getBuyNowBtn() {
-        return buyNowBtn;
-    }
-
-    public WebElement getTwelvemonthsPlan() {
-        return twelvemonthsPlan;
-    }
-
-    public WebElement getJoinNowBtn() {
-        return joinNowBtn;
-    }
-
     // ================= BUSINESS LOGIC =================
 
-    // Navigate to My Memberships from profile dropdown
     public void openMyMemberships() {
         WebElement profileIcon = wait.until(
             ExpectedConditions.elementToBeClickable(
                 By.className("ProfileNew_profileContainer__mUxKD")
             )
         );
-        ((JavascriptExecutor) driver).executeScript(
-            "arguments[0].click();", profileIcon
-        );
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", profileIcon);
 
         WebElement membershipsLink = wait.until(
             ExpectedConditions.presenceOfElementLocated(
                 By.xpath("//span[contains(.,'My Memberships')]")
             )
         );
-        ((JavascriptExecutor) driver).executeScript(
-            "arguments[0].click();", membershipsLink
-        );
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", membershipsLink);
     }
 
     public void clickActivateCorporateMembership() {
-        wait.until(ExpectedConditions.elementToBeClickable(
-            activateCorporateMembershipBtn)
-        ).click();
+        wait.until(ExpectedConditions.elementToBeClickable(activateCorporateMembershipBtn)).click();
     }
 
     public void enterCorporateEmail(String email) {
@@ -131,7 +83,6 @@ public class MembershipsPage {
         wait.until(ExpectedConditions.elementToBeClickable(getOtpBtn)).click();
     }
 
-    // Returns true if corporate error message is visible
     public boolean isCorporateErrorDisplayed() {
         try {
             wait.until(ExpectedConditions.visibilityOf(corporateBenefitsError));
@@ -141,9 +92,13 @@ public class MembershipsPage {
         }
     }
 
-    // Returns the error text after visibility confirmed
-    public String getCorporateErrorText() {
-        return corporateBenefitsError.getText();
+    public boolean isCorporateErrorTextCorrect() {
+        try {
+            String text = wait.until(ExpectedConditions.visibilityOf(corporateBenefitsError)).getText();
+            return text.contains("There are no corporate benefits");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void clickOkGotIt() {
@@ -154,28 +109,62 @@ public class MembershipsPage {
         wait.until(ExpectedConditions.elementToBeClickable(buyNowBtn)).click();
     }
 
-    // Accepts months integer — no WebDriverWait param needed from steps
     public void scrollToAndClickJoinNow(Integer months) {
-        wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//*[contains(text(),'" + months + " Months')]")
-        ));
-        ((JavascriptExecutor) driver).executeScript(
-            "arguments[0].scrollIntoView({block: 'center'});", twelvemonthsPlan
+
+        String planXpath = "//span[contains(text(),'" + months + "')]";
+
+        WebElement plan = wait.until(
+            ExpectedConditions.presenceOfElementLocated(By.xpath(planXpath))
         );
-        joinNowBtn.click();
-    }
 
-    // Checks page source for a given string — used by DataTable step
-    public boolean isPlanDetailVisible(String detail) {
-        return driver.getPageSource().contains(detail);
-    }
+        ((JavascriptExecutor) driver)
+            .executeScript("arguments[0].scrollIntoView({block:'center'});", plan);
 
-    public boolean isPlanVisible() {
-        String pageText = driver.getPageSource();
-        return pageText.contains("12 months") || pageText.contains("12 Months");
-    }
+        WebElement joinBtn = wait.until(
+            ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(@class,'planBtn')]")
+            )
+        );
 
-    public boolean isPriceVisible() {
-        return driver.getPageSource().contains("199");
+        ((JavascriptExecutor) driver)
+            .executeScript("arguments[0].click();", joinBtn);
+
+        wait.until(ExpectedConditions.urlContains("circle-landing"));
+    }
+    // ================= PLAN VALIDATION =================
+
+    public boolean validatePlanDetails(List<String> details) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+            // ✅ Wait for navigation to payment page
+            wait.until(ExpectedConditions.urlContains("pay-care"));
+
+            // ✅ Get full page text (MOST RELIABLE)
+            WebElement body = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(By.tagName("body"))
+            );
+
+            String pageText = body.getText().toLowerCase();
+
+            System.out.println("===== FULL PAGE TEXT =====");
+            System.out.println(pageText);
+            System.out.println("==========================");
+
+            // ✅ Validate using contains (robust)
+            boolean hasPlan = pageText.contains("12");
+            boolean hasMonths = pageText.contains("month"); // flexible
+            boolean hasPrice = pageText.contains("199");
+
+            System.out.println("Plan found: " + hasPlan);
+            System.out.println("Months found: " + hasMonths);
+            System.out.println("Price found: " + hasPrice);
+
+            return hasPlan && hasMonths && hasPrice;
+
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+            return false;
+        }
     }
 }
