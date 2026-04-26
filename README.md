@@ -23,7 +23,7 @@
 - [Best Practices](#best-practices)
 - [Troubleshooting](#troubleshooting)
 - [Team](#team)
-- [Support & Contact](#support--contact)
+
 
 ---
 
@@ -44,7 +44,7 @@
 - **5 Modules** - Find Doctor, Health Insurance, Buy Medicine, Lab Tests, MyAccount
 - **40+ Scenarios** - Positive, negative, and end-to-end flows
 - **100+ Test Cases** - Comprehensive functional coverage
-- **Multi-browser** - Chrome, Edge support
+- **Multi-browser** - Chrome, Edge , Firefox support
 
 ---
 
@@ -153,7 +153,6 @@ mvn clean install -DskipTests
 # Edit: src/test/resources/config.properties
 
 # Update the following properties:
-app.url=https://staging.apollo247.com  # or production URL
 browser=chrome                          # chrome, firefox, safari, edge
 implicit.wait=10                        # seconds
 explicit.wait=15                        # seconds
@@ -254,8 +253,8 @@ Testing-Sprint-Apollo247/
 ├── 📄 pom.xml                                   # Maven configuration
 ├── 📄 testng.xml                                # TestNG runner configuration
 ├── 📄 README.md                                 # This file
-├── 📄 .gitignore                                # Git ignore rules
-└── 📄 CONTRIBUTING.md                           # Contribution guidelines
+└── 📄 .gitignore                                # Git ignore rules
+
 ```
 
 ### Directory Roles
@@ -340,17 +339,18 @@ Testing-Sprint-Apollo247/
 
 #### Supported Scenarios
 
-| Scenario             | Type     | Description                                                            |
-| -------------------- | -------- | ---------------------------------------------------------------------- |
-| Search Valid Test    | Positive | Search and display results for a valid lab test                        |
-| Search Invalid Test  | Negative | Handle search for an invalid or unavailable lab test                   |
-| Upload Prescription  | Positive | Upload a valid prescription for booking lab tests                      |
-| Invalid Prescription | Negative | Validate error handling for unsupported or invalid prescription upload |
-| Filter by Price      | Positive | Apply price filters to refine lab test search results                  |
-| Radiology Workflow   | Positive | Complete booking flow for radiology-related tests                      |
+| Scenario                | Type     | Description                                                               |
+| ----------------------- | -------- | ------------------------------------------------------------------------- |
+| Search Valid Test       | Positive | Verify that valid lab test input returns relevant search results          |
+| Search Invalid Test     | Negative | Verify that invalid input is handled gracefully with no results or errors |
+| Upload Prescription     | Positive | Validate successful upload of a valid prescription file for booking       |
+| Invalid Prescription    | Negative | Verify system shows error for unsupported or incorrect file formats       |
+| Radiology Workflow      | Positive | Validate complete radiology request flow with valid input details         |
+| Orders Filtering        | Positive | Verify orders are correctly filtered based on selected patient            |
+| End-to-End Booking Flow | Positive | Validate complete lab test booking journey from search to payment page    |
 
 
-#### Test Tags: `@labTest`, `@search`, `@prescription`, `@radiology`
+#### Test Tags: `@labTest`, `@search`, `@prescription`, `@radiology`,`@EndToEnd`
 
 ---
 
@@ -565,32 +565,6 @@ try { element.click(); } catch(Exception e) { }
 | **Roshini Ravikumar** | Buy Medicine |roshijay2004@gmail.com |
 | **Priyanka G** | MyAccount Management | priyankagajendran17@gmail.com|
 | **Swetha B** | Find Doctor |swethababupec@gmail.com|
-
----
-
-## Support & Contact
-
-### 📞 Support Channels
-
-- **Slack:** #automation-testing
-- **Email:** automation@apollo247.com
-- **Jira:** APOLLO-QA project
-- **Wiki:** [Internal Documentation](https://wiki.apollo247.com)
-
-### 🐛 Reporting Issues
-
-Create a Jira issue with:
-1. Clear title and description
-2. Steps to reproduce
-3. Expected vs actual result
-4. Screenshots/logs
-5. Environment details (browser, OS, environment)
-
----
-
-## License
-
-Proprietary to Apollo247 Health Services. Unauthorized reproduction prohibited.
 
 ---
 
