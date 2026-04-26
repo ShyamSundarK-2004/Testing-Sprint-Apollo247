@@ -161,7 +161,7 @@ public class LabTestSteps {
 			String hospital = row.get("hospital");
 			String testName = row.get("tests");
 			String date = row.get("date");
-			String filePath = row.get("filePath");
+			String filePath = System.getProperty("user.dir").concat(row.get("filePath").trim());
 
 			// Fill details
 			b.getPages().radiologyPage.closeRadiologyPopup();
@@ -210,7 +210,7 @@ public class LabTestSteps {
 	@When("User searches for a test and selects test {string}")
 	public void user_searches_for_a_test_and_selects_test(String testName) {
 		b.getPages().labTestPage.searchTest(testName);
-		b.getPages().searchResultPage.isResultDisplayed(testName);
+		assertTrue(b.getPages().searchResultPage.isResultDisplayed(testName), "Lab Test not found : " + testName);
 		b.getPages().searchResultPage.clickOnLabTest(testName);
 		b.getPages().labTestPage.closePopupIfPresent();
 	}

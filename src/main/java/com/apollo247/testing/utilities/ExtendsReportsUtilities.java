@@ -92,6 +92,15 @@ public class ExtendsReportsUtilities {
 		}
 	}
 
+	public static void skip(String message) {
+		ExtentTest node = stepNode.get();
+		if (node != null) {
+			node.skip(message);
+		} else {
+			getTest().skip(message);
+		}
+	}
+
 	public static void info(String message) {
 
 		ExtentTest node = stepNode.get();

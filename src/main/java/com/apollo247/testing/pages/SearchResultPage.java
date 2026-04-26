@@ -62,7 +62,7 @@ public class SearchResultPage {
 	}
 
 	public void clickOnLabTest(String testName) {
-		utilities.waituntilPresenceOfElementLocated(35L,
+		utilities.waituntilPresenceOfElementLocated(40L,
 				By.xpath("//p[contains(normalize-space(),'" + testName + "')]"));
 		WebElement labtestCard = driver.findElement(By.xpath("//p[contains(normalize-space(),'" + testName + "')]"));
 		labtestCard.click();

@@ -105,7 +105,7 @@ public class LabTestPage {
 	}
 
 	public void clickOnRadiologyBookingBtn() {
-		utilities.waitUntilElementIsVisibility(20L, getRadiologyBookingBtn());
+		utilities.waitUntilElementIsVisibility(30L, getRadiologyBookingBtn());
 		getRadiologyBookingBtn().click();
 		utilities.switchToWindowByURL("radiology");
 

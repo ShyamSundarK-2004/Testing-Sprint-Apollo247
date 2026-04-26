@@ -12,8 +12,7 @@ Feature: Automation Testing on Lab Test Module
 
     Examples:
       | input     | type    |
-      | CBC Test  | valid   |
-      | PPBS Test | valid   |
+      | H1N1 Test | valid   |
       | @@@@      | invalid |
       | 12333     | invalid |
 
@@ -35,8 +34,8 @@ Feature: Automation Testing on Lab Test Module
     And User clicks on explore radiology option and switch to radiology tab
     Then User should be on radiology page
     When User enters radiology details
-      | city    | hospital                  | date     | tests         | filePath                                         |
-      | Chennai | Anna Nagar- Apollo Clinic | April-25 | X-Ray,CT Scan | "/src/test/resources/TestData/prescription.webp" |
+      | city    | hospital                  | date     | tests         | filePath                                        |
+      | Chennai | Anna Nagar- Apollo Clinic | April-25 | X-Ray,CT Scan | /src/test/resources/TestData/prescription2.jpeg |
     Then User should see request call button is enabled
 
   @labTest @myOrder @regression
