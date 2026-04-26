@@ -130,7 +130,7 @@ public class search  {
 
 	@When("User click ChangeBtn to Change the patient and click proceed")
 	public void user_click_change_btn_to_change_the_patient_and_click_proceed() {
-		b.getPages().AppointmentDocter.ChangePatient();
+		b.getPages().AppointmentDoctor.ChangePatient();
 
 	}
 	@Then("User should see Book Appointment option")
@@ -261,5 +261,4 @@ public class search  {
 		    System.out.println("No doctors found message validated");
 		}
 
-
-}
+	}

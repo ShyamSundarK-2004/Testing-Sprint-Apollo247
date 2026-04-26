@@ -91,6 +91,7 @@ public class LabTestPage {
 	}
 
 	public String getCurrentPageUrl() {
+		utilities.waitUntilUrlContains(20L, "lab-tests");
 		return utilities.fetchApplicationURL();
 	}
 
