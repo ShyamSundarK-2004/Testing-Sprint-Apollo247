@@ -31,7 +31,7 @@ import com.apollo247.testing.pages.TestCartPage;
 import com.apollo247.testing.pages.TestPage;
 import com.apollo247.testing.pages.UploadPrescriptionPage;
 import com.apollo247.testing.pages.VoliniPage;
-import com.apollo247.testing.pages.filterDocterPage;
+import com.apollo247.testing.pages.filterDoctorPage;
 
 public class Pages {
 	public DashboardPage dashboardPage;
@@ -56,7 +56,7 @@ public class Pages {
 	public BuyMedicinePage buyMedicinePage;
 	public VoliniPage voliniPage;
 	public SearchDoctorPage SearchDocter;
-	public filterDocterPage FilterDocter;
+	public filterDoctorPage FilterDocter;
 	public MyAppointmentPage AppointmentDocter;
 	public LocationPage LocationDocter;
 	public HealthtoolPage HeartToolPage;
@@ -89,7 +89,7 @@ public class Pages {
 		SearchDocter = new SearchDoctorPage(driver);
 		PageFactory.initElements(driver, SearchDocter);
 		// filter
-		FilterDocter = new filterDocterPage(driver);
+		FilterDocter = new filterDoctorPage(driver);
 		PageFactory.initElements(driver, FilterDocter);
 		// Appointment
 		AppointmentDocter = new MyAppointmentPage(driver);

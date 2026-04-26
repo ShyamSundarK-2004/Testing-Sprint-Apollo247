@@ -6,7 +6,7 @@
 		<classes>
 			<class name="com.apollo247.testing.runner.LabTest_RunnerIO" />
 			<class name="com.apollo247.testing.runner.MyAccountRunner" />
-			<class name="com.apollo247.testing.runner.RunnerIO_Docter" />
+			<class name="com.apollo247.testing.runner.RunnerIO_Doctor" />
 			<class name="com.apollo247.testing.runner.BuyMedicineRunner" />
 			<class name="com.apollo247.testing.runner.HealthInsurance_TestRunner" />
 		</classes>
