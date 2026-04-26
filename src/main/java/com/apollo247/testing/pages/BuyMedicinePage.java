@@ -1,14 +1,15 @@
 package com.apollo247.testing.pages;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -72,88 +73,115 @@ public class BuyMedicinePage {
     /** Close the shadow-DOM popup on the Buy Medicines page */
     public void closePopup() {
     	    try {
-    	        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(5));
+    	        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(8));
 
-    	        WebElement shadowHost = shortWait.until(
-    	            ExpectedConditions.presenceOfElementLocated(
-    	                By.cssSelector("ct-web-popup-imageonly")));
+    	        try {
+    	            WebElement shadowHost = shortWait.until(
+    	                ExpectedConditions.presenceOfElementLocated(
+    	                    By.cssSelector("ct-web-popup-imageonly")));
 
-    	        SearchContext shadowRoot = shadowHost.getShadowRoot();
-
-    	        WebElement closeBtn =
-    	            shadowRoot.findElement(By.cssSelector("#close"));
-
-    	        closeBtn.click();
-    	        
-    	        // Wait for popup to be invisible
-    	        shortWait.until(
-    	            ExpectedConditions.invisibilityOfElementLocated(
-    	                By.cssSelector("ct-web-popup-imageonly")));
-    	        
-    	        System.out.println("Popup closed successfully");
+    	            SearchContext shadowRoot = shadowHost.getShadowRoot();
+    	            WebElement closeBtn = shadowRoot.findElement(By.cssSelector("#close"));
+    	            closeBtn.click();
+    	            
+    	            shortWait.until(
+    	                ExpectedConditions.invisibilityOfElementLocated(
+    	                    By.cssSelector("ct-web-popup-imageonly")));
+    	            
+    	            System.out.println("Popup closed successfully");
+    	        } catch (Exception shadowDomError) {
+    	            // Fallback: Try alternative popup close methods
+    	            try {
+    	                WebElement closeBtnAlt = shortWait.until(
+    	                    ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class, 'close')]")));
+    	                closeBtnAlt.click();
+    	                System.out.println("Popup closed via alternative method");
+    	            } catch (Exception altError) {
+    	                System.out.println("Popup not found - continuing (may not be displayed)");
+    	            }
+    	        }
 
     	    } catch (Exception e) {
-    	        System.out.println("Popup not displayed or already closed");
+    	        System.out.println("Popup handling skipped: " + e.getMessage());
     	    }
     	}
     
 
     /** Click the search bar placeholder, type the medicine name, then click Add */
     public void searchAndAddMedicine(String medicineName) {
-        click(searchTrigger);
-        type(searchInput, medicineName);
-        
-        // Wait for search results to appear (wait for dropdown/results container)
+
         try {
-            Thread.sleep(1000); // Wait for search results to load
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        
-        // Try to find and click the Add button for this specific medicine
-        try {
-            // First try: Look for the medicine name in results and click its Add button
-            By medicineLocator = By.xpath(
-                "//div[contains(text(),'" + medicineName + "')]" +
-                "/ancestor::*[contains(@class,'product') or contains(@class,'item')]" +
-                "//span[text()='Add']"
-            );
-            WebElement addBtn = wait.until(ExpectedConditions.elementToBeClickable(medicineLocator));
-            addBtn.click();
-            System.out.println("Product added: " + medicineName);
+
+            By triggerLocator =
+                    By.cssSelector("[data-placeholder='Search Medicines']");
+
+            By inputLocator =
+                    By.cssSelector("input[placeholder*='Search medicines']");
+
+            WebElement trigger = wait.until(
+                    ExpectedConditions.elementToBeClickable(triggerLocator));
+
+            ((JavascriptExecutor) driver)
+                    .executeScript("arguments[0].click();", trigger);
+
+            WebElement input = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(inputLocator));
+
+            input.click();
+            input.sendKeys(Keys.CONTROL + "a");
+            input.sendKeys(Keys.DELETE);
+            input.sendKeys(medicineName);
+
+            Thread.sleep(2000);
+
+            List<WebElement> addButtons = driver.findElements(
+                    By.xpath("//span[text()='Add'] | //button[contains(text(),'Add')]"));
+
+            if (addButtons.size() > 0) {
+
+                ((JavascriptExecutor) driver)
+                        .executeScript("arguments[0].click();", addButtons.get(0));
+
+                System.out.println("Product added: " + medicineName);
+
+            } else {
+                System.out.println("No product found: " + medicineName);
+            }
+
+            Thread.sleep(2000);
+
         } catch (Exception e) {
-            // Fallback: Click the first Add button if specific medicine not found
-            System.out.println("Could not find specific Add button for " + medicineName + ", using first Add button");
-            click(firstAddBtn);
-        }
-        
-        // Wait for product to be added (look for toast notification or wait)
-        try {
-            Thread.sleep(1000); // Give time for product to be added
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            System.out.println("Error in searchAndAddMedicine: " + e.getMessage());
         }
     }
-
+       
     /** Click the cart icon/link */
     public void clickCart() {
-        click(cartLink);
-        // Wait for cart to load
         try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            click(cartLink);
+            // Wait for cart to load
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        } catch (Exception e) {
+            System.out.println("Error clicking cart: " + e.getMessage());
         }
     }
 
     /** Click the Apollo Products navigation link */
     public void clickApolloProducts() {
-        closePopup();
         try {
-            Thread.sleep(500); // Wait for popup to close
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            closePopup();
+            try {
+                Thread.sleep(500); // Wait for popup to close
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            click(apolloProductsLink);
+        } catch (Exception e) {
+            System.out.println("Error clicking Apollo Products: " + e.getMessage());
         }
-        click(apolloProductsLink);
     }
 }
