@@ -20,93 +20,93 @@ import io.cucumber.java.Scenario;
 
 public class Hook extends WebdriverUtility {
 
-	private BaseClass b;
-	WebDriver Basedriver;
+ 	private BaseClass b;
+ 	WebDriver Basedriver;
 
-	// Constructor Injection → gets shared BaseClass instance
-	public Hook(BaseClass b) {
-		this.b = b;
-	}
+ 	// Constructor Injection → gets shared BaseClass instance
+ 	public Hook(BaseClass b) {
+ 		this.b = b;
+ 	}
 
-	ReaderUtilities readerUtil = new ReaderUtilities();
+ 	ReaderUtilities readerUtil = new ReaderUtilities();
 
-	@Before
-	public void setup(Scenario scenario) throws Exception {
+ 	@Before
+ 	public void setup(Scenario scenario) throws Exception {
 
-		// Read browser from properties file
-		String browser = readerUtil.getPropertyKeyValue("browser");
+ 		// Read browser from properties file
+ 		String browser = readerUtil.getPropertyKeyValue("browser");
 
-		if (browser.equalsIgnoreCase("chrome")) {
+ 		if (browser.equalsIgnoreCase("chrome")) {
 
-			// Configure Chrome options (Headless mode for faster execution)
-			ChromeOptions options = new ChromeOptions();
-			options.addArguments("--headless=new");
+ 			// Configure Chrome options (Headless mode for faster execution)
+ 			ChromeOptions options = new ChromeOptions();
+ 			//options.addArguments("--headless=new");
 
-			Basedriver = new ChromeDriver(options);
+ 			Basedriver = new ChromeDriver(options);
 
-		} else if (browser.equalsIgnoreCase("edge")) {
+ 		} else if (browser.equalsIgnoreCase("edge")) {
 
-			// Launch Edge browser
-			Basedriver = new EdgeDriver();
+ 			// Launch Edge browser
+ 			Basedriver = new EdgeDriver();
 
-		} else {
-			throw new RuntimeException("Invalid browser: " + browser);
-		}
+ 		} else {
+ 			throw new RuntimeException("Invalid browser: " + browser);
+ 		}
 
-		// Store driver in BaseClass (shared across steps)
-		b.setDriver(Basedriver);
+ 		// Store driver in BaseClass (shared across steps)
+ 		b.setDriver(Basedriver);
 
-		// WebDriver common setup
-		initializeDriver(b.getDriver());
-		configMaximizeBrowser();
-		waitForElements(70);
+ 		// WebDriver common setup
+ 		initializeDriver(b.getDriver());
+ 		configMaximizeBrowser();
+ 		waitForElements(70);
 
-		// Manage session (login once, reuse across domains)
-		SessionManager.ManageSession(b.getDriver());
+ 		// Manage session (login once, reuse across domains)
+ 		SessionManager.ManageSession(b.getDriver());
 
-		// Initialize all page objects
-		Pages pages = new Pages(b.getDriver());
-		b.setPages(pages);
+ 		// Initialize all page objects
+ 		Pages pages = new Pages(b.getDriver());
+ 		b.setPages(pages);
 
-		// Close any popup if present on dashboard
-		pages.dashboardPage.closeDomPopup();
+ 		// Close any popup if present on dashboard
+ 		pages.dashboardPage.closeDomPopup();
 
-		// Create new test in Extent Report (Scenario level)
-		ExtendsReportsUtilities.createTest(scenario.getName());
-	}
+ 		// Create new test in Extent Report (Scenario level)
+ 		ExtendsReportsUtilities.createTest(scenario.getName());
+ 	}
 
-	@AfterStep
-	public void afterStep(Scenario scenario) {
+ 	@AfterStep
+ 	public void afterStep(Scenario scenario) {
 
-		try {
+ 		try {
 
-			// If step fails → capture screenshot + log fail
-			if (scenario.isFailed()) {
+ 			// If step fails → capture screenshot + log fail
+ 			if (scenario.isFailed()) {
 
-				String path = new TakeScreenShotUtility().takeScreenShot(b.getDriver(), scenario.getName());
+ 				String path = new TakeScreenShotUtility().takeScreenShot(b.getDriver(), scenario.getName());
 
-				ExtendsReportsUtilities.fail("Step Failed");
+ 				ExtendsReportsUtilities.fail("Step Failed");
 				ExtendsReportsUtilities.attachScreenshot(path);
 
-			} else {
+ 			} else {
 
-				// If step passes → log success
-				ExtendsReportsUtilities.pass("Step Passed");
-			}
+ 				// If step passes → log success
+ 				ExtendsReportsUtilities.pass("Step Passed");
+ 			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+ 		} catch (Exception e) {
+ 			e.printStackTrace();
+ 		}
+ 	}
 
-	@After
-	public void tearDown() {
+ 	@After
+ 	public void tearDown() {
 
-		// Flush Extent report (write results to file)
-		ExtendsReportsUtilities.flushReport();
+ 		// Flush Extent report (write results to file)
+ 		ExtendsReportsUtilities.flushReport();
 
-		// Close browser and cleanup
-		quitBroswerWindow();
-		b.unload();
-	}
+ 		// Close browser and cleanup
+ 		quitBroswerWindow();
+ 		b.unload();
+ 	}
 }

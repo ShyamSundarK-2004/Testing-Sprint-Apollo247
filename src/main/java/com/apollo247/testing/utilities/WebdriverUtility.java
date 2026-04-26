@@ -25,7 +25,15 @@ public class WebdriverUtility {
 	// Manage
 	// maximize
 	public void configMaximizeBrowser() {
-		driver.manage().window().maximize();
+		try {
+			driver.manage().window().maximize();
+		} catch (Exception e) {
+			// Some environments/drivers may timeout on maximize; fall back to setting a standard size
+			try {
+				driver.manage().window().setSize(new Dimension(1920, 1080));
+			} catch (Exception ignored) {
+			}
+		}
 	}
 
 	// minimize

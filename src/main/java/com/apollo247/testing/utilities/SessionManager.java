@@ -28,12 +28,37 @@ public class SessionManager {
 	public static void ManageSession(WebDriver driver) throws Exception {
 		createSessionDir();
 
+		// Attempt to load existing session; retry once if a transient failure occurs
 		if (isValidSessionExists()) {
-			loadSession(driver);
+			int attempts = 0;
+			while (attempts < 2) {
+				try {
+					loadSession(driver);
+					break;
+				} catch (Exception e) {
+					attempts++;
+					System.out.println("[SessionManager] loadSession attempt " + attempts + " failed: " + e.getMessage());
+					if (attempts >= 2) throw e;
+					Thread.sleep(2000);
+				}
+			}
 		} else {
+			// First-time login flow: navigate and wait for manual OTP, then save session
 			driver.get(MAIN_LOGIN_URL);
+			System.out.println("[SessionManager] No existing session found. Please complete manual login/OTP in the opened browser.");
 			Thread.sleep(90000); // Manual OTP once
-			saveSession(driver);
+			int attempts = 0;
+			while (attempts < 2) {
+				try {
+					saveSession(driver);
+					break;
+				} catch (Exception e) {
+					attempts++;
+					System.out.println("[SessionManager] saveSession attempt " + attempts + " failed: " + e.getMessage());
+					if (attempts >= 2) throw e;
+					Thread.sleep(2000);
+				}
+			}
 		}
 
 		Thread.sleep(3000);

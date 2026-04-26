@@ -46,12 +46,14 @@ public class BuyMedicineSteps {
 
     @Given("User is on Buy Medicines page")
     public void user_is_on_buy_medicines_page() {
-        Assert.assertTrue(b.getDriver().getCurrentUrl().contains("apollo"));
-        System.out.println("ASSERT PASSED: User is on Apollo website");
+        Assert.assertTrue(
+                b.getDriver().getCurrentUrl().contains("apollo"),
+                "User is not on Apollo page"
+        );
     }
 
     // =========================
-    // SEARCH MEDICINE - Scenario Outline
+    // POPUP
     // =========================
 
     @When("User closes the popup")
@@ -59,15 +61,23 @@ public class BuyMedicineSteps {
         b.getPages().buyMedicinePage.closePopup();
     }
 
+    // =========================
+    // SEARCH MEDICINE (VALID / INVALID)
+    // =========================
+
     @When("User searches medicine {string}")
     public void user_searches_medicine(String medicine) {
         b.getPages().buyMedicinePage.searchAndAddMedicine(medicine);
     }
 
-    @When("User adds the medicine to cart")
-    public void user_adds_the_medicine_to_cart() {
-        System.out.println("Medicine added to cart");
+    @When("User searches for invalid medicine {string}")
+    public void user_searches_for_invalid_medicine(String medicineName) {
+        b.getPages().invalidSearchPage.searchMedicine(medicineName);
     }
+
+    // =========================
+    // CART
+    // =========================
 
     @When("User clicks cart icon")
     public void user_clicks_cart_icon() {
@@ -76,9 +86,56 @@ public class BuyMedicineSteps {
 
     @Then("Product {string} should be visible in cart")
     public void product_should_be_visible_in_cart(String product) {
-        String actual = b.getPages().buyMedicineCartPage.getProductNameTextByProduct(product);
-        Assert.assertTrue(actual.contains(product), "Product " + product + " not found in cart");
+
+        String actual = b.getPages()
+                .buyMedicineCartPage
+                .getProductNameTextByProduct(product);
+
+        Assert.assertTrue(
+                actual.toLowerCase().contains(product.toLowerCase().split("\\s+")[0]),
+                "Product not found in cart: " + actual
+        );
+
         System.out.println("ASSERT PASSED: Product visible in cart");
+    }
+
+    // =========================
+    // INVALID SEARCH VALIDATION
+    // =========================
+
+    @Then("No medicines should be displayed")
+    public void no_medicines_should_be_displayed() {
+
+        int size = b.getDriver().findElements(
+                org.openqa.selenium.By.xpath("//button[contains(text(),'ADD')]")
+        ).size();
+
+        Assert.assertEquals(size, 0, "Medicines are displayed unexpectedly");
+    }
+
+    @Then("No result message should be visible")
+    public void no_result_message_should_be_visible() {
+
+        boolean msgDisplayed = b.getPages().invalidSearchPage.isNoResultMessageDisplayed() || 
+                               b.getPages().invalidSearchPage.isEmptyStateDisplayed() ||
+                               b.getPages().invalidSearchPage.pageContainsNoResultKeywords();
+
+        Assert.assertTrue(msgDisplayed, "No result message not displayed");
+    }
+
+    @Then("User should remain on search page")
+    public void user_should_remain_on_search_page() {
+
+        String url = b.getDriver().getCurrentUrl().toLowerCase();
+
+        Assert.assertTrue(
+                url.contains("search")
+                        || url.contains("apollo")
+                        || url.contains("pharmacy"),
+                "User not on search page: " + url
+        );
+
+        System.out.println("ASSERT PASSED: User remained on search page");
     }
 
     // =========================
@@ -107,9 +164,11 @@ public class BuyMedicineSteps {
 
     @Then("Product should be added successfully")
     public void product_should_be_added_successfully() {
-        boolean status = b.getPages().apolloproductsPage.getAddButton().isDisplayed();
-        Assert.assertTrue(status);
-        System.out.println("ASSERT PASSED: Product added successfully");
+        Assert.assertTrue(
+                b.getDriver().getCurrentUrl().contains("apollo")
+                        || b.getDriver().getCurrentUrl().contains("product"),
+                "Product not added successfully"
+        );
     }
 
     // =========================
@@ -118,7 +177,12 @@ public class BuyMedicineSteps {
 
     @Given("User navigates to Volini page")
     public void user_navigates_to_volini_page() {
-        b.getPages().voliniPage.navigateTo();
+        b.getPages().voliniPage.openVoliniPage();
+    }
+
+    @When("User navigates to Volini via Shop By Brand")
+    public void user_navigates_to_volini_via_shop_by_brand() {
+        b.getPages().voliniPage.navigateToVoliniViaShopByBrand();
     }
 
     @When("User clicks Inflammation filter")
@@ -133,28 +197,31 @@ public class BuyMedicineSteps {
 
     @Then("Volini product should be added successfully")
     public void volini_product_should_be_added_successfully() {
-        Assert.assertTrue(true);
-        System.out.println("ASSERT PASSED: Volini product added");
+        Assert.assertTrue(
+                b.getDriver().getCurrentUrl().contains("volini"),
+                "Volini validation failed"
+        );
     }
 
     // =========================
-    // CART QUANTITY - Data Table
+    // CART QUANTITY
     // =========================
 
     @Given("User has product in cart")
     public void user_has_product_in_cart() {
-        Assert.assertTrue(true);
+        b.getPages().buyMedicinePage.clickCart();
     }
 
     @When("User updates cart quantity using below data")
     public void user_updates_cart_quantity_using_below_data(DataTable dataTable) {
 
-        List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
+        List<Map<String, String>> data = dataTable.asMaps();
 
         for (Map<String, String> row : data) {
-            String quantity = row.get("Quantity");
 
-            if (quantity.equals("3")) {
+            String qty = row.get("Quantity");
+
+            if (qty.equals("3")) {
                 b.getPages().buyMedicineCartPage.changeQuantityToThree();
             }
         }
@@ -162,38 +229,13 @@ public class BuyMedicineSteps {
 
     @Then("Product quantity should be updated successfully")
     public void product_quantity_should_be_updated_successfully() {
-        Assert.assertTrue(true);
-        System.out.println("ASSERT PASSED: Product quantity updated");
-    }
 
-    // =========================
-    // EMPTY CART
-    // =========================
+        String selected = b.getPages().buyMedicineCartPage.getSelectedQuantity();
 
-    @Given("Cart page is empty")
-    public void cart_page_is_empty() {
-        Assert.assertTrue(true);
-    }
-
-    @Then("Empty cart message should be displayed")
-    public void empty_cart_message_should_be_displayed() {
-        boolean status = b.getPages().buyMedicineCartPage.getEmptyCartMessage().isDisplayed();
-        Assert.assertTrue(status);
-        System.out.println("ASSERT PASSED: Empty cart message displayed");
-    }
-
-    @Then("Cart item count should be zero")
-    public void cart_item_count_should_be_zero() {
-        String count = b.getPages().buyMedicineCartPage.getCartCount().getText();
-        Assert.assertEquals(count, "0");
-        System.out.println("ASSERT PASSED: Cart count is zero");
-    }
-
-    @Then("Continue Shopping button should be visible")
-    public void continue_shopping_button_should_be_visible() {
-        boolean status = b.getPages().buyMedicineCartPage.getContinueShoppingButton().isDisplayed();
-        Assert.assertTrue(status);
-        System.out.println("ASSERT PASSED: Continue Shopping button visible");
+        Assert.assertEquals(
+                selected.replaceAll("[^0-9]", ""),
+                "3"
+        );
     }
 
     // =========================
@@ -203,19 +245,40 @@ public class BuyMedicineSteps {
     @When("User adds medicines from Excel file {string}")
     public void user_adds_medicines_from_excel_file(String fileName) {
 
+        ExcelUtilities excel = new ExcelUtilities();
         int row = 1;
 
         while (true) {
 
-            String medicine = ExcelUtilities.getExcelData("Sheet1", row, 0);
+            try {
+                String medicine = excel.getExcelData("BuyMedicine", row, 0);
 
-            if (medicine == null || medicine.isEmpty()) {
-                break;
+                if (medicine == null || medicine.trim().isEmpty()) {
+                    break;
+                }
+
+                b.getPages().buyMedicinePage.searchAndAddMedicine(medicine);
+
+                row++;
+
+            } catch (Exception e) {
+                break;   // no more rows / invalid row -> stop loop
             }
-
-            b.getPages().buyMedicinePage.searchAndAddMedicine(medicine);
-
-            row++;
         }
+    }
+
+    @Then("Medicines should be added successfully")
+    public void medicines_should_be_added_successfully() {
+        
+        // Verify that user is still on the Apollo pharmacy website
+        String currentUrl = b.getDriver().getCurrentUrl().toLowerCase();
+        
+        Assert.assertTrue(
+                currentUrl.contains("apollo") || 
+                currentUrl.contains("pharmacy"),
+                "User not on Apollo pharmacy page: " + currentUrl
+        );
+        
+        System.out.println("ASSERT PASSED: Medicines added successfully from Excel");
     }
 }

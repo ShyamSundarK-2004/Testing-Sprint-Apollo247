@@ -7,6 +7,7 @@ import com.apollo247.testing.pages.ApolloProductsPage;
 import com.apollo247.testing.pages.BuyMedicineCartPage;
 import com.apollo247.testing.pages.BuyMedicinePage;
 import com.apollo247.testing.pages.DashboardPage;
+import com.apollo247.testing.pages.InvalidSearchPage;
 import com.apollo247.testing.pages.VoliniPage;
 
 public class Pages {
@@ -16,6 +17,7 @@ public class Pages {
     public BuyMedicineCartPage buyMedicineCartPage;
     public BuyMedicinePage buyMedicinePage;
     public VoliniPage voliniPage;
+    public InvalidSearchPage invalidSearchPage;
 
     public Pages(WebDriver driver) {
 
@@ -24,11 +26,14 @@ public class Pages {
         buyMedicineCartPage = new BuyMedicineCartPage(driver);
         buyMedicinePage = new BuyMedicinePage(driver);
         voliniPage = new VoliniPage(driver);
-
+        invalidSearchPage = new InvalidSearchPage(driver);
+        
         PageFactory.initElements(driver, dashboardPage);
         PageFactory.initElements(driver, apolloproductsPage);
         PageFactory.initElements(driver, buyMedicineCartPage);
         PageFactory.initElements(driver, buyMedicinePage);
         PageFactory.initElements(driver, voliniPage);
+        PageFactory.initElements(driver, invalidSearchPage);
+
     }
 }
