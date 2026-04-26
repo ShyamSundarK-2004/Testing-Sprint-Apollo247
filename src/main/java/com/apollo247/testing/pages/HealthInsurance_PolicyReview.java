@@ -2,37 +2,50 @@ package com.apollo247.testing.pages;
 
 import java.time.Duration;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.apollo247.testing.utilities.JavaScriptUtilities;
 import com.apollo247.testing.utilities.WebdriverUtility;
 
 public class HealthInsurance_PolicyReview {
-	public WebDriverWait wait;
-	public WebDriver driver;
-	public WebdriverUtility utility;
+
+	// ==================== FIELDS ====================
+
+	private WebDriver driver;
+	private WebDriverWait wait;
+	private WebdriverUtility utility;
+	private JavaScriptUtilities jsUtil;
+
+	// ==================== CONSTRUCTOR ====================
 
 	public HealthInsurance_PolicyReview(WebDriver driver) {
-		wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
 		this.utility = new WebdriverUtility();
-		this.utility.initializeDriver(driver); // Pass the active driver to utility
+		this.utility.initializeDriver(driver);
+
+		this.jsUtil = new JavaScriptUtilities(driver);
 	}
 
-	// -------locator findings-----------
+	// ==================== LOCATORS ====================
 
 	@FindBy(xpath = "//span[normalize-space()='Proceed']")
-	WebElement policyProceedButton;
+	private WebElement policyProceedButton;
 
-	// --------getters----------
+	// ==================== GETTERS ====================
 
-	// ---Business Logic--------
-	public void clickPolicyProceedButton() {
-		// policyProceedButton.click();
-		utility.waituntilPresenceOfElementLocated(10L, By.xpath("//span[normalize-space()='Proceed']")).click();
+	public WebElement getPolicyProceedButton() {
+		return policyProceedButton;
 	}
 
+	// ==================== BUSINESS LOGIC ====================
+
+	public void clickPolicyProceedButton() {
+		// Wait until clickable (stronger than presenceOfElementLocated)
+		utility.waitUntilElementIsCLickable(10L, getPolicyProceedButton()).click();
+	}
 }

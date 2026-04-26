@@ -8,8 +8,7 @@
 			<class name="com.apollo247.testing.runner.MyAccountRunner" />
 			<class name="com.apollo247.testing.runner.RunnerIO_Docter" />
 			<class name="com.apollo247.testing.runner.BuyMedicineRunner" />
-			<class
-				name="com.apollo247.testing.runner.HealthInsurance_TestRunner" />
+			<class name="com.apollo247.testing.runner.HealthInsurance_TestRunner" />
 		</classes>
 	</test> <!--
 	Apollo247_Test_Runner -->

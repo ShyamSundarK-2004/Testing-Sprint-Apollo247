@@ -10,7 +10,7 @@ import io.cucumber.testng.CucumberOptions;
 						"com.apollo247.testing.utilities.ExtentCucumberListener" }, monochrome = true)
 public class HealthInsurance_TestRunner extends AbstractTestNGCucumberTests {
 
-	// Enables parallel execution
+	// Enables parallel execution9
 	@Override
 	@org.testng.annotations.DataProvider(parallel = true)
 	public Object[][] scenarios() {

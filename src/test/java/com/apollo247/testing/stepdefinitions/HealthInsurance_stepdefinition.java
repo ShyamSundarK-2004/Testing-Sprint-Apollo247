@@ -1,6 +1,8 @@
 package com.apollo247.testing.stepdefinitions;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -34,11 +36,10 @@ public class HealthInsurance_stepdefinition {
 	@Given("User navigates to Health Insurance page and enter pincode {string}")
 	public void user_navigates_to_health_insurance_page_and_enter_pincode(String pincode) {
 		b.getPages().dashboardPage.clickonHealthInsuranceModule();
-
+		// for using cookies in insurance module
 		try {
 			SessionManager.switchToDomain(b.getDriver(), "https://www.apollo247insurance.com/");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		b.getPages().healthInsurancePage.clickCancelSelectLocation();
@@ -51,7 +52,7 @@ public class HealthInsurance_stepdefinition {
 
 	@When("User selects {string} and {string} at the age {string} as members")
 	public void user_selects_and_at_the_age_as_members(String gender, String m1, String m1Age) {
-		// b.getPages().healthInsurancePage.performEnterPinCode("601201");
+
 		b.getPages().healthInsurancePage.selectGender(gender);
 		b.getPages().healthInsurancePage.unselectMember();
 		b.getPages().healthInsurancePage.selectMember(m1, m1Age);
@@ -91,17 +92,32 @@ public class HealthInsurance_stepdefinition {
 		System.out.println("Validated successfully");
 	}
 
-	@When("User selects Gender {string} {string} at age {string}, {string} at age {string}, and {string}  at age {string} as members")
-	public void user_selects_gender_at_age_at_age_and_at_age_as_members(String gender, String m1, String m1Age,
-			String m2, String m2Age, String m3, String m3Age) {
+	@When("User selects members with following details")
+	public void user_selects_members_with_following_details(io.cucumber.datatable.DataTable dataTable) {
+
+		List<Map<String, String>> members = dataTable.asMaps(String.class, String.class);
+		// Set gender once
+		String gender = members.get(0).get("Gender");
 		b.getPages().healthInsurancePage.selectGender(gender);
-		b.getPages().healthInsurancePage.unselectMember();
-		b.getPages().healthInsurancePage.selectMember(m1, m1Age);
-		b.getPages().healthInsurancePage.selectMember(m2, m2Age);
-		b.getPages().healthInsurancePage.selectMember(m3, m3Age);
+		// Ensure unselect happens ONLY once
+		boolean isCleared = false;
+
+		for (Map<String, String> member : members) {
+
+			if (!isCleared) {
+				b.getPages().healthInsurancePage.unselectMember();
+				isCleared = true;
+			}
+
+			String memberName = member.get("Member");
+			String age = member.get("Age");
+
+			b.getPages().healthInsurancePage.selectMember(memberName, age);
+		}
 	}
-// Implemented user clicks on "View Plans" in another stepdefinition file
-// so clicked "View plans" button
+
+	// Implemented user clicks on "View Plans" in another stepdefinition file
+	// so clicked "View plans" button
 
 	@Then("Family insurance plans should be displayed correctly")
 	public void family_insurance_plans_should_be_displayed_correctly() {
@@ -112,12 +128,11 @@ public class HealthInsurance_stepdefinition {
 		System.out.println("Validated");
 	}
 
-//@filtering 
-//User selected Male self at age 22
+	// @filtering
+	// User selected Male self at age 22
 
 	@When("User applies coverage filter between {string}")
 	public void user_applies_coverage_filter_between(String coverageAmount) {
-		// b.getPages().healthInsuranceProductListings.clickFilter();
 		b.getPages().healthInsuranceProductListings.coverageAmount(coverageAmount);
 		System.out.println("coverage amt selected");
 
@@ -125,7 +140,6 @@ public class HealthInsurance_stepdefinition {
 
 	@When("User selects room rent type as {string}")
 	public void user_selects_room_rent_type_as(String roomRentType) {
-		// b.getPages().healthInsuranceProductListings.clickFilter();
 		b.getPages().healthInsuranceProductListings.roomRentType(roomRentType);
 		System.out.println("roomrent type selected");
 
