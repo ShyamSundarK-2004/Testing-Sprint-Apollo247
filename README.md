@@ -130,7 +130,7 @@ git --version
 
 ```bash
 # Clone the Apollo247 automation framework
-git clone https://github.com/apollo247/automation-framework.git
+git clone https://github.com/ShyamSundarK-2004/Testing-Sprint-Apollo247.git
 
 # Navigate to project directory
 cd Testing-Sprint-Apollo247
@@ -363,6 +363,7 @@ Testing-Sprint-Apollo247/
 | Scenario              | Type     | Description                                           |
 | --------------------- | -------- | ----------------------------------------------------- |
 | Manage Family Members | Positive | Add, edit, or remove family member details in profile |
+| Invalid details       | Negative | Enter invalid details and verify error message        |
 | View Appointments     | Positive | View list of upcoming and past appointments           |
 | Verify Memberships    | Positive | Check and validate active user memberships            |
 | Notification Settings | Positive | Update and manage notification preferences            |
