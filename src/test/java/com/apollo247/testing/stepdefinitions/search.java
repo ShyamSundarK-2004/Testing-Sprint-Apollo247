@@ -27,17 +27,17 @@ public class search  {
 
 	    List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
 	    String speciality = data.get(0).get("speciality");
-
-	    b.getPages().SearchDocter.searchSpeciality(speciality);
+	    b.getPages().Searchdoctor.searchSpeciality(speciality);
 	}
 	@When("user selects first available doctor")
 	public void user_selects_first_available_doctor() {
-		b.getPages().SearchDocter.selectDoctorByName();
+		b.getPages().Searchdoctor.selectDoctorByName();
+
 	   
 	}
 	@When("user clicks on schedule appointment")
 	public void user_clicks_on_schedule_appointment() {
-	   b.getPages().SearchDocter.SelectSlot();
+	   b.getPages().Searchdoctor.SelectSlot();
 	}
 
 	@When("user enters phone number")
@@ -45,89 +45,86 @@ public class search  {
 
 	    List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
 	    String phone = data.get(0).get("phone");
-
-	    b.getPages().SearchDocter.PhoneNumber(phone);
+	    b.getPages().Searchdoctor.PhoneNumber(phone);
 	}
 	@Then("validate phone number and amount displayed")
 	public void validate_phone_number_and_amount_displayed() {
 
 	    // ✅ Phone validation
-	    String last10 = b.getPages().SearchDocter.getLast10DigitPhone();
+	    String last10 = b.getPages().Searchdoctor.getLast10DigitPhone();
 
 	    Assert.assertEquals(
 	        last10.length(),
 	        10,
-	        "❌ Phone number is not 10 digits"
+	        "Phone number is not 10 digits"
 	    );
 
-	    System.out.println("✅ Valid phone number: " + last10);
+	    System.out.println("Valid phone number: " + last10);
 
 	    // ✅ Amount validation
-	    String amount = b.getPages().SearchDocter.getAmountText();
-
+	    String amount = b.getPages().Searchdoctor.getAmountText();
 	    Assert.assertTrue(
 	        amount.contains("₹"),
-	        "❌ Amount not displayed properly"
+	        "Amount not displayed properly"
 	    );
 
-	    System.out.println("✅ Amount displayed: " + amount);
+	    System.out.println("Amount displayed: " + amount);
 	}
 	//Filter
 	@Given("User click the general Physician")
 	public void user_click_the_general_physician() {
-		b.getPages().FilterDocter.ClickGeneral();
+		b.getPages().FilterDoctor.ClickGeneral();
 	}
 
 	@When("user applies sorting as {string}")
 	public void user_applies_sorting_as(String price) {
-		b.getPages().FilterDocter.Relevance();
+		b.getPages().FilterDoctor.Relevance();
 	}
 
 	@When("user filters doctors by experience {string}")
 	public void user_filters_doctors_by_experience(String experience) {
-		b.getPages().FilterDocter.getExperience().click();
+		b.getPages().FilterDoctor.getExperience().click();
 	}
 
 	@When("user filters doctors by language {string}")
 	public void user_filters_doctors_by_language(String Lang) {
-		b.getPages().FilterDocter.getLanguage().click();
+		b.getPages().FilterDoctor.getLanguage().click();
 
 	}
 
 	@When("user clicks on first displayed docter")
 	public void user_clicks_on_first_displayed_docter() {
-		b.getPages().FilterDocter.clickFirstDoctor();
-
+		b.getPages().FilterDoctor.clickFirstDoctor();
 	}
 	@When("user clicks the view profile and write review {string}")
 	public void user_clicks_the_view_profile_and_write_review(String reviewText) {
-		 b.getPages().FilterDocter.view(); // View Profile click
-		    b.getPages().FilterDocter.writeReviewFlow(reviewText); // Review flow
+		 b.getPages().FilterDoctor.view(); // View Profile click
+		    b.getPages().FilterDoctor.writeReviewFlow(reviewText); // Review flow
 	}
 	@Then("verify the feedback")
 	public void verify_the_feedback() {
-		 String actualText = b.getPages().FilterDocter.ThankYouMessage();
+		 String actualText = b.getPages().FilterDoctor.ThankYouMessage();
 		 System.out.println("Actual Text: " + actualText);
 
 		    Assert.assertTrue(
 		        actualText.toLowerCase().contains("thank you for your feedback"),
-		        "❌ Feedback message not displayed correctly. Actual: " + actualText
+		        "Feedback message not displayed correctly. Actual: " + actualText
 		    );
 	}
 	// MyAppointment
 	@When("User navigates to My Appointments and clicks View All")
 	public void user_navigates_to_my_appointments_and_clicks_view_all() {
-		b.getPages().AppointmentDocter.view();
+		b.getPages().AppointmentDoctor.view();
 	}
 
 	@When("User clicks on Rebook for a doctor")
 	public void user_clicks_on_rebook_for_a_doctor() {
-		b.getPages().AppointmentDocter.Rebook();
+		b.getPages().AppointmentDoctor.Rebook();
 	}
 
 	@When("User clicks Continue")
 	public void user_clicks_continue() {
-		b.getPages().AppointmentDocter.getConbtn();
+		b.getPages().AppointmentDoctor.getConbtn();
 
 	}
 
@@ -138,9 +135,29 @@ public class search  {
 	}
 	@Then("User should see Book Appointment option")
 	public void user_should_see_book_appointment_option() {
-		Assert.assertTrue(b.getPages().AppointmentDocter.AppointmentVisible(), "Book Appointment not visible");
+		 Assert.assertTrue(b.getPages().AppointmentDoctor.AppointmentVisible(),
+		            "Book Appointment not visible");
 
-		System.out.println("Book Appointment is visible");
+		    System.out.println("Book Appointment is visible");
+	
+	}
+	//location
+	@When("User selects location and specialization")
+	public void user_selects_location_and_specialization() {
+		b.getPages().LocationDoctor.selectLocation();
+	}
+	@When("User sorts by Most Liked")
+	public void user_sorts_by_most_liked() {
+		b.getPages().LocationDoctor.sortByMostLiked();
+	}
+	@When("User opens doctor description {string}")
+	public void user_opens_doctor_description(String doctername) {
+	    String name = b.getPages().LocationDoctor.openDoctor(doctername);
+	    System.out.println("Doctor Name: " + name);
+	}
+	@Then("Doctor description should be validated {string}")
+	public void doctor_description_should_be_validated(String expectedDescription) {
+		String text = b.getPages().LocationDoctor.getDescription();
 
 	}
 
@@ -193,35 +210,6 @@ public class search  {
 		        " Defect: Expected " + expectedCategory + " but got " + actualCategory
 		    );
 		}
-		// location
-		@When("User selects location and specialization")
-		public void user_selects_location_and_specialization() {
-			b.getPages().LocationDocter.selectLocation();
-		}
-
-		@When("User sorts by Most Liked")
-		public void user_sorts_by_most_liked() {
-			b.getPages().LocationDocter.sortByMostLiked();
-		}
-
-		@When("User opens doctor description {string}")
-		public void user_opens_doctor_description(String doctername) {
-			String name = b.getPages().LocationDocter.openDoctor(doctername);
-			System.out.println("Doctor Name: " + name);
-		}
-
-		@Then("Doctor description should be validated {string}")
-		public void doctor_description_should_be_validated(String expectedDescription) {
-			String text = b.getPages().LocationDocter.getDescription();
-
-			System.out.println("Actual Description: " + text);
-
-			Assert.assertTrue(text.contains(expectedDescription), "Description mismatch");
-
-			System.out.println("Description validated successfully");
-
-		}
-		
 		//Negative
 		@When("User selects speciality {string}")
 		public void user_selects_speciality(String specialist) {
@@ -267,10 +255,10 @@ public class search  {
 		    Assert.assertTrue(
 		        actualMsg.toLowerCase().contains("couldn’t find") ||
 		        actualMsg.toLowerCase().contains("no doctors"),
-		        "❌ No doctors message NOT displayed"
+		        "No doctors message NOT displayed"
 		    );
 
-		    System.out.println("✅ No doctors found message validated");
+		    System.out.println("No doctors found message validated");
 		}
 
 

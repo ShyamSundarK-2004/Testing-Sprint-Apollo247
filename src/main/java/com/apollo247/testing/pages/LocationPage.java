@@ -73,21 +73,15 @@ public class LocationPage {
 	    }
 
 	    public String openDoctor(String doctorName) {
-
 	        wait.until(ExpectedConditions.elementToBeClickable(viewDescription)).click();
 	        WebElement doctor = wait.until(ExpectedConditions.elementToBeClickable(
 	                By.xpath("//td[contains(@class,'Header_alignLeft') and normalize-space(text())='" + doctorName + "']")
 	            ));
-
 	            String name = doctor.getText();
 	            doctor.click();
-
 	            return name;
-	       
 	    }
-
 	    public String getDescription() {
 	        return wait.until(ExpectedConditions.visibilityOf(description)).getText();
 	    }
-
 }
