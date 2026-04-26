@@ -15,7 +15,7 @@ import org.testng.annotations.DataProvider;
     monochrome = true
 )
 
-public class RunnerIO_Docter extends AbstractTestNGCucumberTests {
+public class RunnerIO_Doctor extends AbstractTestNGCucumberTests {
 	
 	@Override
 	@DataProvider(parallel = true)

@@ -5,7 +5,6 @@ When user clicks the find_Docter module
 
 @doctorBooking @smoke
 Scenario: Book a hospital visit appointment
-
 When user searches for speciality
 | speciality |
 | Andrology  | 

@@ -1,6 +1,7 @@
 package com.apollo247.testing.utilities;
 
 import org.openqa.selenium.WebDriver;
+
 import org.openqa.selenium.support.PageFactory;
 import com.apollo247.testing.pages.DashboardPage;
 import com.apollo247.testing.pages.HealthtoolPage;
@@ -8,15 +9,15 @@ import com.apollo247.testing.pages.LocationPage;
 import com.apollo247.testing.pages.MyAppointmentPage;
 import com.apollo247.testing.pages.NegativeScenario;
 import com.apollo247.testing.pages.SearchDoctorPage;
-import com.apollo247.testing.pages.filterDocterPage;
+import com.apollo247.testing.pages.filterDoctorPage;
 
 public class Pages {
 
 	public  DashboardPage dashboardPage;
-	public  SearchDoctorPage Searchdocter;
-	public  filterDocterPage FilterDocter;
-	public  MyAppointmentPage AppointmentDocter;
-	public  LocationPage LocationDocter;
+	public  SearchDoctorPage Searchdoctor;
+	public  filterDoctorPage FilterDoctor;
+	public  MyAppointmentPage AppointmentDoctor;
+	public  LocationPage LocationDoctor;
 	public  HealthtoolPage HeartToolPage;
 	public  NegativeScenario NegativePage;
 
@@ -27,17 +28,17 @@ public class Pages {
 		dashboardPage = new DashboardPage(driver);
 		PageFactory.initElements(driver, dashboardPage);
 		//SearchDocter
-		Searchdocter=new SearchDoctorPage(driver);
-		PageFactory.initElements(driver, Searchdocter);
+		Searchdoctor=new SearchDoctorPage(driver);
+		PageFactory.initElements(driver, Searchdoctor);
 		//filter
-		FilterDocter=new filterDocterPage(driver);
-		PageFactory.initElements(driver, FilterDocter);
+		FilterDoctor=new filterDoctorPage(driver);
+		PageFactory.initElements(driver, FilterDoctor);
 		//Appointment
-		AppointmentDocter=new MyAppointmentPage(driver);
-		PageFactory.initElements(driver, AppointmentDocter);
+		AppointmentDoctor=new MyAppointmentPage(driver);
+		PageFactory.initElements(driver, AppointmentDoctor);
 		//Location
-		LocationDocter=new LocationPage(driver);
-		PageFactory.initElements(driver, LocationDocter);
+		LocationDoctor=new LocationPage(driver);
+		PageFactory.initElements(driver, LocationDoctor);
 		//Healthtool
 		HeartToolPage=new HealthtoolPage(driver);
 		PageFactory.initElements(driver, HeartToolPage);
