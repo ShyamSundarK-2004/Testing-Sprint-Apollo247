@@ -11,22 +11,31 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.apollo247.testing.utilities.JavaScriptUtilities;
 import com.apollo247.testing.utilities.WebdriverUtility;
 
 public class HealthInsuranceProductListings {
 
-	public WebDriverWait wait;
-	public WebDriver driver;
-	public WebdriverUtility utility;
+	// ==================== FIELDS ====================
+
+	private WebDriver driver;
+	private WebDriverWait wait;
+	private WebdriverUtility utility;
+	private JavaScriptUtilities jsUtil;
+
+	// ==================== CONSTRUCTOR ====================
 
 	public HealthInsuranceProductListings(WebDriver driver) {
-		wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
 		this.utility = new WebdriverUtility();
-		this.utility.initializeDriver(driver); // Pass the active driver to utility
+		this.utility.initializeDriver(driver);
+
+		this.jsUtil = new JavaScriptUtilities(driver);
 	}
 
-	// --------------Locator finding-------------
+	// ==================== LOCATORS ====================
 
 	@FindBy(xpath = "//span[.='View Plans']")
 	private WebElement viewPlansButton;
@@ -67,7 +76,8 @@ public class HealthInsuranceProductListings {
 	@FindBy(xpath = "//span[normalize-space()='Proceed to Customise']")
 	private WebElement proceedToCutomizeButton;
 
-	// ----------Getters---------------
+	// ==================== GETTERS ====================
+
 	public WebElement getViewPlans() {
 		return viewPlansButton;
 	}
@@ -84,70 +94,65 @@ public class HealthInsuranceProductListings {
 		return viewPlansHeader;
 	}
 
-	public void clickFilter() {
-		filterButton.click();
+	// ==================== CLICK ACTIONS ====================
 
+	public void clickFilter() {
+		utility.waitUntilElementIsCLickable(10L, filterButton).click();
 	}
 
 	public void clickSortBy() {
-		sortByButton.click();
+		utility.waitUntilElementIsCLickable(10L, sortByButton).click();
 	}
 
 	public void clicksortByApplyButton() {
-		sortByApplyButton.click();
+		utility.waitUntilElementIsCLickable(10L, sortByApplyButton).click();
 	}
 
 	public void clickCoverageOption() {
-		coverageOption.click();
-		;
+		utility.waitUntilElementIsCLickable(10L, coverageOption).click();
 	}
 
 	public void clickRoomRentTypeOption() {
-		roomRentTypeOption.click();
+		utility.waitUntilElementIsCLickable(10L, roomRentTypeOption).click();
 	}
 
 	public void clickApplyButton() {
-		applyButton.click();
+		utility.waitUntilElementIsCLickable(10L, applyButton).click();
 	}
 
 	public void clickClearSelectionButton() {
-		clearSelectionButton.click();
+		utility.waitUntilElementIsCLickable(10L, clearSelectionButton).click();
 	}
 
 	public void clickProceedsPlan() {
-		proceedToCutomizeButton.click();
+		utility.waitUntilElementIsCLickable(10L, proceedToCutomizeButton).click();
 	}
 
-	// --------------Business logic--------
+	// ==================== BUSINESS LOGIC ====================
 
 	public void performViewPlans() {
-		getViewPlans().click();
-
+		utility.waitUntilElementIsCLickable(10L, getViewPlans()).click();
 	}
 
 	public WebElement viewPlanHeader() {
-		return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//p[.='View Plans']")));
+		return utility.waitUntilVisibilityOfElementLocated(10L, By.xpath("//p[.='View Plans']"));
 	}
 
 	public List<WebElement> viewNumberOfPlans() {
 		return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
 				By.xpath("//div[contains(@class,'plan') or .//button[contains(text(),'Proceed')]]")));
-
 	}
 
 	public boolean isNoPlansMessageDisplayed() {
-
-		WebElement msg = wait.until(
-				ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'No plans found')]")));
+		WebElement msg = utility.waitUntilVisibilityOfElementLocated(10L,
+				By.xpath("//*[contains(text(),'No plans found')]"));
 		return msg.isDisplayed();
 	}
 
 	public boolean isPlansAvailable() {
-		// Wait for container
-		WebElement container = wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.xpath("//div[@class='NewProductListing_listingContainer__HHxUE']")));
+		WebElement container = utility.waitUntilVisibilityOfElementLocated(10L,
+				By.xpath("//div[@class='NewProductListing_listingContainer__HHxUE']"));
 
-		// Get all plan cards inside container
 		List<WebElement> plans = container.findElements(
 				By.xpath(".//div[contains(@class,'ProductPlanVariantsList_productPlanVariantsListWrapper__79oGU')]"));
 
@@ -156,18 +161,13 @@ public class HealthInsuranceProductListings {
 
 	public void coverageAmount(String coverageRange) {
 		clickFilter();
-		// Click coverage option
 		clickCoverageOption();
 
-		// Dynamic locator for coverage
 		By coverageLocator = By.xpath(
 				"//label[contains(normalize-space(),'" + coverageRange + "')]/preceding-sibling::input[@type='radio']");
 
-		// Wait and click
-		WebElement coverageElement = wait.until(ExpectedConditions.elementToBeClickable(coverageLocator));
-		coverageElement.click();
+		utility.waitUntilElementIsCLickable(10L, driver.findElement(coverageLocator)).click();
 
-		// Apply filter
 		clickApplyButton();
 	}
 
@@ -186,58 +186,47 @@ public class HealthInsuranceProductListings {
 				break;
 			} catch (StaleElementReferenceException e) {
 				if (i == 2)
-					throw e; // fail after retries
+					throw e;
 			}
 		}
 
-		wait.until(ExpectedConditions.elementToBeClickable(applyButton)).click();
+		utility.waitUntilElementIsCLickable(10L, applyButton).click();
 	}
 
 	public void sortByPlans(String plan) {
-
 		clickSortBy();
 
 		By planLocator = By
 				.xpath("//label[contains(normalize-space(),'" + plan + "')]/preceding-sibling::input[@type='radio']");
-		WebElement planElement = wait.until(ExpectedConditions.elementToBeClickable(planLocator));
-		planElement.click();
+
+		utility.waitUntilElementIsCLickable(10L, driver.findElement(planLocator)).click();
 
 		clicksortByApplyButton();
-
 	}
 
 	public WebElement coverageRange(String coverageRange) {
 		By coverageLocator = By.xpath(
 				"//label[contains(normalize-space(),'" + coverageRange + "')]/preceding-sibling::input[@type='radio']");
-		WebElement coverageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(coverageLocator));
-		return coverageElement;
-
+		return utility.waitUntilVisibilityOfElementLocated(10L, coverageLocator);
 	}
 
 	public boolean isMatch(String rangeStr) {
-
-		// normalize
-		// rangeStr=coverageRange(rangeStr).getText();
 		String valueStr = getPlansCoverageAmountValue().getText();
 
 		rangeStr = rangeStr.toLowerCase().replaceAll("[^0-9.\\-a-z]", "");
 		valueStr = valueStr.toLowerCase().replaceAll("[^0-9.a-z]", "");
 
-		// extract unit
 		String rangeUnit = rangeStr.contains("crore") ? "crore" : "lakh";
 		String valueUnit = valueStr.contains("crore") ? "crore" : "lakh";
 
-		// ❌ unit mismatch → reject
 		if (!rangeUnit.equals(valueUnit)) {
 			return false;
 		}
 
-		// extract numbers
 		String rangeNumbers = rangeStr.replaceAll("[^0-9.\\-]", "");
 		String valueNumberStr = valueStr.replaceAll("[^0-9.]", "");
 
 		double value = Double.parseDouble(valueNumberStr);
-
 		double min, max;
 
 		if (rangeNumbers.contains("-")) {
@@ -253,7 +242,7 @@ public class HealthInsuranceProductListings {
 	}
 
 	public boolean isTextMatching(String expectedText) {
-		String actualText = wait.until(ExpectedConditions.visibilityOf(getPremiumPlanHeader())).getText().trim();
-		return actualText.equalsIgnoreCase(expectedText.trim());
+		utility.waitUntilElementIsVisibility(10L, getPremiumPlanHeader());
+		return getPremiumPlanHeader().getText().trim().equalsIgnoreCase(expectedText.trim());
 	}
 }

@@ -25,10 +25,14 @@
 	 
 	 ##############################################--------Scenario 3------------############################################################  
 	 @regression @insurance @memberSelection
-	 Scenario: Verify multiple member selection (Self, Wife, Father) 
-	 When User selects Gender "Female" "Self" at age "28", "Husband" at age "25", and "Father"  at age "55" as members
-	 And User clicks on "View Plans"
-	 Then Family insurance plans should be displayed correctly
+     Scenario: Verify multiple member selection (Self, Husband, Father)
+     When User selects members with following details
+     | Gender | Member   | Age |
+     | Female | Self     | 28  |
+     | Female | Husband  | 25  |
+     | Female | Father   | 55  |
+     And User clicks on "View Plans"
+     Then Family insurance plans should be displayed correctly
 	 
 	 ##############################################--------Scenario 4------------############################################################   
 	 @filtering @sorting 

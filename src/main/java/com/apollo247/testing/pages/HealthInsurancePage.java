@@ -1,35 +1,44 @@
 package com.apollo247.testing.pages;
 
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
-
-import java.time.Duration;
-import java.util.List;
-
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.apollo247.testing.utilities.ActionUtilities;
+import com.apollo247.testing.utilities.JavaScriptUtilities;
 import com.apollo247.testing.utilities.WebdriverUtility;
 
 public class HealthInsurancePage {
 
-	public WebDriverWait wait;
-	public WebDriver driver;
-	public WebdriverUtility utility;
+	// ==================== FIELDS ====================
+
+	private WebDriver driver;
+	private WebDriverWait wait;
+	private WebdriverUtility utility;
+	private JavaScriptUtilities jsUtil;
+	private ActionUtilities actionUtil;
+
+	// ==================== CONSTRUCTOR ====================
 
 	public HealthInsurancePage(WebDriver driver) {
-		wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+		this.wait.pollingEvery(Duration.ofMillis(200));
+
 		this.utility = new WebdriverUtility();
-		this.utility.initializeDriver(driver); // Pass the active driver to utility
+		this.utility.initializeDriver(driver);
+
+		this.jsUtil = new JavaScriptUtilities(driver);
+		this.actionUtil = new ActionUtilities(driver);
 	}
 
-	// -----------Locator Finding---------------
+	// ==================== LOCATORS ====================
 
 	@FindBy(css = "[href='https://apollo247insurance.com/health-insurance']")
 	private WebElement buyInsuranceButton;
@@ -61,10 +70,10 @@ public class HealthInsurancePage {
 	@FindBy(xpath = "//span[.='Father']")
 	private WebElement selectFatherMemeber;
 
-	// ----------Getters ------------
+	// ==================== GETTERS ====================
+
 	public WebElement getClickBuyInsurance() {
 		return buyInsuranceButton;
-
 	}
 
 	public WebElement getEnterPinCode() {
@@ -75,11 +84,11 @@ public class HealthInsurancePage {
 		return submitSelectLocation;
 	}
 
-	// ---------Business Logic----------
-	public void performEnterPinCode(String pincode) {
-		WebElement pinInput = utility.waitUntilElementIsCLickable(10L, getEnterPinCode());
+	// ==================== BUSINESS LOGIC ====================
 
-		// Clear before entering
+	public void performEnterPinCode(String pincode) {
+		// Use utility wait instead of raw WebDriverWait
+		WebElement pinInput = utility.waitUntilElementIsCLickable(10L, getEnterPinCode());
 		pinInput.clear();
 		pinInput.sendKeys(pincode);
 
@@ -88,57 +97,56 @@ public class HealthInsurancePage {
 		try {
 			submitBtn.click();
 		} catch (Exception e) {
-			((JavascriptExecutor) driver).executeScript("arguments[0].click();", submitBtn);
+			// Fallback: JS click via JavaScriptUtilities
+			jsUtil.jsClick(submitBtn);
 		}
 	}
 
 	public void selectGender(String gender) {
-
 		By locator = By.xpath("//button[normalize-space()='" + gender + "']");
 		By modal = By.cssSelector(".PincodeModal_middleSection__RCZiF");
 
-		// ✅ Step 1: Wait ONCE for modal to disappear
-		wait.until(ExpectedConditions.invisibilityOfElementLocated(modal));
-		// utility.waitUntilInvisibilityOfElementLocated(10L, modal);
+		// Wait for modal overlay to disappear
+		utility.waitUntilInvisibilityOfElementLocated(10L, modal);
 
-		// ✅ Step 2: Retry click (only for stale/intercept issues)
+		// Retry for stale/intercept issues
 		for (int i = 0; i < 3; i++) {
 			try {
-				WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+				WebElement element = utility.waitUntilElementIsCLickable(10L,
+						driver.findElement(locator));
 				element.click();
-				return; // ✅ success → exit method
+				return;
 			} catch (StaleElementReferenceException e) {
 				System.out.println("Retrying due to stale element...");
 			} catch (ElementClickInterceptedException e) {
 				System.out.println("Retrying due to click interception...");
-				((JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(locator));
+				// Fallback: JS click via JavaScriptUtilities
+				jsUtil.jsClick(driver.findElement(locator));
 				return;
 			}
 		}
 
-		// ❌ If still failing → fail properly
 		throw new RuntimeException("Unable to click gender: " + gender);
 	}
 
 	public void clickViewButton(String buttonName) {
-
 		By locator = By.xpath("//span[normalize-space()='" + buttonName + "']");
 
 		for (int i = 0; i < 3; i++) {
 			try {
-				// Wait for DOM stability
-				wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+				// Wait until element is present in DOM
+				utility.waituntilPresenceOfElementLocated(10L, locator);
 
-				WebElement button = wait.until(ExpectedConditions.elementToBeClickable(locator));
+				WebElement button = utility.waitUntilElementIsCLickable(10L,
+						driver.findElement(locator));
 
-				// Scroll into view (important for this site)
-				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", button);
+				// Scroll into view via JavaScriptUtilities
+				jsUtil.jsScrollIntoView(button);
 
-				// Click using JS (bypasses stale + overlay)
-				((JavascriptExecutor) driver).executeScript("arguments[0].click();", button);
+				// Click via JavaScriptUtilities (bypasses overlay)
+				jsUtil.jsClick(button);
 
 				return;
-
 			} catch (StaleElementReferenceException e) {
 				System.out.println("Retrying due to stale element...");
 			}
@@ -151,38 +159,35 @@ public class HealthInsurancePage {
 		try {
 			WebElement checkbox = driver.findElement(By.xpath("//input[@type=\"checkbox\"][1]"));
 			if (checkbox.isSelected()) {
-				checkbox.click(); // unselect
+				checkbox.click();
 			}
 		} catch (Exception e) {
-			// ignore if not selected
+			// Ignore if not present or already unselected
 		}
-
 	}
 
 	public String errorMessageNoMemeberSelected() {
-		WebElement errorMsg = wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.xpath("//div[contains(text(),'Select minimum one adult')]")));
+		By errorLocator = By.xpath("//div[contains(text(),'Select minimum one adult')]");
+		WebElement errorMsg = utility.waitUntilVisibilityOfElementLocated(10L, errorLocator);
 		return errorMsg.getText().trim();
 	}
 
 	public void selectMember(String member, String age) {
-
-		wait.pollingEvery(Duration.ofMillis(200));
-
-		// Click member
+		// Click member span
 		By memberLocator = By.xpath("//span[normalize-space()='" + member + "']");
-		wait.until(ExpectedConditions.elementToBeClickable(memberLocator)).click();
+		utility.waitUntilElementIsCLickable(10L, driver.findElement(memberLocator)).click();
 
-		// Wait for dropdown
+		// Wait for age dropdown to appear
 		By dropdown = By.xpath("//div[contains(@class,'MemberTile_popoverIn')]");
-		wait.until(ExpectedConditions.visibilityOfElementLocated(dropdown));
+		utility.waitUntilVisibilityOfElementLocated(10L, dropdown);
 
-		// Select age INSIDE dropdown (important)
-		By ageLocator = By.xpath("//div[contains(@class,'MemberTile_popoverIn')]//li[normalize-space()='" + age + "']");
-		wait.until(ExpectedConditions.elementToBeClickable(ageLocator)).click();
+		// Select age inside dropdown
+		By ageLocator = By.xpath(
+				"//div[contains(@class,'MemberTile_popoverIn')]//li[normalize-space()='" + age + "']");
+		utility.waitUntilElementIsCLickable(10L, driver.findElement(ageLocator)).click();
 
-		// Wait for dropdown to disappear
-		wait.until(ExpectedConditions.invisibilityOfElementLocated(dropdown));
+		// Wait for dropdown to close
+		utility.waitUntilInvisibilityOfElementLocated(10L, dropdown);
 	}
 
 	public void clickCancelSelectLocation() {
