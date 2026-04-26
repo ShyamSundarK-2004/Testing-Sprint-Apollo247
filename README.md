@@ -461,8 +461,8 @@ page.load.timeout=30
 
 # 📊 Reporting
 screenshot.on.failure=true
-screenshot.path=target/screenshots/
-report.path=target/reports/
+screenshot.path=screenshots/
+report.path=reports/
 
 # 📁 Test Data
 testdata.path=src/test/resources/testdata/
@@ -477,23 +477,23 @@ testdata.path=src/test/resources/testdata/
 After execution, reports are generated at:
 
 ```
-target/
-├── surefire-reports/              # TestNG Report
+📁Reports/
+├── Apollo247-reports/                    # TestNG Report
 │   └── index.html
-├── cucumber-html-reports/         # Cucumber Report
+├── Apollo247-cucumber-html-reports/      # Cucumber Report
 │   └── index.html
-├── screenshots/                   # Failure Screenshots
-└── logs/                          # Execution Logs
+├──📁 screenshots/                        # Failure Screenshots
+└── logs/                                  # Execution Logs
 ```
 
 ### View Reports
 
 ```bash
 # Open TestNG Report
-open target/surefire-reports/index.html
+open Report/Apollo247-reports/index.html
 
 # Open Cucumber Report
-open target/cucumber-html-reports/index.html
+open target/Apollo247-cucumber-html-reports/index.html
 ```
 
 ---
