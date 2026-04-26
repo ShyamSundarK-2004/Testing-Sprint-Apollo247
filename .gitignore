@@ -12,6 +12,7 @@ test-output/
 .project
 .settings/
 .metadata/
+.bin
 
 # Selenium Generated Files
 Reports/

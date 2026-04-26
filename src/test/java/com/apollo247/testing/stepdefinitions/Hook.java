@@ -94,6 +94,8 @@ public class Hook extends WebdriverUtility {
 				ExtendsReportsUtilities.fail("Step Failed");
 				ExtendsReportsUtilities.attachScreenshot(path);
 
+			} else if (scenario.getStatus().name().equals("SKIPPED")) {
+				ExtendsReportsUtilities.skip("Step Skipped");
 			} else {
 				// step passes
 				ExtendsReportsUtilities.pass("Step executed successfully");

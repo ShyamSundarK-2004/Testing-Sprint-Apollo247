@@ -111,9 +111,9 @@ public class HealthInsurance_InsuranceForm {
 	}
 
 	/**
-	 * safeClick(By) — waits for visibility, scrolls into view,
-	 * nudges -120px to clear sticky header, then JS click to
-	 * bypass ElementClickInterceptedException.
+	 * safeClick(By) — waits for visibility, scrolls into view, nudges -120px to
+	 * clear sticky header, then JS click to bypass
+	 * ElementClickInterceptedException.
 	 */
 	public void safeClick(By locator) {
 		WebElement element = utility.waitUntilVisibilityOfElementLocated(10L, locator);
@@ -173,11 +173,16 @@ public class HealthInsurance_InsuranceForm {
 	}
 
 	public void fillMedicalQuestions(String opt1, String opt2, String opt3, String opt4, String opt5) {
-		safeClick(By.xpath("//input[@name='chronicHealthQuestion']/following-sibling::label[normalize-space()='" + opt1 + "']"));
-		safeClick(By.xpath("//input[@name='managedHealthQuestion']/following-sibling::label[normalize-space()='" + opt2 + "']"));
-		safeClick(By.xpath("//input[@name='medicalHistoryQuestion']/following-sibling::label[normalize-space()='" + opt3 + "']"));
-		safeClick(By.xpath("//input[@name='insuranceClaimQuestion']/following-sibling::label[normalize-space()='" + opt4 + "']"));
-		safeClick(By.xpath("//input[@name='recreationalSubstanceQuestion']/following-sibling::label[normalize-space()='" + opt5 + "']"));
+		safeClick(By.xpath(
+				"//input[@name='chronicHealthQuestion']/following-sibling::label[normalize-space()='" + opt1 + "']"));
+		safeClick(By.xpath(
+				"//input[@name='managedHealthQuestion']/following-sibling::label[normalize-space()='" + opt2 + "']"));
+		safeClick(By.xpath(
+				"//input[@name='medicalHistoryQuestion']/following-sibling::label[normalize-space()='" + opt3 + "']"));
+		safeClick(By.xpath(
+				"//input[@name='insuranceClaimQuestion']/following-sibling::label[normalize-space()='" + opt4 + "']"));
+		safeClick(By.xpath("//input[@name='recreationalSubstanceQuestion']/following-sibling::label[normalize-space()='"
+				+ opt5 + "']"));
 		safeClick(By.xpath("//button[normalize-space()='Next']"));
 	}
 
@@ -233,7 +238,7 @@ public class HealthInsurance_InsuranceForm {
 		idField.clear();
 		idField.sendKeys(idNO);
 
-		String filePath = new File("src/test/resources/FileUpload/F1_picture.png").getAbsolutePath();
+		String filePath = new File("src/test/resources/TestData/F1_picture.png").getAbsolutePath();
 		driver.findElement(By.xpath("//strong[contains(text(),'Upload documents for address proof')]"
 				+ "/ancestor::form//input[@type='file']")).sendKeys(filePath);
 	}
@@ -254,8 +259,8 @@ public class HealthInsurance_InsuranceForm {
 		pause(500);
 
 		// Flat Number
-		WebElement flat = longWait.until(ExpectedConditions
-				.presenceOfElementLocated(By.xpath("//input[@id='flatNumber']")));
+		WebElement flat = longWait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='flatNumber']")));
 		jsUtil.jsScrollIntoView(flat);
 		flat.clear();
 		jsUtil.jsClick(flat);
@@ -263,29 +268,28 @@ public class HealthInsurance_InsuranceForm {
 		System.out.println("✅ Flat number entered");
 
 		// Colony
-		WebElement colony = longWait.until(ExpectedConditions
-				.presenceOfElementLocated(By.xpath("//input[@id='colony']")));
+		WebElement colony = longWait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='colony']")));
 		colony.clear();
 		jsUtil.jsClick(colony);
 		colony.sendKeys(location);
 		System.out.println("✅ Colony entered");
 
 		// Pincode
-		WebElement pin = longWait.until(ExpectedConditions
-				.presenceOfElementLocated(By.xpath("//input[@id='pincode']")));
+		WebElement pin = longWait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@id='pincode']")));
 		pin.clear();
 		jsUtil.jsClick(pin);
 		pin.sendKeys(pincode);
 		System.out.println("✅ Pincode entered");
 
 		// Wait for city/state auto-fetch
-		longWait.until(ExpectedConditions.not(
-				ExpectedConditions.attributeToBe(By.id("pincode"), "value", "")));
+		longWait.until(ExpectedConditions.not(ExpectedConditions.attributeToBe(By.id("pincode"), "value", "")));
 		pause(1500);
 
 		// Click Add button
-		WebElement addButton = longWait.until(ExpectedConditions
-				.presenceOfElementLocated(By.xpath("//span[normalize-space()='Add']")));
+		WebElement addButton = longWait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[normalize-space()='Add']")));
 		jsUtil.jsScrollIntoView(addButton);
 		pause(500);
 		jsUtil.jsClick(addButton);
@@ -297,7 +301,8 @@ public class HealthInsurance_InsuranceForm {
 
 		driver.findElement(By.xpath(
 				"//strong[contains(text(),'First Name')]/ancestor::div[contains(@class,'SearchableDropdown_textAreaLabel')]"
-						+ "/following-sibling::div//input[@placeholder='First Name']")).sendKeys(nomineeFN);
+						+ "/following-sibling::div//input[@placeholder='First Name']"))
+				.sendKeys(nomineeFN);
 
 		driver.findElement(By.xpath(
 				"//strong[.='Last Name']/ancestor::label/following-sibling::div//input[@placeholder='Last Name']"))
@@ -310,8 +315,10 @@ public class HealthInsurance_InsuranceForm {
 		By option1 = By.xpath("//div[contains(@class,'Dropdown_options')]/p[normalize-space()='" + propRelation + "']");
 		safeClick(utility.waitUntilVisibilityOfElementLocated(10L, option1));
 
-		driver.findElement(By.xpath("//label[.='DOB']/following-sibling::div//input[@placeholder='dd/mm/yyyy']")).click();
-		utility.waitUntilElementIsCLickable(10L, driver.findElement(By.xpath("//abbr[@aria-label='" + dob + "']"))).click();
+		driver.findElement(By.xpath("//label[.='DOB']/following-sibling::div//input[@placeholder='dd/mm/yyyy']"))
+				.click();
+		utility.waitUntilElementIsCLickable(10L, driver.findElement(By.xpath("//abbr[@aria-label='" + dob + "']")))
+				.click();
 		dateDone.click();
 
 		driver.findElement(By.xpath(
@@ -329,9 +336,11 @@ public class HealthInsurance_InsuranceForm {
 		By option2 = By.xpath("//div[contains(@class,'Dropdown_options')]/p[normalize-space()='" + apRelation + "']");
 		safeClick(utility.waitUntilVisibilityOfElementLocated(10L, option2));
 
-		driver.findElement(By.xpath(
-				"//label[.='Appointee DOB']/following-sibling::div//input[@placeholder='dd/mm/yyyy']")).click();
-		utility.waitUntilElementIsCLickable(10L, driver.findElement(By.xpath("//abbr[@aria-label='" + apDOB + "']"))).click();
+		driver.findElement(
+				By.xpath("//label[.='Appointee DOB']/following-sibling::div//input[@placeholder='dd/mm/yyyy']"))
+				.click();
+		utility.waitUntilElementIsCLickable(10L, driver.findElement(By.xpath("//abbr[@aria-label='" + apDOB + "']")))
+				.click();
 		dateDone.click();
 	}
 
@@ -348,8 +357,8 @@ public class HealthInsurance_InsuranceForm {
 		WebElement ifscField = driver.findElement(By.xpath("//input[@id='IFSC']"));
 		ifscField.sendKeys(IFSCcode);
 
-		wait.until(ExpectedConditions.not(
-				ExpectedConditions.attributeToBe(By.xpath("//input[@id='IFSC']"), "value", "")));
+		wait.until(
+				ExpectedConditions.not(ExpectedConditions.attributeToBe(By.xpath("//input[@id='IFSC']"), "value", "")));
 	}
 
 	// ==================== acceptsTC() — LAZY-LOAD FIXED ====================
@@ -359,8 +368,8 @@ public class HealthInsurance_InsuranceForm {
 			WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
 			// Step 1: Wait for full page load
-			longWait.until(d -> ((JavascriptExecutor) d)
-					.executeScript("return document.readyState").equals("complete"));
+			longWait.until(
+					d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
 
 			// Step 2: Scroll down gradually — forces lazy-rendered checkboxes into DOM
 			for (int i = 0; i < 5; i++) {
@@ -441,8 +450,7 @@ public class HealthInsurance_InsuranceForm {
 				System.out.println("⚠️ Call popup detected, closing it...");
 				WebElement closeBtn = driver.findElement(By.xpath("//span[@class='Lb']"));
 				closeBtn.click();
-				new WebDriverWait(driver, Duration.ofSeconds(10))
-						.until(ExpectedConditions.invisibilityOf(closeBtn));
+				new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.invisibilityOf(closeBtn));
 			}
 		} catch (Exception e) {
 			System.out.println("Popup handling failed: " + e.getMessage());
@@ -453,16 +461,16 @@ public class HealthInsurance_InsuranceForm {
 		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
 		try {
-			longWait.until(d -> ((JavascriptExecutor) d)
-					.executeScript("return document.readyState").equals("complete"));
+			longWait.until(
+					d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
 
 			closeCallPopupIfPresent();
 
 			boolean isPaymentLoaded = longWait.until(d -> {
 				String currentUrl = d.getCurrentUrl().toLowerCase();
 				boolean urlMatch = currentUrl.contains(payment.toLowerCase());
-				boolean paymentTextVisible = d.findElements(
-						By.xpath("//*[contains(text(),'Payment Options')]")).size() > 0;
+				boolean paymentTextVisible = d.findElements(By.xpath("//*[contains(text(),'Payment Options')]"))
+						.size() > 0;
 				return urlMatch || paymentTextVisible;
 			});
 
@@ -485,8 +493,8 @@ public class HealthInsurance_InsuranceForm {
 	public boolean verifyPaymentOption(String expectedText) {
 		try {
 			return new WebDriverWait(driver, Duration.ofSeconds(10))
-					.until(ExpectedConditions.visibilityOfElementLocated(
-							By.xpath("//*[contains(text(),'" + expectedText + "')]")))
+					.until(ExpectedConditions
+							.visibilityOfElementLocated(By.xpath("//*[contains(text(),'" + expectedText + "')]")))
 					.isDisplayed();
 		} catch (Exception e) {
 			return false;
@@ -496,8 +504,8 @@ public class HealthInsurance_InsuranceForm {
 	public boolean verifyAmtVisible(String expectedText) {
 		try {
 			return new WebDriverWait(driver, Duration.ofSeconds(10))
-					.until(ExpectedConditions.visibilityOfElementLocated(
-							By.xpath("//*[contains(text(),'" + expectedText + "')]")))
+					.until(ExpectedConditions
+							.visibilityOfElementLocated(By.xpath("//*[contains(text(),'" + expectedText + "')]")))
 					.isDisplayed();
 		} catch (Exception e) {
 			return false;

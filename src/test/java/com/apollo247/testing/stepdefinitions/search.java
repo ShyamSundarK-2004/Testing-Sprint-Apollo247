@@ -1,18 +1,12 @@
 package com.apollo247.testing.stepdefinitions;
 import java.util.List;
 import java.util.Map;
-import java.time.Duration;
-import java.util.List;
-import java.util.Map;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+
 import org.testng.Assert;
+
 import com.apollo247.testing.utilities.BaseClass;
 import com.apollo247.testing.utilities.ExcelUtilities;
-import com.apollo247.testing.utilities.Pages;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
