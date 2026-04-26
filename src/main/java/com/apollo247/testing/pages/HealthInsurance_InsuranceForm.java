@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -111,9 +112,9 @@ public class HealthInsurance_InsuranceForm {
 	}
 
 	/**
-	 * safeClick(By) — waits for visibility, scrolls into view,
-	 * nudges -120px to clear sticky header, then JS click to
-	 * bypass ElementClickInterceptedException.
+	 * safeClick(By) — waits for visibility, scrolls into view, nudges -120px to
+	 * clear sticky header, then JS click to bypass
+	 * ElementClickInterceptedException.
 	 */
 	public void safeClick(By locator) {
 		WebElement element = utility.waitUntilVisibilityOfElementLocated(10L, locator);
@@ -173,11 +174,16 @@ public class HealthInsurance_InsuranceForm {
 	}
 
 	public void fillMedicalQuestions(String opt1, String opt2, String opt3, String opt4, String opt5) {
-		safeClick(By.xpath("//input[@name='chronicHealthQuestion']/following-sibling::label[normalize-space()='" + opt1 + "']"));
-		safeClick(By.xpath("//input[@name='managedHealthQuestion']/following-sibling::label[normalize-space()='" + opt2 + "']"));
-		safeClick(By.xpath("//input[@name='medicalHistoryQuestion']/following-sibling::label[normalize-space()='" + opt3 + "']"));
-		safeClick(By.xpath("//input[@name='insuranceClaimQuestion']/following-sibling::label[normalize-space()='" + opt4 + "']"));
-		safeClick(By.xpath("//input[@name='recreationalSubstanceQuestion']/following-sibling::label[normalize-space()='" + opt5 + "']"));
+		safeClick(By.xpath(
+				"//input[@name='chronicHealthQuestion']/following-sibling::label[normalize-space()='" + opt1 + "']"));
+		safeClick(By.xpath(
+				"//input[@name='managedHealthQuestion']/following-sibling::label[normalize-space()='" + opt2 + "']"));
+		safeClick(By.xpath(
+				"//input[@name='medicalHistoryQuestion']/following-sibling::label[normalize-space()='" + opt3 + "']"));
+		safeClick(By.xpath(
+				"//input[@name='insuranceClaimQuestion']/following-sibling::label[normalize-space()='" + opt4 + "']"));
+		safeClick(By.xpath("//input[@name='recreationalSubstanceQuestion']/following-sibling::label[normalize-space()='"
+				+ opt5 + "']"));
 		safeClick(By.xpath("//button[normalize-space()='Next']"));
 	}
 
@@ -238,57 +244,75 @@ public class HealthInsurance_InsuranceForm {
 				+ "/ancestor::form//input[@type='file']")).sendKeys(filePath);
 	}
 
+	private void enterTextSafely(WebElement element, String value) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+		wait.until(ExpectedConditions.visibilityOf(element));
+		wait.until(ExpectedConditions.elementToBeClickable(element));
+
+		try {
+			element.clear();
+		} catch (Exception e) {
+			// fallback for React inputs
+			((JavascriptExecutor) driver).executeScript("arguments[0].value='';", element);
+		}
+
+		element.click();
+		element.sendKeys(value);
+	}
+
 	public void fillAddressDetails(String flatNO, String location, String pincode) {
-		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-		// Click Add New Address
-		WebElement addNewAddr = longWait.until(ExpectedConditions
-				.presenceOfElementLocated(By.xpath("//div[contains(@class,'AddressField_addButton')]")));
-		jsUtil.jsScrollIntoView(addNewAddr);
-		pause(1000);
-		jsUtil.jsClick(addNewAddr);
-		pause(2000);
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 
-		// Remove overflow:hidden blocking the modal
-		((JavascriptExecutor) driver).executeScript("document.documentElement.style.overflow = 'auto';");
-		pause(500);
+		// 🔹 Click "Add New Address"
+		By addBtnBy = By.xpath("//div[contains(@class,'AddressField_addButton')]");
+		WebElement addBtn = wait.until(ExpectedConditions.presenceOfElementLocated(addBtnBy));
 
-		// Flat Number
-		WebElement flat = longWait.until(ExpectedConditions
-				.presenceOfElementLocated(By.xpath("//input[@id='flatNumber']")));
-		jsUtil.jsScrollIntoView(flat);
-		flat.clear();
-		jsUtil.jsClick(flat);
-		flat.sendKeys(flatNO);
-		System.out.println("✅ Flat number entered");
+		// Scroll to center to avoid header overlap
+		js.executeScript("arguments[0].scrollIntoView({block: 'center'});", addBtn);
+		wait.until(ExpectedConditions.elementToBeClickable(addBtn));
 
-		// Colony
-		WebElement colony = longWait.until(ExpectedConditions
-				.presenceOfElementLocated(By.xpath("//input[@id='colony']")));
-		colony.clear();
-		jsUtil.jsClick(colony);
-		colony.sendKeys(location);
-		System.out.println("✅ Colony entered");
+		try {
+			addBtn.click();
+		} catch (ElementClickInterceptedException e) {
+			// fallback if header still blocks
+			js.executeScript("window.scrollBy(0, -100);");
+			js.executeScript("arguments[0].click();", addBtn);
+		}
 
-		// Pincode
-		WebElement pin = longWait.until(ExpectedConditions
-				.presenceOfElementLocated(By.xpath("//input[@id='pincode']")));
-		pin.clear();
-		jsUtil.jsClick(pin);
-		pin.sendKeys(pincode);
-		System.out.println("✅ Pincode entered");
+		// 🔹 Wait for modal / form to be visible
+		WebElement flat = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("flatNumber")));
+		wait.until(ExpectedConditions.elementToBeClickable(flat));
 
-		// Wait for city/state auto-fetch
-		longWait.until(ExpectedConditions.not(
-				ExpectedConditions.attributeToBe(By.id("pincode"), "value", "")));
-		pause(1500);
+		// 🔹 Fill Flat Number
+		enterTextSafely(flat, flatNO);
 
-		// Click Add button
-		WebElement addButton = longWait.until(ExpectedConditions
-				.presenceOfElementLocated(By.xpath("//span[normalize-space()='Add']")));
-		jsUtil.jsScrollIntoView(addButton);
-		pause(500);
-		jsUtil.jsClick(addButton);
+		// 🔹 Fill Colony
+		WebElement colony = wait.until(ExpectedConditions.elementToBeClickable(By.id("colony")));
+		enterTextSafely(colony, location);
+
+		// 🔹 Fill Pincode
+		WebElement pin = wait.until(ExpectedConditions.elementToBeClickable(By.id("pincode")));
+		enterTextSafely(pin, pincode);
+
+		// 🔹 Wait for auto-fetch (city/state)
+		wait.until(driver -> !pin.getAttribute("value").trim().isEmpty());
+
+		// 🔹 Click Add button
+		By addFinalBtnBy = By.xpath("//span[normalize-space()='Add']");
+		WebElement addFinalBtn = wait.until(ExpectedConditions.presenceOfElementLocated(addFinalBtnBy));
+
+		js.executeScript("arguments[0].scrollIntoView({block: 'center'});", addFinalBtn);
+		wait.until(ExpectedConditions.elementToBeClickable(addFinalBtn));
+
+		try {
+			addFinalBtn.click();
+		} catch (ElementClickInterceptedException e) {
+			js.executeScript("arguments[0].click();", addFinalBtn);
+		}
+
 		System.out.println("✅ Address added successfully");
 	}
 
@@ -297,7 +321,8 @@ public class HealthInsurance_InsuranceForm {
 
 		driver.findElement(By.xpath(
 				"//strong[contains(text(),'First Name')]/ancestor::div[contains(@class,'SearchableDropdown_textAreaLabel')]"
-						+ "/following-sibling::div//input[@placeholder='First Name']")).sendKeys(nomineeFN);
+						+ "/following-sibling::div//input[@placeholder='First Name']"))
+				.sendKeys(nomineeFN);
 
 		driver.findElement(By.xpath(
 				"//strong[.='Last Name']/ancestor::label/following-sibling::div//input[@placeholder='Last Name']"))
@@ -310,8 +335,10 @@ public class HealthInsurance_InsuranceForm {
 		By option1 = By.xpath("//div[contains(@class,'Dropdown_options')]/p[normalize-space()='" + propRelation + "']");
 		safeClick(utility.waitUntilVisibilityOfElementLocated(10L, option1));
 
-		driver.findElement(By.xpath("//label[.='DOB']/following-sibling::div//input[@placeholder='dd/mm/yyyy']")).click();
-		utility.waitUntilElementIsCLickable(10L, driver.findElement(By.xpath("//abbr[@aria-label='" + dob + "']"))).click();
+		driver.findElement(By.xpath("//label[.='DOB']/following-sibling::div//input[@placeholder='dd/mm/yyyy']"))
+				.click();
+		utility.waitUntilElementIsCLickable(10L, driver.findElement(By.xpath("//abbr[@aria-label='" + dob + "']")))
+				.click();
 		dateDone.click();
 
 		driver.findElement(By.xpath(
@@ -329,9 +356,11 @@ public class HealthInsurance_InsuranceForm {
 		By option2 = By.xpath("//div[contains(@class,'Dropdown_options')]/p[normalize-space()='" + apRelation + "']");
 		safeClick(utility.waitUntilVisibilityOfElementLocated(10L, option2));
 
-		driver.findElement(By.xpath(
-				"//label[.='Appointee DOB']/following-sibling::div//input[@placeholder='dd/mm/yyyy']")).click();
-		utility.waitUntilElementIsCLickable(10L, driver.findElement(By.xpath("//abbr[@aria-label='" + apDOB + "']"))).click();
+		driver.findElement(
+				By.xpath("//label[.='Appointee DOB']/following-sibling::div//input[@placeholder='dd/mm/yyyy']"))
+				.click();
+		utility.waitUntilElementIsCLickable(10L, driver.findElement(By.xpath("//abbr[@aria-label='" + apDOB + "']")))
+				.click();
 		dateDone.click();
 	}
 
@@ -348,8 +377,8 @@ public class HealthInsurance_InsuranceForm {
 		WebElement ifscField = driver.findElement(By.xpath("//input[@id='IFSC']"));
 		ifscField.sendKeys(IFSCcode);
 
-		wait.until(ExpectedConditions.not(
-				ExpectedConditions.attributeToBe(By.xpath("//input[@id='IFSC']"), "value", "")));
+		wait.until(
+				ExpectedConditions.not(ExpectedConditions.attributeToBe(By.xpath("//input[@id='IFSC']"), "value", "")));
 	}
 
 	// ==================== acceptsTC() — LAZY-LOAD FIXED ====================
@@ -359,8 +388,8 @@ public class HealthInsurance_InsuranceForm {
 			WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
 			// Step 1: Wait for full page load
-			longWait.until(d -> ((JavascriptExecutor) d)
-					.executeScript("return document.readyState").equals("complete"));
+			longWait.until(
+					d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
 
 			// Step 2: Scroll down gradually — forces lazy-rendered checkboxes into DOM
 			for (int i = 0; i < 5; i++) {
@@ -441,8 +470,7 @@ public class HealthInsurance_InsuranceForm {
 				System.out.println("⚠️ Call popup detected, closing it...");
 				WebElement closeBtn = driver.findElement(By.xpath("//span[@class='Lb']"));
 				closeBtn.click();
-				new WebDriverWait(driver, Duration.ofSeconds(10))
-						.until(ExpectedConditions.invisibilityOf(closeBtn));
+				new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.invisibilityOf(closeBtn));
 			}
 		} catch (Exception e) {
 			System.out.println("Popup handling failed: " + e.getMessage());
@@ -453,16 +481,16 @@ public class HealthInsurance_InsuranceForm {
 		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
 		try {
-			longWait.until(d -> ((JavascriptExecutor) d)
-					.executeScript("return document.readyState").equals("complete"));
+			longWait.until(
+					d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
 
 			closeCallPopupIfPresent();
 
 			boolean isPaymentLoaded = longWait.until(d -> {
 				String currentUrl = d.getCurrentUrl().toLowerCase();
 				boolean urlMatch = currentUrl.contains(payment.toLowerCase());
-				boolean paymentTextVisible = d.findElements(
-						By.xpath("//*[contains(text(),'Payment Options')]")).size() > 0;
+				boolean paymentTextVisible = d.findElements(By.xpath("//*[contains(text(),'Payment Options')]"))
+						.size() > 0;
 				return urlMatch || paymentTextVisible;
 			});
 
@@ -485,8 +513,8 @@ public class HealthInsurance_InsuranceForm {
 	public boolean verifyPaymentOption(String expectedText) {
 		try {
 			return new WebDriverWait(driver, Duration.ofSeconds(10))
-					.until(ExpectedConditions.visibilityOfElementLocated(
-							By.xpath("//*[contains(text(),'" + expectedText + "')]")))
+					.until(ExpectedConditions
+							.visibilityOfElementLocated(By.xpath("//*[contains(text(),'" + expectedText + "')]")))
 					.isDisplayed();
 		} catch (Exception e) {
 			return false;
@@ -496,8 +524,8 @@ public class HealthInsurance_InsuranceForm {
 	public boolean verifyAmtVisible(String expectedText) {
 		try {
 			return new WebDriverWait(driver, Duration.ofSeconds(10))
-					.until(ExpectedConditions.visibilityOfElementLocated(
-							By.xpath("//*[contains(text(),'" + expectedText + "')]")))
+					.until(ExpectedConditions
+							.visibilityOfElementLocated(By.xpath("//*[contains(text(),'" + expectedText + "')]")))
 					.isDisplayed();
 		} catch (Exception e) {
 			return false;
