@@ -4,6 +4,7 @@ Background:
 Given user opens My Account panel
 Then  user is logged into the application
 
+@MyAccountMod
 @ManageFamily 
 Scenario: Add valid family member from Excel
 
