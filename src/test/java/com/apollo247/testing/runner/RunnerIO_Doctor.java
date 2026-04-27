@@ -7,6 +7,7 @@ import org.testng.annotations.DataProvider;
     features = "./src/test/java/com/apollo247/testing/features/FindDocterModule.feature",
     glue = "com.apollo247.testing.stepdefinitions",
     dryRun = false,
+    tags="@Finddoctor",
     plugin = {
     		"pretty",
             "html:Reports/TestReport.html",

@@ -3,7 +3,7 @@ Background:
 When user clicks the find_Docter module
 # Scenario 1: Doctor Booking
 
-@doctorBooking @smoke
+@Finddoctor @doctorBooking @smoke
 Scenario: Book a hospital visit appointment
 When user searches for speciality
 | speciality |
@@ -17,7 +17,7 @@ Then validate phone number and amount displayed
 
 
 # Scenario 2: Filter Doctor and Book
-@filter @regression
+@Finddoctor @filter @regression
 Scenario: Filter the doctor and book appointment
   When User click the general Physician
   And user applies sorting as "Price - low to high"
@@ -29,7 +29,7 @@ Scenario: Filter the doctor and book appointment
 
 
 # Scenario 3: Rebook Appointment
-@rebook @regression
+@Finddoctor @rebook @regression
 Scenario: Verify Book Appointment option after rebooking
   When User navigates to My Appointments and clicks View All
   And User clicks on Rebook for a doctor
@@ -51,7 +51,7 @@ Scenario: Verify BMI result for Female user using Excel data
 
   
 # Scenario 5: Docter description validation 
-@description @regression
+@Finddoctor @description @regression
 Scenario Outline: Validate doctor description for multiple doctors
   When User selects location and specialization
   And User sorts by Most Liked
@@ -64,13 +64,13 @@ Examples:
   | Dr. Pawan Sharma   | Dr. Pawan Sharma has over 8 years of experience and is fluent in English, Hindi.        |
   
 # Scenario 6: Find Doctor Negative Scenarios
-@Negative
+@Finddoctor @Negative
 Scenario: Validate error when location is not selected
   When User selects speciality "Andrology"
   And User selects date "24"
   And User clicks on submit without location
   Then Pincode validation message should be displayed
-@Negative1
+@Finddoctor @Negative1
 Scenario: Validate no doctors found for invalid speciality
 When user searches for the  speciality
 | speciality |
