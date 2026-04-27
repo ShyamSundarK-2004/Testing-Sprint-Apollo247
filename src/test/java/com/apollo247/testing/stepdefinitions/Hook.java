@@ -41,7 +41,7 @@ public class Hook extends WebdriverUtility {
 		if (browser.equalsIgnoreCase("chrome")) {
 			// launching browsers in selenium grid
 			ChromeOptions chromeOptions = new ChromeOptions();
-			chromeOptions.addArguments("--headless=new");
+//			chromeOptions.addArguments("--headless=new");
 			// creating remotewebdriver to handle all browsers
 			// Basedriver = new RemoteWebDriver(new URL(serverUrl), chromeOptions);
 

@@ -103,7 +103,6 @@ public class LabTestSteps {
 	@Then("verify proceed button is enabled")
 	public void verify_proceed_button_is_enabled() {
 		assertTrue(b.getPages().bookByPrescriptionPage.isProceedBtnEnabled(), "Proceed button is not Enabled");
-
 	}
 
 	// ====== INVALID PRESCRIPTION UPLOAD FLOW ======

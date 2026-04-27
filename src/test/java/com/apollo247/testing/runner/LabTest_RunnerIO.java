@@ -7,7 +7,7 @@ import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(features = "src/test/java/com/apollo247/testing/features/LabTest.feature", glue = "com.apollo247.testing.stepdefinitions", dryRun = false, plugin = {
 		"pretty", "html:Reports/LabTest_CucumberReport.html",
-		"com.apollo247.testing.utilities.ExtentCucumberListener" }, tags = "@labTest")
+		"com.apollo247.testing.utilities.ExtentCucumberListener" }, tags = "@radiologyScenario or @labzTest")
 
 public class LabTest_RunnerIO extends AbstractTestNGCucumberTests {
 	@Override
