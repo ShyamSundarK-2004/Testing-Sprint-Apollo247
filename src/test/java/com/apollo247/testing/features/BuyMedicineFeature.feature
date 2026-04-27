@@ -7,21 +7,21 @@ Feature: Apollo 247 Pharmacy Website Functional Testing
   Background:
     Given User launches the browser
     And User navigates to Apollo 247 website
+    When User closes the popup
 
-  # -------------------- Scenario 1 : Scenario Outline --------------------
+  # -------------------- Scenario 1 --------------------
   @SearchMedicine
   Scenario Outline: Search medicine and add to cart
     Given User is on Buy Medicines page
-    When User closes the popup
-    And User searches medicine "<MedicineName>"
+    When User searches medicine "<MedicineName>"
     And User clicks cart icon
     Then Product "<MedicineName>" should be visible in cart
 
     Examples:
-      | MedicineName      |
-      | Dolo-650 Tablet   |
-      | Crocin Tablet     |
-      | Paracetamol       |
+      | MedicineName |
+      | Dolo-650     |
+      | Crocin       |
+      | Paracetamol  |
 
   # -------------------- Scenario 2 --------------------
   @ApolloProducts
@@ -34,14 +34,15 @@ Feature: Apollo 247 Pharmacy Website Functional Testing
     Then Product should be added successfully
 
   # -------------------- Scenario 3 --------------------
-  @Volini
-  Scenario: Filter Volini products by Inflammation and add product
-    Given User navigates to Volini page
-    When User clicks Inflammation filter
+  @VoliniViaShopByBrand
+  Scenario: Navigate to Volini via Shop By Brand and filter by Inflammation
+    Given User is on Buy Medicines page
+    When User navigates to Volini via Shop By Brand
+    And User clicks Inflammation filter
     And User adds first Volini product
     Then Volini product should be added successfully
 
-  # -------------------- Scenario 4 : Data Table --------------------
+  # -------------------- Scenario 4 --------------------
   @CartManagement
   Scenario: Change cart product quantity using Data Table
     Given User has product in cart
@@ -51,17 +52,16 @@ Feature: Apollo 247 Pharmacy Website Functional Testing
     Then Product quantity should be updated successfully
 
   # -------------------- Scenario 5 --------------------
-  @EmptyCart
-  Scenario: Verify empty cart page elements
-    Given Cart page is empty
-    When User clicks cart icon
-    Then Empty cart message should be displayed
-    And Cart item count should be zero
-    And Continue Shopping button should be visible
+  @NegativeSearch
+  Scenario: Search with invalid medicine name
+    When User searches medicine "xyzabc123medicine"
+    Then No medicines should be displayed
+    And No result message should be visible
+    And User should remain on search page
 
-  # -------------------- Scenario 6 : Excel --------------------
+  # -------------------- Scenario 6 --------------------
   @ExcelData
   Scenario: Add medicines from Excel file
     Given User is on Buy Medicines page
-    When User adds medicines from Excel file "MedicineData.xlsx"
+    When User adds medicines from Excel file "Apollo247_TestData.xlsx"
     Then Medicines should be added successfully

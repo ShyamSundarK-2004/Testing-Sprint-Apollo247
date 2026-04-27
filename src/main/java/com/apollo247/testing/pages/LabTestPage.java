@@ -91,6 +91,7 @@ public class LabTestPage {
 	}
 
 	public String getCurrentPageUrl() {
+		utilities.waitUntilUrlContains(20L, "lab-tests");
 		return utilities.fetchApplicationURL();
 	}
 
@@ -105,7 +106,7 @@ public class LabTestPage {
 	}
 
 	public void clickOnRadiologyBookingBtn() {
-		utilities.waitUntilElementIsVisibility(20L, getRadiologyBookingBtn());
+		utilities.waitUntilElementIsVisibility(30L, getRadiologyBookingBtn());
 		getRadiologyBookingBtn().click();
 		utilities.switchToWindowByURL("radiology");
 

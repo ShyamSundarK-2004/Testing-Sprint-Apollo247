@@ -1,6 +1,7 @@
 package com.apollo247.testing.pages;
 
 import java.time.Duration;
+
 import java.util.List;
 
 import org.jspecify.annotations.Nullable;
@@ -13,11 +14,11 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class filterDocterPage{
+public class filterDoctorPage{
 	WebDriver driver;
     WebDriverWait wait;
 
-    public filterDocterPage(WebDriver driver) {
+    public filterDoctorPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     }

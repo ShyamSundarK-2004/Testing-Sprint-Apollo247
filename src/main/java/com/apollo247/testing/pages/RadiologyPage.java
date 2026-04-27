@@ -220,7 +220,7 @@ public class RadiologyPage {
 	}
 
 	public void UploadPrescription(String path) {
-		getUploadPrescriptionField().sendKeys(System.getProperty("user.dir") + path);
+		getUploadPrescriptionField().sendKeys(path);
 	}
 
 	public boolean isRequestCallBtnEnabled() {

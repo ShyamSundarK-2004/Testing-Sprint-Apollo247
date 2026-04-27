@@ -12,6 +12,7 @@ import com.apollo247.testing.pages.HealthInsuranceProductListings;
 import com.apollo247.testing.pages.HealthInsurance_InsuranceForm;
 import com.apollo247.testing.pages.HealthInsurance_PolicyReview;
 import com.apollo247.testing.pages.HealthtoolPage;
+import com.apollo247.testing.pages.InvalidSearchPage;
 import com.apollo247.testing.pages.LabTestPage;
 import com.apollo247.testing.pages.LocationPage;
 import com.apollo247.testing.pages.LogoutPage;
@@ -31,142 +32,118 @@ import com.apollo247.testing.pages.TestCartPage;
 import com.apollo247.testing.pages.TestPage;
 import com.apollo247.testing.pages.UploadPrescriptionPage;
 import com.apollo247.testing.pages.VoliniPage;
-import com.apollo247.testing.pages.filterDocterPage;
+import com.apollo247.testing.pages.filterDoctorPage;
 
 public class Pages {
-	public DashboardPage dashboardPage;
-	public LabTestPage labTestPage;
-	public UploadPrescriptionPage bookByPrescriptionPage;
-	public RadiologyPage radiologyPage;
-	public MyOrderPage myOrderPage;
-	public SearchResultPage searchResultPage;
-	public TestPage testPage;
-	public PatientDetailsPage patientDetailsPage;
-	public TestCartPage testCartPage;
-	public HealthInsurancePage healthInsurancePage;
-	public HealthInsuranceProductListings healthInsuranceProductListings;
-	public ManageFamilyPage manageFamilyPage;
-	public MyAppointmentsPage myappointmentsPage;
-	public MembershipsPage membershipsPage;
-	public NotificationsPage notificationsPage;
-	public NeedHelpPage needHelpPage;
-	public LogoutPage logoutPage;
-	public ApolloProductsPage apolloproductsPage;
-	public BuyMedicineCartPage buyMedicineCartPage;
-	public BuyMedicinePage buyMedicinePage;
-	public VoliniPage voliniPage;
-	public SearchDoctorPage SearchDocter;
-	public filterDocterPage FilterDocter;
-	public MyAppointmentPage AppointmentDocter;
-	public LocationPage LocationDocter;
-	public HealthtoolPage HeartToolPage;
-	public NegativeScenario NegativePage;
 
-	public HealthInsurance_PolicyReview healthInsurance_PolicyReview;
-	public HealthInsurance_InsuranceForm healthInsurance_InsuranceForm;
+    public DashboardPage dashboardPage;
+    public ApolloProductsPage apolloproductsPage;
+    public BuyMedicineCartPage buyMedicineCartPage;
+    public BuyMedicinePage buyMedicinePage;
+    public VoliniPage voliniPage;
+    public InvalidSearchPage invalidSearchPage;
 
-	// all the pages are initialized with the driver object
+    public LabTestPage labTestPage;
+    public UploadPrescriptionPage bookByPrescriptionPage;
+    public RadiologyPage radiologyPage;
+    public MyOrderPage myOrderPage;
+    public SearchResultPage searchResultPage;
+    public TestPage testPage;
+    public PatientDetailsPage patientDetailsPage;
+    public TestCartPage testCartPage;
 
-	public Pages(WebDriver driver) {
+    public HealthInsurancePage healthInsurancePage;
+    public HealthInsuranceProductListings healthInsuranceProductListings;
+    public HealthInsurance_PolicyReview healthInsurance_PolicyReview;
+    public HealthInsurance_InsuranceForm healthInsurance_InsuranceForm;
 
-		// initializing driver for dashboard page
-		dashboardPage = new DashboardPage(driver);
-		PageFactory.initElements(driver, dashboardPage);
+    public ManageFamilyPage manageFamilyPage;
+    public MyAppointmentsPage myappointmentsPage;
+    public MembershipsPage membershipsPage;
+    public NotificationsPage notificationsPage;
+    public NeedHelpPage needHelpPage;
+    public LogoutPage logoutPage;
 
-		apolloproductsPage = new ApolloProductsPage(driver);
-		PageFactory.initElements(driver, apolloproductsPage);
+    public SearchDoctorPage Searchdoctor;
+    public filterDoctorPage FilterDoctor;
+    public MyAppointmentPage AppointmentDoctor;
+    public LocationPage LocationDoctor;
 
-		buyMedicineCartPage = new BuyMedicineCartPage(driver);
-		PageFactory.initElements(driver, buyMedicineCartPage);
+    public HealthtoolPage HeartToolPage;
+    public NegativeScenario NegativePage;
 
-		buyMedicinePage = new BuyMedicinePage(driver);
-		PageFactory.initElements(driver, buyMedicinePage);
+    public Pages(WebDriver driver) {
 
-		voliniPage = new VoliniPage(driver);
-		PageFactory.initElements(driver, voliniPage);
+        dashboardPage = new DashboardPage(driver);
+        apolloproductsPage = new ApolloProductsPage(driver);
+        buyMedicineCartPage = new BuyMedicineCartPage(driver);
+        buyMedicinePage = new BuyMedicinePage(driver);
+        voliniPage = new VoliniPage(driver);
+        invalidSearchPage = new InvalidSearchPage(driver);
 
-		// SearchDocter
-		SearchDocter = new SearchDoctorPage(driver);
-		PageFactory.initElements(driver, SearchDocter);
-		// filter
-		FilterDocter = new filterDocterPage(driver);
-		PageFactory.initElements(driver, FilterDocter);
-		// Appointment
-		AppointmentDocter = new MyAppointmentPage(driver);
-		PageFactory.initElements(driver, AppointmentDocter);
-		// Location
-		LocationDocter = new LocationPage(driver);
-		PageFactory.initElements(driver, LocationDocter);
-		// Healthtool
-		HeartToolPage = new HealthtoolPage(driver);
-		PageFactory.initElements(driver, HeartToolPage);
-		// Negative
-		NegativePage = new NegativeScenario(driver);
-		PageFactory.initElements(driver, NegativePage);
+        Searchdoctor = new SearchDoctorPage(driver);
+        FilterDoctor = new filterDoctorPage(driver);
+        AppointmentDoctor = new MyAppointmentPage(driver);
+        LocationDoctor = new LocationPage(driver);
 
-		healthInsurancePage = new HealthInsurancePage(driver);
-		PageFactory.initElements(driver, healthInsurancePage);
+        HeartToolPage = new HealthtoolPage(driver);
+        NegativePage = new NegativeScenario(driver);
 
-		healthInsuranceProductListings = new HealthInsuranceProductListings(driver);
-		PageFactory.initElements(driver, healthInsuranceProductListings);
+        healthInsurancePage = new HealthInsurancePage(driver);
+        healthInsuranceProductListings = new HealthInsuranceProductListings(driver);
+        healthInsurance_PolicyReview = new HealthInsurance_PolicyReview(driver);
+        healthInsurance_InsuranceForm = new HealthInsurance_InsuranceForm(driver);
 
-		manageFamilyPage = new ManageFamilyPage(driver);
-		PageFactory.initElements(driver, manageFamilyPage);
+        manageFamilyPage = new ManageFamilyPage(driver);
+        myappointmentsPage = new MyAppointmentsPage(driver);
+        membershipsPage = new MembershipsPage(driver);
+        notificationsPage = new NotificationsPage(driver);
+        needHelpPage = new NeedHelpPage(driver);
+        logoutPage = new LogoutPage(driver);
 
-		myappointmentsPage = new MyAppointmentsPage(driver);
-		PageFactory.initElements(driver, myappointmentsPage);
+        labTestPage = new LabTestPage(driver);
+        bookByPrescriptionPage = new UploadPrescriptionPage(driver);
+        radiologyPage = new RadiologyPage(driver);
+        myOrderPage = new MyOrderPage(driver);
+        searchResultPage = new SearchResultPage(driver);
+        testPage = new TestPage(driver);
+        patientDetailsPage = new PatientDetailsPage(driver);
+        testCartPage = new TestCartPage(driver);
 
-		membershipsPage = new MembershipsPage(driver);
-		PageFactory.initElements(driver, membershipsPage);
+        PageFactory.initElements(driver, dashboardPage);
+        PageFactory.initElements(driver, apolloproductsPage);
+        PageFactory.initElements(driver, buyMedicineCartPage);
+        PageFactory.initElements(driver, buyMedicinePage);
+        PageFactory.initElements(driver, voliniPage);
+        PageFactory.initElements(driver, invalidSearchPage);
 
-		notificationsPage = new NotificationsPage(driver);
-		PageFactory.initElements(driver, notificationsPage);
+        PageFactory.initElements(driver, Searchdoctor);
+        PageFactory.initElements(driver, FilterDoctor);
+        PageFactory.initElements(driver, AppointmentDoctor);
+        PageFactory.initElements(driver, LocationDoctor);
 
-		needHelpPage = new NeedHelpPage(driver);
-		PageFactory.initElements(driver, needHelpPage);
+        PageFactory.initElements(driver, HeartToolPage);
+        PageFactory.initElements(driver, NegativePage);
 
-		logoutPage = new LogoutPage(driver);
-		PageFactory.initElements(driver, logoutPage);
+        PageFactory.initElements(driver, healthInsurancePage);
+        PageFactory.initElements(driver, healthInsuranceProductListings);
+        PageFactory.initElements(driver, healthInsurance_PolicyReview);
+        PageFactory.initElements(driver, healthInsurance_InsuranceForm);
 
-		healthInsurance_PolicyReview = new HealthInsurance_PolicyReview(driver);
-		PageFactory.initElements(driver, healthInsurance_PolicyReview);
+        PageFactory.initElements(driver, manageFamilyPage);
+        PageFactory.initElements(driver, myappointmentsPage);
+        PageFactory.initElements(driver, membershipsPage);
+        PageFactory.initElements(driver, notificationsPage);
+        PageFactory.initElements(driver, needHelpPage);
+        PageFactory.initElements(driver, logoutPage);
 
-		healthInsurance_InsuranceForm = new HealthInsurance_InsuranceForm(driver);
-		PageFactory.initElements(driver, healthInsurance_InsuranceForm);
-
-		// ====== LABTEST MODULE PAGES ======
-
-		// labtest page driver initialization
-		labTestPage = new LabTestPage(driver);
-		PageFactory.initElements(driver, labTestPage);
-
-		// upload_prescription page driver initialization
-		bookByPrescriptionPage = new UploadPrescriptionPage(driver);
-		PageFactory.initElements(driver, bookByPrescriptionPage);
-
-		// radiology page driver initialization
-		radiologyPage = new RadiologyPage(driver);
-		PageFactory.initElements(driver, radiologyPage);
-
-		// orders page driver initialization
-		myOrderPage = new MyOrderPage(driver);
-		PageFactory.initElements(driver, myOrderPage);
-
-		// search results page driver initialization
-		searchResultPage = new SearchResultPage(driver);
-		PageFactory.initElements(driver, searchResultPage);
-
-		// labtest cart page driver initialization
-		testPage = new TestPage(driver);
-		PageFactory.initElements(driver, testPage);
-
-		// patient details page driver initialization
-		patientDetailsPage = new PatientDetailsPage(driver);
-		PageFactory.initElements(driver, patientDetailsPage);
-
-		// test cart page driver initialization
-		testCartPage = new TestCartPage(driver);
-		PageFactory.initElements(driver, testCartPage);
-
-	}
+        PageFactory.initElements(driver, labTestPage);
+        PageFactory.initElements(driver, bookByPrescriptionPage);
+        PageFactory.initElements(driver, radiologyPage);
+        PageFactory.initElements(driver, myOrderPage);
+        PageFactory.initElements(driver, searchResultPage);
+        PageFactory.initElements(driver, testPage);
+        PageFactory.initElements(driver, patientDetailsPage);
+        PageFactory.initElements(driver, testCartPage);
+    }
 }
