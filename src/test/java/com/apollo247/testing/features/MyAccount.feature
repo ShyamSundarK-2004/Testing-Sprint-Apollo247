@@ -4,6 +4,7 @@ Feature: Account Module - All Functionalities
     Given user opens My Account panel
     Then user is logged into the application
 
+@MyAccountMod
   @ManageFamily
   Scenario: Add valid family member from Excel
     When user navigates to Manage Family Members
