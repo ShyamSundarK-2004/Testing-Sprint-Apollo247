@@ -74,7 +74,11 @@ public class HealthInsurance_stepdefinition {
 				"View Plans header not displayed");
 		Assert.assertTrue(b.getPages().healthInsuranceProductListings.viewNumberOfPlans().size() > 0,
 				"No plans found on page");
+		// Even if we clicked view plans , if it stays same page 
+		Assert.assertFalse(b.getPages().healthInsurancePage.viewPlansButton().isDisplayed(),"User is still on the same page (View Plans button visible)!");
+
 		System.out.println("Plans are shown");
+		
 
 	}
 

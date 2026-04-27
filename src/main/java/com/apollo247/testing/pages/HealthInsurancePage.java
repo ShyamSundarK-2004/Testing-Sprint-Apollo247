@@ -154,6 +154,10 @@ public class HealthInsurancePage {
 
 		throw new RuntimeException("Failed to click View Plans after retries");
 	}
+	
+	public WebElement viewPlansButton() {
+		return driver.findElement(By.xpath("//span[normalize-space()='View Plans']"));		
+	}
 
 	public void unselectMember() {
 		try {
